@@ -19,4 +19,7 @@
 
 @property (nonatomic, readonly) NSString *identifier;
 
+
+- (void) callCompetionWithImage:(UIImage *)image;
+
 @end

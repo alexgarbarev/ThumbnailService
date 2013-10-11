@@ -180,14 +180,14 @@
     [thumbnailsFileCache setObject:thumbnail forKey:request.identifier];
     [self performRequests:request.managedOperation.expectantRequests];
     [requestsInProgress removeObjectForKey:request.identifier];
-    request.completionBlock(thumbnail);
+    [request callCompetionWithImage:thumbnail];
 }
 
 - (void) didLoadThumbnail:(UIImage *)thumbnail forRequest:(TSRequest *)request
 {
     [self performRequests:request.managedOperation.expectantRequests];
     [requestsInProgress removeObjectForKey:request.identifier];
-    request.completionBlock(thumbnail);
+    [request callCompetionWithImage:thumbnail];
 }
 
 - (void) didCancelOperationForRequest:(TSRequest *)request

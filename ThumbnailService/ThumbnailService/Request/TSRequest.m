@@ -12,6 +12,17 @@
 @implementation TSRequest {
     BOOL needUpdateIdentifier;
     NSString *_cachedIdentifier;
+    
+    dispatch_semaphore_t liveSemaphore;
+}
+
+- (id) init
+{
+    self = [super init];
+    if (self) {
+        liveSemaphore = dispatch_semaphore_create(0);
+    }
+    return self;
 }
 
 - (NSString *) identifier
@@ -57,7 +68,20 @@
     [self.managedOperation cancel];
     self.expectedOperation = nil;
     self.isCanceled = YES;
+    dispatch_semaphore_signal(liveSemaphore);
 }
 
+- (void) callCompetionWithImage:(UIImage *)image
+{
+    if (self.completionBlock) {
+        self.completionBlock(image);
+    }
+    dispatch_semaphore_signal(liveSemaphore);
+}
+
+- (void) waitUntilFinished
+{
+    dispatch_semaphore_wait(liveSemaphore, DISPATCH_TIME_FOREVER);
+}
 
 @end
