@@ -12,8 +12,14 @@
 #import "PreviewCollectionCell.h"
 #import "NotificationUtils.h"
 
+#import "ThumbnailService.h"
+#import "AssetSource.h"
+
+static CGSize kThumbSize = {200, 200};
+
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;
+    ThumbnailService *thumbnailService;
 }
 
 - (id) init
@@ -22,6 +28,8 @@
     if (self) {
         source = [[AssetsLibrarySource alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetLibraryDidReload) name:AssetsLibrarySourceDidReloadNotification object:nil];
+        
+        thumbnailService = [ThumbnailService new];
     }
     return self;
 }
@@ -34,6 +42,28 @@
 - (void) assetLibraryDidReload
 {
     [self.collectionView reloadData];
+    [self startPrecache];
+}
+
+- (void) startPrecache
+{
+    NSArray *allAssets = [source allAssets];
+    __block NSUInteger pendingPrecache = [allAssets count];
+    CFAbsoluteTime timeBeforePrecache = CFAbsoluteTimeGetCurrent();
+    
+    for (ALAsset *asset in allAssets) {
+        TSRequest *request = [TSRequest new];
+        request.source = [[AssetSource alloc] initWithAsset:asset];
+        request.size = kThumbSize;
+        request.priority = NSOperationQueuePriorityVeryLow;
+        [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
+            pendingPrecache--;
+            if (pendingPrecache == 0) {
+                NSLog(@"all precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
+            }
+        }];
+        [thumbnailService performRequest:request];
+    }
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -47,10 +77,29 @@
 {
     PreviewCollectionCell *viewCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PreviewCollectionCell" forIndexPath:indexPath];
     
-    ALAsset *asset = [source assetForIndex:[indexPath item]];
+    if (viewCell.context) {
+        TSRequest *lastRequest = viewCell.context;
+        [lastRequest cancel];
+    }
     
-    viewCell.imageView.image = [asset thumbnailWithType:AssetThumbnailTypeAspectRatio];
+    ALAsset *asset = [source assetForIndex:[indexPath item]];
 
+    TSRequest *request = [TSRequest new];
+    request.source = [[AssetSource alloc] initWithAsset:asset];
+    request.size = kThumbSize;
+    request.priority = NSOperationQueuePriorityVeryHigh;
+
+    [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
+        viewCell.imageView.image = result;
+    }];
+    
+    [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
+        viewCell.imageView.image = result;
+    }];
+    
+    [thumbnailService performRequest:request];
+    
+    viewCell.context = request;
     
     return viewCell;
     

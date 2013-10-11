@@ -125,14 +125,18 @@
 - (void) takePlaceholder:(UIImage *)image error:(NSError *)error
 {
     if (self.placeholderBlock) {
-        self.placeholderBlock(image, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+           self.placeholderBlock(image, error);
+        });
     }
 }
 
 - (void) takeThumbnail:(UIImage *)image error:(NSError *)error
 {
     if (self.thumbnailBlock) {
-        self.thumbnailBlock(image, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+           self.thumbnailBlock(image, error); 
+        });
     }
     [self requestDidFinish];
 }

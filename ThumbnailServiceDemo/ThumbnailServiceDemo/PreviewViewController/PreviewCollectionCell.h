@@ -11,5 +11,6 @@
 @interface PreviewCollectionCell : UICollectionViewCell
 
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) id context;
 
 @end

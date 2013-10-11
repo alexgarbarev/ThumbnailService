@@ -10,13 +10,6 @@
 		FA2676031806F75E00F5B02B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676021806F75E00F5B02B /* Foundation.framework */; };
 		FA2676051806F75E00F5B02B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676041806F75E00F5B02B /* CoreGraphics.framework */; };
 		FA2676071806F75E00F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676061806F75E00F5B02B /* UIKit.framework */; };
-		FA26764B1806F77200F5B02B /* TSFileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26763A1806F77200F5B02B /* TSFileCache.m */; };
-		FA26764C1806F77200F5B02B /* TSGenerateOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26763D1806F77200F5B02B /* TSGenerateOperation.m */; };
-		FA26764D1806F77200F5B02B /* TSLoadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26763F1806F77200F5B02B /* TSLoadOperation.m */; };
-		FA26764E1806F77200F5B02B /* TSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676411806F77200F5B02B /* TSOperation.m */; };
-		FA26764F1806F77200F5B02B /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676451806F77200F5B02B /* TSRequest.m */; };
-		FA2676501806F77200F5B02B /* TSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676481806F77200F5B02B /* TSSource.m */; };
-		FA2676511806F77200F5B02B /* ThumbnailService.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26764A1806F77200F5B02B /* ThumbnailService.m */; };
 		FA2676581806F9F400F5B02B /* AssetsLibrarySource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676571806F9F400F5B02B /* AssetsLibrarySource.m */; };
 		FA26768118071D5D00F5B02B /* ALAsset+Identifier.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26767618071D5D00F5B02B /* ALAsset+Identifier.m */; };
 		FA26768218071D5D00F5B02B /* ALAsset+Images.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26767818071D5D00F5B02B /* ALAsset+Images.m */; };
@@ -32,7 +25,33 @@
 		FA26769F18071FBB00F5B02B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26769C18071FBB00F5B02B /* AppDelegate.m */; };
 		FA2676A018071FBB00F5B02B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26769D18071FBB00F5B02B /* main.m */; };
 		FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */; };
+		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
+		FA67E4B918087B9900B64944 /* AssetSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4B818087B9900B64944 /* AssetSource.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FA67E4AC180879A000B64944 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA26773F1807AF7F00F5B02B;
+			remoteInfo = ThumbnailService;
+		};
+		FA67E4AE180879A000B64944 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA26774F1807AF7F00F5B02B;
+			remoteInfo = ThumbnailServiceTests;
+		};
+		FA67E4B0180879B700B64944 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA26773E1807AF7F00F5B02B;
+			remoteInfo = ThumbnailService;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		FA2675FF1806F75E00F5B02B /* ThumbnailServiceDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThumbnailServiceDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,21 +59,6 @@
 		FA2676041806F75E00F5B02B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FA2676061806F75E00F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA2676211806F75E00F5B02B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		FA2676391806F77200F5B02B /* TSFileCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFileCache.h; sourceTree = "<group>"; };
-		FA26763A1806F77200F5B02B /* TSFileCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFileCache.m; sourceTree = "<group>"; };
-		FA26763C1806F77200F5B02B /* TSGenerateOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSGenerateOperation.h; sourceTree = "<group>"; };
-		FA26763D1806F77200F5B02B /* TSGenerateOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSGenerateOperation.m; sourceTree = "<group>"; };
-		FA26763E1806F77200F5B02B /* TSLoadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSLoadOperation.h; sourceTree = "<group>"; };
-		FA26763F1806F77200F5B02B /* TSLoadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSLoadOperation.m; sourceTree = "<group>"; };
-		FA2676401806F77200F5B02B /* TSOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSOperation.h; sourceTree = "<group>"; };
-		FA2676411806F77200F5B02B /* TSOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperation.m; sourceTree = "<group>"; };
-		FA2676431806F77200F5B02B /* TSRequest+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TSRequest+Private.h"; sourceTree = "<group>"; };
-		FA2676441806F77200F5B02B /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
-		FA2676451806F77200F5B02B /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequest.m; sourceTree = "<group>"; };
-		FA2676471806F77200F5B02B /* TSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSource.h; sourceTree = "<group>"; };
-		FA2676481806F77200F5B02B /* TSSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSource.m; sourceTree = "<group>"; };
-		FA2676491806F77200F5B02B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
-		FA26764A1806F77200F5B02B /* ThumbnailService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailService.m; sourceTree = "<group>"; };
 		FA2676561806F9F400F5B02B /* AssetsLibrarySource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetsLibrarySource.h; sourceTree = "<group>"; };
 		FA2676571806F9F400F5B02B /* AssetsLibrarySource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetsLibrarySource.m; sourceTree = "<group>"; };
 		FA26767518071D5D00F5B02B /* ALAsset+Identifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+Identifier.h"; sourceTree = "<group>"; };
@@ -84,6 +88,12 @@
 		FA26769E18071FBB00F5B02B /* ThumbnailServiceDemo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ThumbnailServiceDemo-Prefix.pch"; sourceTree = "<group>"; };
 		FA2676A218071FFD00F5B02B /* AssetsCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetsCollectionDataSource.h; sourceTree = "<group>"; };
 		FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetsCollectionDataSource.m; sourceTree = "<group>"; };
+		FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ThumbnailService.xcodeproj; sourceTree = "<group>"; };
+		FA67E4B418087AE700B64944 /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
+		FA67E4B518087AE700B64944 /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
+		FA67E4B618087AE700B64944 /* TSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSource.h; sourceTree = "<group>"; };
+		FA67E4B718087B9900B64944 /* AssetSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetSource.h; sourceTree = "<group>"; };
+		FA67E4B818087B9900B64944 /* AssetSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */,
 				FA2676051806F75E00F5B02B /* CoreGraphics.framework in Frameworks */,
 				FA2676071806F75E00F5B02B /* UIKit.framework in Frameworks */,
 				FA2676031806F75E00F5B02B /* Foundation.framework in Frameworks */,
@@ -145,56 +156,11 @@
 		FA2676371806F77200F5B02B /* ThumbnailService */ = {
 			isa = PBXGroup;
 			children = (
-				FA2676381806F77200F5B02B /* Cache */,
-				FA26763B1806F77200F5B02B /* Operations */,
-				FA2676421806F77200F5B02B /* Request */,
-				FA2676461806F77200F5B02B /* Sources */,
-				FA2676491806F77200F5B02B /* ThumbnailService.h */,
-				FA26764A1806F77200F5B02B /* ThumbnailService.m */,
+				FA67E4B318087AE700B64944 /* ThumbnailService */,
+				FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */,
 			);
 			name = ThumbnailService;
 			path = ../../ThumbnailService;
-			sourceTree = "<group>";
-		};
-		FA2676381806F77200F5B02B /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-				FA2676391806F77200F5B02B /* TSFileCache.h */,
-				FA26763A1806F77200F5B02B /* TSFileCache.m */,
-			);
-			path = Cache;
-			sourceTree = "<group>";
-		};
-		FA26763B1806F77200F5B02B /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-				FA26763C1806F77200F5B02B /* TSGenerateOperation.h */,
-				FA26763D1806F77200F5B02B /* TSGenerateOperation.m */,
-				FA26763E1806F77200F5B02B /* TSLoadOperation.h */,
-				FA26763F1806F77200F5B02B /* TSLoadOperation.m */,
-				FA2676401806F77200F5B02B /* TSOperation.h */,
-				FA2676411806F77200F5B02B /* TSOperation.m */,
-			);
-			path = Operations;
-			sourceTree = "<group>";
-		};
-		FA2676421806F77200F5B02B /* Request */ = {
-			isa = PBXGroup;
-			children = (
-				FA2676431806F77200F5B02B /* TSRequest+Private.h */,
-				FA2676441806F77200F5B02B /* TSRequest.h */,
-				FA2676451806F77200F5B02B /* TSRequest.m */,
-			);
-			path = Request;
-			sourceTree = "<group>";
-		};
-		FA2676461806F77200F5B02B /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				FA2676471806F77200F5B02B /* TSSource.h */,
-				FA2676481806F77200F5B02B /* TSSource.m */,
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 		FA2676551806F9F400F5B02B /* AssetsLibrary */ = {
@@ -270,10 +236,32 @@
 		FA2676A118071FFD00F5B02B /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				FA67E4B718087B9900B64944 /* AssetSource.h */,
+				FA67E4B818087B9900B64944 /* AssetSource.m */,
 				FA2676A218071FFD00F5B02B /* AssetsCollectionDataSource.h */,
 				FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */,
 			);
 			path = DataSources;
+			sourceTree = "<group>";
+		};
+		FA67E4A81808799F00B64944 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA67E4AD180879A000B64944 /* libThumbnailService.a */,
+				FA67E4AF180879A000B64944 /* ThumbnailServiceTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA67E4B318087AE700B64944 /* ThumbnailService */ = {
+			isa = PBXGroup;
+			children = (
+				FA67E4B418087AE700B64944 /* ThumbnailService.h */,
+				FA67E4B518087AE700B64944 /* TSRequest.h */,
+				FA67E4B618087AE700B64944 /* TSSource.h */,
+			);
+			name = ThumbnailService;
+			path = headers/ThumbnailService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,6 +278,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FA67E4B1180879B700B64944 /* PBXTargetDependency */,
 			);
 			name = ThumbnailServiceDemo;
 			productName = ThumbnailServiceDemo;
@@ -316,12 +305,35 @@
 			mainGroup = FA2675F61806F75E00F5B02B;
 			productRefGroup = FA2676001806F75E00F5B02B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = FA67E4A81808799F00B64944 /* Products */;
+					ProjectRef = FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				FA2675FE1806F75E00F5B02B /* ThumbnailServiceDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		FA67E4AD180879A000B64944 /* libThumbnailService.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libThumbnailService.a;
+			remoteRef = FA67E4AC180879A000B64944 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FA67E4AF180879A000B64944 /* ThumbnailServiceTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ThumbnailServiceTests.xctest;
+			remoteRef = FA67E4AE180879A000B64944 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		FA2675FD1806F75E00F5B02B /* Resources */ = {
@@ -340,15 +352,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA26764D1806F77200F5B02B /* TSLoadOperation.m in Sources */,
 				FA26769918071FB700F5B02B /* MenuViewController.m in Sources */,
 				FA26769F18071FBB00F5B02B /* AppDelegate.m in Sources */,
 				FA26768518071D5D00F5B02B /* UIImage+Decompress.m in Sources */,
-				FA26764E1806F77200F5B02B /* TSOperation.m in Sources */,
 				FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */,
-				FA2676511806F77200F5B02B /* ThumbnailService.m in Sources */,
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
-				FA26764C1806F77200F5B02B /* TSGenerateOperation.m in Sources */,
+				FA67E4B918087B9900B64944 /* AssetSource.m in Sources */,
 				FA2676A018071FBB00F5B02B /* main.m in Sources */,
 				FA26768618071D5D00F5B02B /* UIImageView+ImageFrame.m in Sources */,
 				FA26768C18071E6800F5B02B /* PreviewCollectionCell.m in Sources */,
@@ -357,13 +366,18 @@
 				FA2676581806F9F400F5B02B /* AssetsLibrarySource.m in Sources */,
 				FA26768218071D5D00F5B02B /* ALAsset+Images.m in Sources */,
 				FA26768D18071E6800F5B02B /* PreviewViewController.m in Sources */,
-				FA26764F1806F77200F5B02B /* TSRequest.m in Sources */,
-				FA26764B1806F77200F5B02B /* TSFileCache.m in Sources */,
-				FA2676501806F77200F5B02B /* TSSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FA67E4B1180879B700B64944 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ThumbnailService;
+			targetProxy = FA67E4B0180879B700B64944 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		FA26762F1806F75E00F5B02B /* Debug */ = {
@@ -441,6 +455,7 @@
 		FA2676321806F75E00F5B02B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -456,6 +471,7 @@
 		FA2676331806F75E00F5B02B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -487,6 +503,7 @@
 				FA2676331806F75E00F5B02B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
