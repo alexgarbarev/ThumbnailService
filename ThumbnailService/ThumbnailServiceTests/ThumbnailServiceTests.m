@@ -49,14 +49,14 @@
     request.source = [TSSourceTest new];
     request.size = CGSizeMake(200, 200);
 
-    
-    request.placeholderBlock = ^(UIImage *result){
+    [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
+        NSLog(@"Placeholder complete with result: %@. Error: %@",result,error);
         placeholderCalled = YES;
-    };
-    
-    request.completionBlock = ^(UIImage *result){
+    }];
+    [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
+        NSLog(@"Thumbnail complete with result: %@. Error: %@",result,error);
         completionCalled = YES;
-    };
+    }];
     
     [thumbnailService performRequest:request];
     

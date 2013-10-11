@@ -24,6 +24,7 @@
 		FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677741807AFB900F5B02B /* TSRequest.h */; };
 		FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; };
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
+		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,8 @@
 		FA2677791807AFB900F5B02B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
 		FA26777A1807AFB900F5B02B /* ThumbnailService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailService.m; sourceTree = "<group>"; };
 		FA2677891807B1F500F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FA67E49E18083C8500B64944 /* TSOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSOperationQueue.h; sourceTree = "<group>"; };
+		FA67E49F18083C8500B64944 /* TSOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperationQueue.m; sourceTree = "<group>"; };
 		FA69D3071807B3F800979C84 /* TSSourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceTest.h; sourceTree = "<group>"; };
 		FA69D3081807B3F800979C84 /* TSSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				FA2677681807AFB900F5B02B /* Cache */,
+				FA67E49D18083C6C00B64944 /* OperationQueue */,
 				FA26776B1807AFB900F5B02B /* Operations */,
 				FA2677721807AFB900F5B02B /* Request */,
 				FA2677761807AFB900F5B02B /* Sources */,
@@ -206,6 +210,15 @@
 				FA2677781807AFB900F5B02B /* TSSource.m */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		FA67E49D18083C6C00B64944 /* OperationQueue */ = {
+			isa = PBXGroup;
+			children = (
+				FA67E49E18083C8500B64944 /* TSOperationQueue.h */,
+				FA67E49F18083C8500B64944 /* TSOperationQueue.m */,
+			);
+			path = OperationQueue;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,6 +304,7 @@
 			files = (
 				FA26777F1807AFB900F5B02B /* TSRequest.m in Sources */,
 				FA26777E1807AFB900F5B02B /* TSOperation.m in Sources */,
+				FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */,
 				FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */,
 				FA26777B1807AFB900F5B02B /* TSFileCache.m in Sources */,
 				FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */,

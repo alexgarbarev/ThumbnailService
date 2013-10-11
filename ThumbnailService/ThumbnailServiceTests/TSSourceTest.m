@@ -17,12 +17,12 @@
 
 - (UIImage *) placeholder
 {
-    return nil;
+    return [UIImage new];
 }
 
 - (UIImage *) thumbnailWithSize:(CGSize)size
 {
-    return nil;
+    return [UIImage new];
 }
 
 @end

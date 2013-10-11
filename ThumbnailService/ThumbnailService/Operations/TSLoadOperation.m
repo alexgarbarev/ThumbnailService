@@ -27,13 +27,26 @@
 - (void)main
 {
     @autoreleasepool {
+        
         if (![self isCancelled]) {
             self.result = [cache objectForKey:key];
         }
+        
+        if (!self.result) {
+            NSString *description = [NSString stringWithFormat:@"Object for key %@ not found!",key];
+            self.error = [NSError errorWithDomain:@"LoadOperation" code:0 userInfo:@{NSLocalizedDescriptionKey:description}];
+            return;
+        }
+        
+        if (![self.result isKindOfClass:[UIImage class]]) {
+            NSString *description = [NSString stringWithFormat:@"Object for key %@ is %@ is not kind of image!",key, self.result];
+            self.error = [NSError errorWithDomain:@"LoadOperation" code:1 userInfo:@{NSLocalizedDescriptionKey:description}];
+            self.result = nil;
+            return;
+        }
     
         if (![self isCancelled]) {
-            for (int i = 0; i < 10; i++)
-                [self decompressImage:self.result];
+            [self decompressImage:self.result];
         }
         if ([self isCancelled]) {
             self.result = nil;

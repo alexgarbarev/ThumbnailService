@@ -12,6 +12,8 @@
 #import "TSLoadOperation.h"
 #import "TSGenerateOperation.h"
 
+#import "TSOperationQueue.h"
+
 #import "TSRequest+Private.h"
 
 @implementation ThumbnailService {
@@ -21,18 +23,15 @@
     NSCache *thumbnailsMemoryCache;
     TSFileCache *thumbnailsFileCache;
     
-    NSOperationQueue *queue;
-    NSMutableDictionary *requestsInProgress;
+    TSOperationQueue *queue;
 }
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        queue = [[NSOperationQueue alloc] init];
+        queue = [[TSOperationQueue alloc] init];
         queue.maxConcurrentOperationCount = 1;
-        
-        requestsInProgress = [NSMutableDictionary new];
         
         thumbnailsFileCache = [[TSFileCache alloc] init];
         [thumbnailsFileCache setName:@"Thumbnails"];
@@ -84,7 +83,7 @@
 
 #pragma mark - Public methods
 
-- (void) performRequests:(NSArray *)requests
+- (void) performRequests:(NSSet *)requests
 {
     for (TSRequest *request in requests) {
         [self performRequest:request];
@@ -93,43 +92,35 @@
 
 - (void) performRequest:(TSRequest *)request
 {
-    if (request.isCanceled) {
-        return;
+    if ([request needPlaceholder]) {
+        UIImage *placeholder = [self placeholderFromSource:request.source];
+        [request takePlaceholder:placeholder error:nil];
     }
     
-    UIImage *placeholder = [self placeholderFromSource:request.source];
-    request.placeholderBlock(placeholder);
-    
-    UIImage *thumbnail = [thumbnailsMemoryCache objectForKey:request.identifier];
-    
-    if (!thumbnail)
-    {
-        if ([self isOperationInProgressForRequest:request]) {
-            [self linkOperationInProgressWithRequest:request];
+    if ([request needThumbnail]) {
+        UIImage *thumbnail = [thumbnailsMemoryCache objectForKey:request.identifier];
+        
+        if (!thumbnail)
+        {
+            TSOperation *operation = [queue operationWithIdentifier:request.identifier];
+            
+            if (!operation) {
+                operation = [self newOperationForRequest:request];
+                request.operation = operation;
+                [queue addOperation:operation forIdentifider:request.identifier];
+            } else {
+                request.operation = operation;
+            }
         }
         else {
-            [self addOperationForRequest:request];
+            [request takeThumbnail:thumbnail error:nil];
         }
     }
-    else {
-        request.completionBlock(thumbnail);
-    }
 }
 
-#pragma mark -
+#pragma mark - Operations creation
 
-- (void) linkOperationInProgressWithRequest:(TSRequest *)request
-{
-    TSRequest *requestInProgress = requestsInProgress[request.identifier];
-    request.expectedOperation = requestInProgress.managedOperation;
-}
-
-- (BOOL) isOperationInProgressForRequest:(TSRequest *)request
-{
-    return requestsInProgress[request.identifier] != nil;
-}
-
-- (void) addOperationForRequest:(TSRequest *)request
+- (TSOperation *) newOperationForRequest:(TSRequest *)request
 {
     TSOperation *operation;
     if ([thumbnailsFileCache objectExistsForKey:request.identifier]) {
@@ -137,62 +128,57 @@
     } else {
         operation = [self newOperationToGenerateThumbnailForRequest:request];
     }
-    operation.queuePriority = request.priority;
-    [queue addOperation:operation];
-    
-    request.managedOperation = operation;
-    
-    requestsInProgress[request.identifier] = request;
+    return operation;
 }
-
-#pragma mark - Operations creation
 
 - (TSOperation *) newOperationToGenerateThumbnailForRequest:(TSRequest *)request
 {
     TSOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:request.size];
-    __weak typeof (operation) weakObject = operation;
-    operation.completionBlock = ^{
-        [self didGenerateThumbnail:weakObject.result forRequest:request];
-    };
-    operation.cancellationBlock = ^{
-        [self didCancelOperationForRequest:request];
-    };
+
+    [operation addCompleteBlock:^(TSOperation *operation) {
+        [self didGenerateThumbnailForIdentifier:request.identifier fromOperation:operation];
+    }];
+    
     return operation;
 }
 
 - (TSOperation *) newOperationToLoadThumbnailForRequest:(TSRequest *)request
 {
     TSOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andFileCache:thumbnailsFileCache];
-    __weak typeof (operation) weakObject = operation;
-    operation.completionBlock = ^{
-        [self didLoadThumbnail:weakObject.result forRequest:request];
-    };
-    operation.cancellationBlock = ^{
-        [self didCancelOperationForRequest:request];
-    };
+
+    [operation addCompleteBlock:^(TSOperation *operation) {
+        [self didLoadThumbnailForIdentifier:request.identifier fromOperation:operation];
+    }];
+
     return operation;
 }
 
 #pragma mark - Operations completions
 
-- (void) didGenerateThumbnail:(UIImage *)thumbnail forRequest:(TSRequest *)request
+- (void) didGenerateThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
-    [thumbnailsFileCache setObject:thumbnail forKey:request.identifier];
-    [self performRequests:request.managedOperation.expectantRequests];
-    [requestsInProgress removeObjectForKey:request.identifier];
-    [request callCompetionWithImage:thumbnail];
+    if (operation.result && !operation.error) {
+        [thumbnailsFileCache setObject:operation.result forKey:identifier];
+        [thumbnailsMemoryCache setObject:operation.result forKey:identifier];
+    }
+
+    [self callCompletionInRequests:operation.requests withImage:operation.result error:operation.error];
 }
 
-- (void) didLoadThumbnail:(UIImage *)thumbnail forRequest:(TSRequest *)request
+- (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
-    [self performRequests:request.managedOperation.expectantRequests];
-    [requestsInProgress removeObjectForKey:request.identifier];
-    [request callCompetionWithImage:thumbnail];
+    if (operation.result && !operation.error) {
+        [thumbnailsMemoryCache setObject:operation.result forKey:identifier];
+    }
+    
+    [self callCompletionInRequests:operation.requests withImage:operation.result error:operation.error];
 }
 
-- (void) didCancelOperationForRequest:(TSRequest *)request
+- (void) callCompletionInRequests:(NSSet *)requests withImage:(UIImage *)image error:(NSError *)error
 {
-    [self performRequests:request.managedOperation.expectantRequests];
-    [requestsInProgress removeObjectForKey:request.identifier];
+    for (TSRequest *request in requests) {
+        [request takeThumbnail:image error:error];
+    }
 }
+
 @end

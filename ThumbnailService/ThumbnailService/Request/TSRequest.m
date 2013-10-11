@@ -9,6 +9,13 @@
 #import "TSRequest.h"
 #import "TSRequest+Private.h"
 
+@interface TSRequest ()
+
+@property (nonatomic, copy) TSRequestCompletion placeholderBlock;
+@property (nonatomic, copy) TSRequestCompletion thumbnailBlock;
+
+@end
+
 @implementation TSRequest {
     BOOL needUpdateIdentifier;
     NSString *_cachedIdentifier;
@@ -20,7 +27,7 @@
 {
     self = [super init];
     if (self) {
-        liveSemaphore = dispatch_semaphore_create(0);
+        [self requestDidStarted];
     }
     return self;
 }
@@ -47,41 +54,87 @@
     needUpdateIdentifier = YES;
 }
 
-- (void) setExpectedOperation:(TSOperation *)expectedOperation
+- (void) setOperation:(TSOperation *)operation
 {
-    if (expectedOperation) {
-        [_expectedOperation addExpectantRequest:self];
-    } else {
-        [_expectedOperation removeExpectantRequest:self];
+    if (_operation) {
+        [_operation removeRequest:self];
     }
-    _expectedOperation = expectedOperation;
+    
+    _operation = operation;
+    
+    if (_operation) {
+        [_operation addRequest:self];
+    }
 }
+
+#pragma mark - Modifying request reqirements
 
 - (void)setPriority:(NSOperationQueuePriority)priority
 {
     _priority = priority;
-    self.managedOperation.queuePriority = _priority;
+    [self.operation updatePriority];
 }
 
 - (void) cancel
 {
-    [self.managedOperation cancel];
-    self.expectedOperation = nil;
-    self.isCanceled = YES;
-    dispatch_semaphore_signal(liveSemaphore);
+    self.operation = nil;
+    self.thumbnailBlock = nil;
+    self.placeholderBlock = nil;
+    [self requestDidFinish];
 }
 
-- (void) callCompetionWithImage:(UIImage *)image
+#pragma mark - Life-cycle
+
+- (void) requestDidStarted
 {
-    if (self.completionBlock) {
-        self.completionBlock(image);
-    }
+    liveSemaphore = dispatch_semaphore_create(0);
+}
+
+- (void) requestDidFinish
+{
     dispatch_semaphore_signal(liveSemaphore);
 }
 
 - (void) waitUntilFinished
 {
     dispatch_semaphore_wait(liveSemaphore, DISPATCH_TIME_FOREVER);
+}
+
+#pragma mark - Callbacks
+
+- (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock
+{
+    self.placeholderBlock = placeholderBlock;
+}
+
+- (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock
+{
+    self.thumbnailBlock = thumbnailBlock;
+}
+
+- (BOOL) needPlaceholder
+{
+    return self.placeholderBlock != nil;
+}
+
+- (BOOL) needThumbnail
+{
+    return self.thumbnailBlock != nil;
+}
+
+- (void) takePlaceholder:(UIImage *)image error:(NSError *)error
+{
+    if (self.placeholderBlock) {
+        self.placeholderBlock(image, error);
+    }
+}
+
+- (void) takeThumbnail:(UIImage *)image error:(NSError *)error
+{
+    if (self.thumbnailBlock) {
+        self.thumbnailBlock(image, error);
+    }
+    [self requestDidFinish];
 }
 
 @end

@@ -11,15 +11,14 @@
 
 @interface TSRequest ()
 
-@property (nonatomic, strong) TSOperation *managedOperation;
-@property (nonatomic, weak)   TSOperation *expectedOperation;
-
-
-@property (nonatomic) BOOL isCanceled;
+@property (nonatomic, weak) TSOperation *operation;
 
 @property (nonatomic, readonly) NSString *identifier;
 
+- (void) takeThumbnail:(UIImage *)image error:(NSError *)error;
+- (void) takePlaceholder:(UIImage *)image error:(NSError *)error;
 
-- (void) callCompetionWithImage:(UIImage *)image;
+- (BOOL) needPlaceholder;
+- (BOOL) needThumbnail;
 
 @end

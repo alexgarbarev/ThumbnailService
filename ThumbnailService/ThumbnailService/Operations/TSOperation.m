@@ -9,78 +9,105 @@
 #import "TSOperation.h"
 
 @implementation TSOperation {
-    NSMutableArray *expectators;
+    NSMutableSet *requests;
     
-    BOOL isInternalChangingPriority;
-    NSOperationQueuePriority originalPriority;
+    NSMutableSet *completionBlocks;
+    NSMutableSet *cancelBlocks;
 }
 
 - (id) init
 {
     self = [super init];
     if (self) {
-        expectators = [NSMutableArray new];
+        requests = [NSMutableSet new];
+        completionBlocks = [NSMutableSet new];
+        cancelBlocks = [NSMutableSet new];
+        
+        __weak typeof (self) weakSelf = self;
+        [super setCompletionBlock:^{
+            [weakSelf onComplete];
+        }];
     }
     return self;
 }
 
 - (void) cancel
 {
-    if (self.cancellationBlock) {
-        self.cancellationBlock();
-    }
+    [self onCancel];
     [super cancel];
 }
 
-- (void) addExpectantRequest:(TSRequest *)request
+- (void) addRequest:(TSRequest *)request
 {
-    [expectators addObject:request];
+    [requests addObject:request];
     [self updatePriority];
 }
 
-- (void) removeExpectantRequest:(TSRequest *)request
+- (void) removeRequest:(TSRequest *)request
 {
-    [expectators removeObject:request];
-    [self updatePriority];
+    [requests removeObject:request];
+
+    if ([requests count] > 0) {
+        [self updatePriority];
+    } else {
+        [self cancel];
+    }
 }
 
-- (NSArray *) expectantRequests
+- (NSSet *) requests
 {
-    return expectators;
+    return requests;
 }
 
 - (void) updatePriority
 {
-    NSOperationQueuePriority priorityToSet = originalPriority;
+    NSOperationQueuePriority priority = NSOperationQueuePriorityVeryLow;
     
-    for (TSRequest *request in expectators) {
-        if (request.priority > priorityToSet) {
-            priorityToSet = request.priority;
+    for (TSRequest *request in requests) {
+        if (request.priority > priority) {
+            priority = request.priority;
         }
     }
     
-    [self internalChangePriorityInBlock:^{
-        self.queuePriority = priorityToSet;
-    }];
+    self.queuePriority = priority;
 }
 
-- (void) setQueuePriority:(NSOperationQueuePriority)p
+#pragma mark - Operation termination
+
+- (void) onComplete
 {
-    [super setQueuePriority:p];
-    
-    if (!isInternalChangingPriority) {
-        originalPriority = p;
-        [self updatePriority];
+    [self callCompleteBlocks];
+}
+
+- (void) onCancel
+{
+    [self callCancelBlocks];
+}
+
+#pragma mark - Callbacks
+
+- (void) addCompleteBlock:(TSOperationCompletion)completionBlock
+{
+    [completionBlocks addObject:completionBlock];
+}
+
+- (void) addCancelBlock:(TSOperationCompletion)cancelBlock
+{
+    [cancelBlocks addObject:cancelBlock];
+}
+
+- (void) callCancelBlocks
+{
+    for (TSOperationCompletion cancel in cancelBlocks) {
+        cancel(self);
     }
 }
 
-#pragma mark - Utils
-
-- (void) internalChangePriorityInBlock:(dispatch_block_t)block
+- (void) callCompleteBlocks
 {
-    isInternalChangingPriority = YES;
-    block();
-    isInternalChangingPriority = NO;
+    for (TSOperationCompletion complete in completionBlocks) {
+        complete(self);
+    }
 }
 
 @end
