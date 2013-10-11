@@ -7,19 +7,19 @@
 //
 
 #import "TSLoadOperation.h"
-#import <pthread.h>
+
 
 @implementation TSLoadOperation {
-    TSFileCache *cache;
+    TSCacheManager *cache;
     NSString *key;
 }
 
-- (id) initWithKey:(NSString *)_key andFileCache:(TSFileCache *)_fileCache
+- (id) initWithKey:(NSString *)_key andCacheManager:(TSCacheManager *)_cacheManager;
 {
     self = [super init];
     if (self) {
         key = _key;
-        cache = _fileCache;
+        cache = _cacheManager;
     }
     return self;
 }
@@ -29,7 +29,7 @@
     @autoreleasepool {
         
         if (![self isCancelled]) {
-            self.result = [cache objectForKey:key];
+            self.result = [cache objectForKey:key mode:TSCacheManagerModeFile];
         }
         
         if (!self.result) {

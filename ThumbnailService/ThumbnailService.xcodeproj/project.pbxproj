@@ -25,6 +25,7 @@
 		FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; };
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
+		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,8 @@
 		FA2677891807B1F500F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA67E49E18083C8500B64944 /* TSOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSOperationQueue.h; sourceTree = "<group>"; };
 		FA67E49F18083C8500B64944 /* TSOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperationQueue.m; sourceTree = "<group>"; };
+		FA67E4A118085FBD00B64944 /* TSCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCacheManager.h; sourceTree = "<group>"; };
+		FA67E4A218085FBD00B64944 /* TSCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCacheManager.m; sourceTree = "<group>"; };
 		FA69D3071807B3F800979C84 /* TSSourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceTest.h; sourceTree = "<group>"; };
 		FA69D3081807B3F800979C84 /* TSSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,6 +177,8 @@
 		FA2677681807AFB900F5B02B /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				FA67E4A118085FBD00B64944 /* TSCacheManager.h */,
+				FA67E4A218085FBD00B64944 /* TSCacheManager.m */,
 				FA2677691807AFB900F5B02B /* TSFileCache.h */,
 				FA26776A1807AFB900F5B02B /* TSFileCache.m */,
 			);
@@ -303,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA26777F1807AFB900F5B02B /* TSRequest.m in Sources */,
+				FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */,
 				FA26777E1807AFB900F5B02B /* TSOperation.m in Sources */,
 				FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */,
 				FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */,

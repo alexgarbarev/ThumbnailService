@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "TSOperation.h"
-#import "TSFileCache.h"
+#import "TSCacheManager.h"
 
 @interface TSLoadOperation : TSOperation
 
-- (id) initWithKey:(NSString *)key andFileCache:(TSFileCache *)fileCache;
+- (id) initWithKey:(NSString *)key andCacheManager:(TSCacheManager *)cacheManager;
 
 @end

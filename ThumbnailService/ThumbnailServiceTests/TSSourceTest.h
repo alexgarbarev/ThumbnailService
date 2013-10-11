@@ -10,4 +10,6 @@
 
 @interface TSSourceTest : TSSource
 
+- (void) fire;
+
 @end

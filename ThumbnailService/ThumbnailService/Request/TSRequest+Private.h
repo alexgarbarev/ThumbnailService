@@ -15,6 +15,8 @@
 
 @property (nonatomic, readonly) NSString *identifier;
 
+@property (nonatomic, strong) TSRequest *nextRequest;
+
 - (void) takeThumbnail:(UIImage *)image error:(NSError *)error;
 - (void) takePlaceholder:(UIImage *)image error:(NSError *)error;
 

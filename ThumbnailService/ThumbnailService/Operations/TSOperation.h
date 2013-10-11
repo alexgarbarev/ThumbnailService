@@ -32,4 +32,7 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock;
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock;
 
+
+/* Private and temproary */
+- (void) callCompleteBlocks;
 @end

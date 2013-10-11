@@ -24,4 +24,9 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 - (void) waitUntilFinished;
 
+/* You can shedule next request, which will performs just after current. 
+   Useful when you want to show small thumb, then big
+   Note: if you cancel request, it will cancel all next requests too */
+- (void) setNextRequest:(TSRequest *)nextRequest;
+
 @end

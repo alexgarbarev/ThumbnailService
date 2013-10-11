@@ -69,6 +69,7 @@
         }
     }
     
+    NSLog(@"TSOperation priority set to %d",priority);
     self.queuePriority = priority;
 }
 

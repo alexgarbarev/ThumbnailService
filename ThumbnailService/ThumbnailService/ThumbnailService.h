@@ -11,8 +11,10 @@
 
 @interface ThumbnailService : NSObject
 
-@property (nonatomic) BOOL shouldCachePlaceholders;
+@property (nonatomic) BOOL shouldCachePlaceholders; /* Default: NO */
 
 - (void) performRequest:(TSRequest *)request;
+
+- (void) performRequestOnCurrentThread:(TSRequest *)request;
 
 @end

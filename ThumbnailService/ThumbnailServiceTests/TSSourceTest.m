@@ -8,7 +8,18 @@
 
 #import "TSSourceTest.h"
 
-@implementation TSSourceTest
+@implementation TSSourceTest {
+    dispatch_semaphore_t semaphore;
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        semaphore = dispatch_semaphore_create(0);
+    }
+    return self;
+}
 
 - (NSString *) identifier
 {
@@ -22,7 +33,13 @@
 
 - (UIImage *) thumbnailWithSize:(CGSize)size
 {
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return [UIImage new];
+}
+
+- (void) fire
+{
+    dispatch_semaphore_signal(semaphore);
 }
 
 @end
