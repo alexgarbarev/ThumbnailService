@@ -15,6 +15,7 @@
 #import "TSOperationQueue.h"
 
 #import "TSRequest+Private.h"
+#import "TSOperation+Private.h"
 
 @implementation ThumbnailService {
     
@@ -134,7 +135,7 @@
     TSOperation *operation = [self newOperationForRequest:request];
     request.operation = operation;
     [operation start];
-    [operation callCompleteBlocks];
+    [operation onComplete];
 }
 
 #pragma mark - Operations creation

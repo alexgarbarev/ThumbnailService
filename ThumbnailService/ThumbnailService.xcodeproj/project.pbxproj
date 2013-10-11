@@ -83,6 +83,7 @@
 		FA67E49F18083C8500B64944 /* TSOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperationQueue.m; sourceTree = "<group>"; };
 		FA67E4A118085FBD00B64944 /* TSCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCacheManager.h; sourceTree = "<group>"; };
 		FA67E4A218085FBD00B64944 /* TSCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCacheManager.m; sourceTree = "<group>"; };
+		FA67E4A4180878F700B64944 /* TSOperation+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TSOperation+Private.h"; sourceTree = "<group>"; };
 		FA69D3071807B3F800979C84 /* TSSourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceTest.h; sourceTree = "<group>"; };
 		FA69D3081807B3F800979C84 /* TSSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -194,6 +195,7 @@
 				FA26776F1807AFB900F5B02B /* TSLoadOperation.m */,
 				FA2677701807AFB900F5B02B /* TSOperation.h */,
 				FA2677711807AFB900F5B02B /* TSOperation.m */,
+				FA67E4A4180878F700B64944 /* TSOperation+Private.h */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
