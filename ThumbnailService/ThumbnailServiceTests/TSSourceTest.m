@@ -21,6 +21,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(semaphore);
+}
+
 - (NSString *) identifier
 {
     return @"test";

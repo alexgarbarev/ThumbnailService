@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PreviewDataSource.h"
 
-@interface AssetsCollectionDataSource : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface AssetsCollectionDataSource : NSObject <UICollectionViewDataSource, UICollectionViewDelegate, PreviewDataSource>
 
 @property (nonatomic, weak) UICollectionView *collectionView;
 

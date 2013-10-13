@@ -52,6 +52,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(synchronizationQueue);
+    dispatch_release(callbackQueue);
+}
+
 - (void) cancel
 {
     [self onCancel];

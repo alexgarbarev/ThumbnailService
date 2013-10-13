@@ -31,6 +31,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(queue);
+}
+
 - (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
 {
     dispatch_sync(queue, ^{
@@ -95,6 +100,7 @@
 {
     if (semaphore) {
         dispatch_semaphore_signal(semaphore);
+        dispatch_release(semaphore);
         semaphore = NULL;
     }
 }

@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PreviewDataSource.h"
 
-@interface PDFCollectionDataSource : NSObject
+@interface PDFCollectionDataSource : NSObject <PreviewDataSource>
 
 @end

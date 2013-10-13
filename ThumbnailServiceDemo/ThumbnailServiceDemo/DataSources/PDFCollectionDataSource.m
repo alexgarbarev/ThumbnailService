@@ -29,15 +29,29 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
         document = CGPDFDocumentCreateWithURL((__bridge CFURLRef)documentURL);
         
         thumbnailService = [ThumbnailService new];
-        thumbnailService.useMemoryCache = NO;
-        [self startPrecache];
     }
     return self;
 }
 
+- (void)setShouldPrecache:(BOOL)_shouldPrecache
+{
+    if (_shouldPrecache) {
+        [self startPrecache];
+    }
+}
+
+- (void)setUseMemoryCache:(BOOL)_useMemoryCache
+{
+    thumbnailService.useMemoryCache = _useMemoryCache;
+}
+
+- (void) setUseFileCache:(BOOL)_useFileCache
+{
+    thumbnailService.useFileCache = _useFileCache;
+}
+
 - (void) startPrecache
 {
-    return;
     CFAbsoluteTime timeBeforePrecache = CFAbsoluteTimeGetCurrent();
     
     NSUInteger pagesCount = CGPDFDocumentGetNumberOfPages(document);

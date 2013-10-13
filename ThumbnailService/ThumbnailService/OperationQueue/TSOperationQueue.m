@@ -29,6 +29,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(syncQueue);
+}
+
 - (void) addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
 {
     dispatch_sync(syncQueue, ^{

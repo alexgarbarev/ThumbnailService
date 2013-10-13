@@ -18,6 +18,7 @@
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;
     ThumbnailService *thumbnailService;
+    BOOL shouldPrecache;
 }
 
 - (id) init
@@ -40,7 +41,25 @@
 - (void) assetLibraryDidReload
 {
     [self.collectionView reloadData];
-    [self startPrecache];
+    if (shouldPrecache) {
+        [self startPrecache];
+    }
+
+}
+
+- (void) setShouldPrecache:(BOOL)_shouldPrecache
+{
+    shouldPrecache = _shouldPrecache;
+}
+
+- (void)setUseMemoryCache:(BOOL)_useMemoryCache
+{
+    thumbnailService.useMemoryCache = _useMemoryCache;
+}
+
+- (void) setUseFileCache:(BOOL)_useFileCache
+{
+    thumbnailService.useFileCache = _useFileCache;
 }
 
 - (void) startPrecache

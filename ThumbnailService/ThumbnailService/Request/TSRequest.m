@@ -108,6 +108,7 @@
 {
     if (liveSemaphore != NULL) {
         dispatch_semaphore_signal(liveSemaphore);
+        dispatch_release(liveSemaphore);
         liveSemaphore = NULL;
     }
 }

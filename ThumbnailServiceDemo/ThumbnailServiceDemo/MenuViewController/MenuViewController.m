@@ -12,6 +12,7 @@
 #import "PDFCollectionDataSource.h"
 
 #import "ThumbnailService.h"
+#import "PreviewDataSource.h"
 
 @interface MenuViewController ()
 @property (weak, nonatomic) IBOutlet UISegmentedControl *menuSegmentedControl;
@@ -35,8 +36,11 @@
 {
     Class selectedSourceClass = [self classForSelectedIndex:[self.menuSegmentedControl selectedSegmentIndex]];
     PreviewViewController *previewVC = segue.destinationViewController;
-    id source = [selectedSourceClass new];
-    [previewVC setSource:source];
+    id<PreviewDataSource> source = [selectedSourceClass new];
+    [source setUseFileCache:YES];
+    [source setUseMemoryCache:YES];
+    [source setShouldPrecache:YES];
+    [previewVC setSource:(id)source];
 }
 
 - (IBAction)clearFileCache:(id)sender

@@ -28,6 +28,11 @@ static NSString *kCacheExtensionObject = @"object";
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(fileCacheQueue);
+}
+
 #pragma mark - NSCache overrides
 
 - (id)objectForKey:(id)key

@@ -27,7 +27,6 @@
 		FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */; };
 		FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540532180A82910092752B /* PDFCollectionDataSource.m */; };
 		FA540536180A82910092752B /* TSSourcePdfPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540534180A82910092752B /* TSSourcePdfPage.m */; };
-		FA540539180A829D0092752B /* example.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FA540538180A829D0092752B /* example.pdf */; };
 		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
 		FA67E4B918087B9900B64944 /* TSSourceALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4B818087B9900B64944 /* TSSourceALAsset.m */; };
 		FAF8E914180B141A00654C00 /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FAF8E913180B141A00654C00 /* sample.pdf */; };
@@ -96,7 +95,6 @@
 		FA540532180A82910092752B /* PDFCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFCollectionDataSource.m; sourceTree = "<group>"; };
 		FA540533180A82910092752B /* TSSourcePdfPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePdfPage.h; sourceTree = "<group>"; };
 		FA540534180A82910092752B /* TSSourcePdfPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourcePdfPage.m; sourceTree = "<group>"; };
-		FA540538180A829D0092752B /* example.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = example.pdf; path = ../../../../../Downloads/ThumbnailService/ThumbnailServiceDemo/ThumbnailServiceDemo/Resources/example.pdf; sourceTree = "<group>"; };
 		FA54053D180A83BE0092752B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
 		FA54053E180A83BE0092752B /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
 		FA54053F180A83BE0092752B /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
@@ -106,6 +104,7 @@
 		FA67E4B718087B9900B64944 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
 		FA67E4B818087B9900B64944 /* TSSourceALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceALAsset.m; sourceTree = "<group>"; };
 		FAF8E913180B141A00654C00 /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sample.pdf; path = ../../../../../Downloads/sample.pdf; sourceTree = "<group>"; };
+		FAF8E918180B1FC000654C00 /* PreviewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewDataSource.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,7 +218,6 @@
 			isa = PBXGroup;
 			children = (
 				FAF8E913180B141A00654C00 /* sample.pdf */,
-				FA540538180A829D0092752B /* example.pdf */,
 				FA26769018071F7C00F5B02B /* Images.xcassets */,
 				FA26769118071F7C00F5B02B /* Main.storyboard */,
 				FA26769218071F7C00F5B02B /* ThumbnailServiceDemo-Info.plist */,
@@ -250,6 +248,7 @@
 		FA2676A118071FFD00F5B02B /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				FAF8E918180B1FC000654C00 /* PreviewDataSource.h */,
 				FA67E4B718087B9900B64944 /* TSSourceALAsset.h */,
 				FA67E4B818087B9900B64944 /* TSSourceALAsset.m */,
 				FA540533180A82910092752B /* TSSourcePdfPage.h */,
@@ -361,7 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAF8E914180B141A00654C00 /* sample.pdf in Resources */,
-				FA540539180A829D0092752B /* example.pdf in Resources */,
 				FA26769418071F7C00F5B02B /* Main.storyboard in Resources */,
 				FA26769318071F7C00F5B02B /* Images.xcassets in Resources */,
 			);
