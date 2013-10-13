@@ -20,6 +20,7 @@
     if (self) {
         memoryCache = [NSCache new];
         fileCache = [TSFileCache new];
+        fileCache.shouldWriteAsynchronically = YES;
     }
     return self;
 }

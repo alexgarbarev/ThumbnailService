@@ -13,6 +13,8 @@
 
 @interface TSFileCache : NSCache
 
+@property (nonatomic) BOOL shouldWriteAsynchronically;
+
 /* This class writes object to file instead of keep in memory. 
    So, all memory-related properties and methods from NSCache will not work */
 

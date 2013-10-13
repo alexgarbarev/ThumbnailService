@@ -60,7 +60,7 @@ static NSString *kCacheExtensionObject = @"object";
 
 - (void)setObject:(id)object forKey:(id)key cost:(NSUInteger)g
 {
-    dispatch_sync(fileCacheQueue, ^{
+    dispatch_block_t writeBlock = ^{
         NSString *extension;
         NSData *data;
         if ([object isKindOfClass:[UIImage class]]) {
@@ -72,7 +72,13 @@ static NSString *kCacheExtensionObject = @"object";
         }
         NSString *path = [[[self cacheDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:extension];
         [data writeToFile:path options:0 error:nil];
-    });
+    };
+    
+    if (self.shouldWriteAsynchronically) {
+        dispatch_async(fileCacheQueue, writeBlock);
+    } else {
+        dispatch_sync(fileCacheQueue, writeBlock);
+    }
 }
 
 - (void)removeObjectForKey:(id)key
