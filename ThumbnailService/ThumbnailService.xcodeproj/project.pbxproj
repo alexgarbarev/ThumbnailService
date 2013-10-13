@@ -49,7 +49,7 @@
 		FA26773D1807AF7F00F5B02B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "headers/$(PRODUCT_NAME)";
+			dstPath = "$(SRCROOT)/headers/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 				FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */,

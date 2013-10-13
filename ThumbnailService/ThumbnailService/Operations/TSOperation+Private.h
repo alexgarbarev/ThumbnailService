@@ -10,6 +10,6 @@
 
 @interface TSOperation ()
 
-- (void) onComplete;
+- (void) runOnMainThread;
 
 @end

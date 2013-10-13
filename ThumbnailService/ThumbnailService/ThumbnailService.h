@@ -14,10 +14,15 @@
 
 @property (nonatomic) BOOL shouldCachePlaceholders; /* Default: NO */
 
+@property (nonatomic) BOOL useMemoryCache; /* Default: YES */
+@property (nonatomic) BOOL useFileCache;   /* Default: YES */
+
 - (void) performRequest:(TSRequest *)request;
 
 - (void) performRequestOnMainThread:(TSRequest *)request;
 
 - (void) performRequestGroup:(TSRequestGroup *)group;
+
+- (void) clearFileCache;
 
 @end

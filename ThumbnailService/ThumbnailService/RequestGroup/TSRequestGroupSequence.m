@@ -59,14 +59,14 @@
     dispatch_sync(queue, ^{
         [sequence removeObject:request];
         if (sequence.count == 0) {
-            dispatch_semaphore_signal(semaphore);
+            [self finishGroup];
         }
     });
 }
 
 - (void) didCancelRequest:(TSRequest *)request
 {
-//    [self didFinishRequest:request];
+
 }
 
 - (BOOL)shouldPerformOnMainQueueRequest:(TSRequest *)request
@@ -77,18 +77,33 @@
 - (void) cancel
 {
     dispatch_sync(queue, ^{
+        requestOnMainThread = nil;
+        [self finishGroup];
         for (TSRequest *request in sequence) {
             [request cancel];
         }
         sequence = nil;
-        requestOnMainThread = nil;
-        dispatch_semaphore_signal(semaphore);
     });
+}
+
+- (BOOL) isGroupFinished
+{
+    return semaphore == NULL;
+}
+
+- (void) finishGroup
+{
+    if (semaphore) {
+        dispatch_semaphore_signal(semaphore);
+        semaphore = NULL;
+    }
 }
 
 - (void)waitUntilFinished
 {
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    if (semaphore != NULL) {
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    }
 }
 
 

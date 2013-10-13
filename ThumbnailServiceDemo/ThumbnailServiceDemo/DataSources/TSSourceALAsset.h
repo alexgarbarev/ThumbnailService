@@ -9,7 +9,7 @@
 #import "TSSource.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
-@interface AssetSource : TSSource
+@interface TSSourceALAsset : TSSource
 
 - (id) initWithAsset:(ALAsset *)asset;
 

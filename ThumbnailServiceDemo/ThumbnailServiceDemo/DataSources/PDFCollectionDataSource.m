@@ -9,33 +9,62 @@
 #import "PDFCollectionDataSource.h"
 #import "ThumbnailService.h"
 #import "PreviewCollectionCell.h"
-#import "TSSourcePDF.h"
+#import "TSSourcePdfPage.h"
 #import "TSRequestGroupSequence.h"
+
+static CGSize kSmallThumbnailSize = (CGSize){144, 144};
 
 @implementation PDFCollectionDataSource {
     CGPDFDocumentRef document;
     ThumbnailService *thumbnailService;
+    NSString *documentName;
 }
 
 - (id) init
 {
     self = [super init];
     if (self) {
-        NSURL *documentURL = [[NSBundle mainBundle] URLForResource:@"example" withExtension:@"pdf"];
+        documentName = @"sample";
+        NSURL *documentURL = [[NSBundle mainBundle] URLForResource:documentName withExtension:@"pdf"];
         document = CGPDFDocumentCreateWithURL((__bridge CFURLRef)documentURL);
         
         thumbnailService = [ThumbnailService new];
+        thumbnailService.useMemoryCache = NO;
+        [self startPrecache];
     }
     return self;
 }
 
-
+- (void) startPrecache
+{
+    return;
+    CFAbsoluteTime timeBeforePrecache = CFAbsoluteTimeGetCurrent();
+    
+    NSUInteger pagesCount = CGPDFDocumentGetNumberOfPages(document);
+    __block NSUInteger pendingPrecache = pagesCount;
+    
+    for (NSInteger i = 1; i < pagesCount; i++) {
+        TSRequest *request = [TSRequest new];
+        
+        
+        TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:CGPDFDocumentGetPage(document, i) documentName:documentName];
+        request.source = pageSource;
+        request.size = kSmallThumbnailSize;
+        request.priority = NSOperationQueuePriorityVeryLow;
+        [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
+            pendingPrecache--;
+            if (pendingPrecache == 0) {
+                NSLog(@"all pdf pages precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
+            }
+        }];
+        [thumbnailService performRequest:request];
+    }
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return CGPDFDocumentGetNumberOfPages(document);
 }
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -47,47 +76,38 @@
         viewCell.imageView.image = nil;
     }
     
-    CGPDFPageRef page = CGPDFDocumentGetPage(document, [indexPath item]);
+    CGPDFPageRef page = CGPDFDocumentGetPage(document, [indexPath item]+1);
+    
+    TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
+    pageSource.contentMode = UIViewContentModeScaleAspectFit;
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
     
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    
     TSRequest *smallThumbRequest = [TSRequest new];
-    smallThumbRequest.source = [[TSSourcePDF alloc] initWithPdfPage:page];
-    smallThumbRequest.size = CGSizeMake(40 *scale, 40*scale);
+    smallThumbRequest.source = pageSource;
+    smallThumbRequest.size = kSmallThumbnailSize;
     smallThumbRequest.priority = NSOperationQueuePriorityVeryHigh;
-    
     [smallThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
-        NSAssert([NSThread isMainThread], @"");
-        NSLog(@"small received for index %d",[indexPath item]);
         viewCell.imageView.image = result;
     }];
     
     TSRequest *bigThumbRequest = [TSRequest new];
-    bigThumbRequest.source = [[TSSourcePDF alloc] initWithPdfPage:page];
-    bigThumbRequest.size = CGSizeMake(kThumbSize.width * scale, kThumbSize.height * scale);
+    bigThumbRequest.source = pageSource;
+    bigThumbRequest.size = kThumbSize;
     bigThumbRequest.priority = NSOperationQueuePriorityVeryHigh;
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
-        NSAssert([NSThread isMainThread], @"");
-        NSLog(@"big received for index %d",[indexPath item]);
-//        if ([indexPath item] == 9) {
-//            
-//        }
         viewCell.imageView.image = result;
     }];
     
-    [group addRequest:smallThumbRequest runOnMainThread:YES];
+    [group addRequest:smallThumbRequest runOnMainThread:NO];
     [group addRequest:bigThumbRequest runOnMainThread:NO];
     
-    [thumbnailService performRequestGroup:group ];
-    NSLog(@"Cell: %d",[indexPath item]);
+    [thumbnailService performRequestGroup:group];
     
     viewCell.context = group;
     
     return viewCell;
-    
 }
 
 @end

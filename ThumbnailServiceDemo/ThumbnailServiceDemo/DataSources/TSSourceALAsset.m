@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Aleksey Garbarev. All rights reserved.
 //
 
-#import "AssetSource.h"
+#import "TSSourceALAsset.h"
 #import "ALAsset+Identifier.h"
 #import "ALAsset+Images.h"
 
-@implementation AssetSource {
+@implementation TSSourceALAsset {
     ALAsset *asset;
 }
 
@@ -33,7 +33,7 @@
     return [asset thumbnailWithType:AssetThumbnailTypeAspectRatio];
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     return [asset thumbnailWithSize:MAX(size.width, size.height)];
 }

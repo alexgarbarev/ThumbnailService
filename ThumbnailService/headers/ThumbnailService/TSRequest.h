@@ -17,6 +17,8 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 @property (nonatomic) CGSize size;
 @property (nonatomic) NSOperationQueuePriority priority;
 
+@property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
+
 - (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 

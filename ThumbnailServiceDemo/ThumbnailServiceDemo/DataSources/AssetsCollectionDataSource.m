@@ -13,7 +13,7 @@
 #import "NotificationUtils.h"
 
 #import "ThumbnailService.h"
-#import "AssetSource.h"
+#import "TSSourceALAsset.h"
 
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;
@@ -51,7 +51,7 @@
     
     for (ALAsset *asset in allAssets) {
         TSRequest *request = [TSRequest new];
-        request.source = [[AssetSource alloc] initWithAsset:asset];
+        request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
         request.size = kThumbSize;
         request.priority = NSOperationQueuePriorityVeryLow;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
@@ -83,7 +83,7 @@
     ALAsset *asset = [source assetForIndex:[indexPath item]];
 
     TSRequest *request = [TSRequest new];
-    request.source = [[AssetSource alloc] initWithAsset:asset];
+    request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
     request.size = kThumbSize;
     request.priority = NSOperationQueuePriorityVeryHigh;
 

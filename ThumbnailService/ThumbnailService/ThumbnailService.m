@@ -17,12 +17,20 @@
 #import "TSRequest+Private.h"
 #import "TSOperation+Private.h"
 
+#define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
+#define GET_BITMASK(source, mask) (source & mask)
+
+
 @implementation ThumbnailService {
     
     TSCacheManager *placeholderCache;
     TSCacheManager *thumbnailsCache;
     
     TSOperationQueue *queue;
+    
+    TSCacheManagerMode cacheModeFile;
+    TSCacheManagerMode cacheModeMemory;
+    TSCacheManagerMode cacheModeFileAndMemory;
 }
 
 - (id)init
@@ -37,8 +45,39 @@
         
         thumbnailsCache = [TSCacheManager new];
         thumbnailsCache.name = @"Thumbnails";
+        
+        self.useMemoryCache = YES;
+        self.useFileCache = YES;
     }
     return self;
+}
+
+- (void)setUseFileCache:(BOOL)useFileCache
+{
+    SET_BITMASK(cacheModeFile, TSCacheManagerModeFile, useFileCache);
+    SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeFile, useFileCache);
+}
+
+- (void)setUseMemoryCache:(BOOL)useMemoryCache
+{
+    SET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory, useMemoryCache);
+    SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeMemory, useMemoryCache);
+}
+
+- (BOOL)useMemoryCache
+{
+    return GET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory);
+}
+
+- (BOOL)useFileCache
+{
+    return GET_BITMASK(cacheModeFile, TSCacheManagerModeFile);
+}
+
+- (void) clearFileCache
+{
+    [placeholderCache removeAllObjectsForMode:cacheModeFile];
+    [thumbnailsCache removeAllObjectsForMode:cacheModeFile];
 }
 
 #pragma mark - Placeholder methods
@@ -158,8 +197,7 @@
     dispatch_block_t performBlock = ^{
         TSOperation *operation = [self newOperationForRequest:request];
         request.operation = operation;
-        [operation start];
-        [operation onComplete];
+        [operation runOnMainThread];
     };
     
     if ([NSThread isMainThread]) {
@@ -174,7 +212,7 @@
 - (TSOperation *) newOperationForRequest:(TSRequest *)request
 {
     TSOperation *operation;
-    if ([thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeFile]) {
+    if (cacheModeFile && [thumbnailsCache objectExistsForKey:request.identifier mode:cacheModeFile]) {
         operation = [self newOperationToLoadThumbnailForRequest:request];
     } else {
         operation = [self newOperationToGenerateThumbnailForRequest:request];
@@ -184,7 +222,7 @@
 
 - (TSOperation *) newOperationToGenerateThumbnailForRequest:(TSRequest *)request
 {
-    TSOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:request.size];
+    TSOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:[request sizeToRender]];
 
     [operation addCompleteBlock:^(TSOperation *operation) {
         [self didGenerateThumbnailForIdentifier:request.identifier fromOperation:operation];
@@ -209,7 +247,7 @@
 - (void) didGenerateThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
     if (operation.result && !operation.error) {
-        [thumbnailsCache setObject:operation.result forKey:identifier mode:TSCacheManagerModeFileAndMemory];
+        [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeFileAndMemory];
     }
 
     [self takeThumbnailInRequests:operation.requests withImage:operation.result error:operation.error];
@@ -218,7 +256,7 @@
 - (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
     if (operation.result && !operation.error) {
-        [thumbnailsCache setObject:operation.result forKey:identifier mode:TSCacheManagerModeMemory];
+        [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeMemory];
     }
     
     [self takeThumbnailInRequests:operation.requests withImage:operation.result error:operation.error];

@@ -20,6 +20,9 @@
     
     dispatch_queue_t synchronizationQueue;
     dispatch_queue_t callbackQueue;
+    
+    int completionCalled;
+    int calledFromBlock;
 }
 
 @synthesize completionBlocks = _completionBlocks;
@@ -29,6 +32,9 @@
 {
     self = [super init];
     if (self) {
+        completionCalled = 0;
+        calledFromBlock = 0;
+        
         requests = [NSMutableSet new];
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
@@ -91,7 +97,6 @@
 
 - (void) _updatePriority
 {
-    NSLog(@"requests: %@",requests);
     NSOperationQueuePriority priority = NSOperationQueuePriorityVeryLow;
     
     for (TSRequest *request in requests) {
@@ -151,7 +156,7 @@
 
 - (void) callCancelBlocks
 {
-    dispatch_sync(callbackQueue, ^{
+    dispatch_async(callbackQueue, ^{
         for (TSOperationCompletion cancel in self.cancelBlocks) {
             cancel(self);
         }
@@ -160,11 +165,36 @@
 
 - (void) callCompleteBlocks
 {
-    dispatch_sync(callbackQueue, ^{
+    dispatch_async(callbackQueue, ^{
         for (TSOperationCompletion complete in self.completionBlocks) {
             complete(self);
         }
     });
 }
+
+- (void) callCompleteBlocksOnMainThread
+{
+    dispatch_block_t completion = ^{
+        for (TSOperationCompletion complete in self.completionBlocks) {
+            complete(self);
+        }
+    };
+
+    if ([NSThread isMainThread]) {
+        completion();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), completion);
+    }
+}
+
+#pragma mark - Manual running
+
+- (void) runOnMainThread
+{
+    [super setCompletionBlock:nil];
+    [self start];
+    [self callCompleteBlocksOnMainThread];
+}
+
 
 @end

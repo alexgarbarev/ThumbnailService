@@ -36,11 +36,8 @@
 }
 
 
-- (void) testMultipleRequests
+- (void) testGroupNormalCompletion
 {
-    
-    return;
-    
     __block int thumbnailCalled = 0;
     __block int placeholderCalled = 0;
     
@@ -85,43 +82,83 @@
     
     [thumbnailService performRequestGroup:group];
     
-    //    [thumbnailService performRequest:request1];
-    //    [thumbnailService performRequest:request2];
-    //    [thumbnailService performRequest:request3];
-    
-    
-    //    WaitAndCallInBackground(1, ^{
-    //        [request1 cancel];
-    //    });
-    //
-    //    WaitAndCallInBackground(1, ^{
-    //        [request3 cancel];
-    //    });
-    //
-    //    WaitAndCallInBackground(2, ^{
-    //        [request3 cancel];
-    //    });
-    
-    WaitAndCallInBackground(1, ^{
+    WaitAndCallInBackground(0.2, ^{
         [source fire];
     });
     
-    WaitAndCallInBackground(1, ^{
+    WaitAndCallInBackground(0.4, ^{
         [source fire];
     });
     
-    WaitAndCallInBackground(1, ^{
+    WaitAndCallInBackground(0.6, ^{
         [source fire];
     });
-    
-    //    [request1 waitUntilFinished];
-    //    [request2 waitUntilFinished];
-    //    [request3 waitUntilFinished];
     
     [group waitUntilFinished];
     
     XCTAssert(thumbnailCalled == 3, @"Called: %d", thumbnailCalled);
     XCTAssert(placeholderCalled == 3, @"Called: %d",placeholderCalled);
+    
+}
+
+- (void) testGroupCancel
+{
+    __block int thumbnailCalled = 0;
+    
+    TSRequestCompletion thumbnailCompletion = ^(UIImage *result, NSError *error) {
+        thumbnailCalled++;
+    };
+    
+    TSSourceTest *source = [TSSourceTest new];
+    
+    TSRequest *request1 = [TSRequest new];
+    request1.source = source;
+    request1.size = CGSizeMake(100, 100);
+    request1.priority = NSOperationQueuePriorityHigh;
+    [request1 setThumbnailCompletion:thumbnailCompletion];
+    
+    TSRequest *request2 = [TSRequest new];
+    request2.source = source;
+    request2.size = CGSizeMake(200, 200);
+    request2.priority = NSOperationQueuePriorityNormal;
+    [request2 setThumbnailCompletion:thumbnailCompletion];
+    
+    TSRequest *request3 = [TSRequest new];
+    request3.source = source;
+    request3.size = CGSizeMake(300, 300);
+    request3.priority = NSOperationQueuePriorityLow;
+    [request3 setThumbnailCompletion:thumbnailCompletion];
+    
+    request1.shouldCastCompletionsToMainThread = NO;
+    request2.shouldCastCompletionsToMainThread = NO;
+    request3.shouldCastCompletionsToMainThread = NO;
+    
+    TSRequestGroupSequence *group = [TSRequestGroupSequence new];
+    [group addRequest:request1 runOnMainThread:NO];
+    [group addRequest:request2 runOnMainThread:NO];
+    [group addRequest:request3 runOnMainThread:NO];
+    
+    [thumbnailService performRequestGroup:group];
+    
+    WaitAndCallInBackground(0.2, ^{
+        [source fire];
+    });
+    
+    WaitAndCallInBackground(0.4, ^{
+        [source fire];
+    });
+    
+    WaitAndCallInBackground(0.6, ^{
+        [source fire];
+    });
+    
+    WaitAndCallInBackground(0.45, ^{
+        [group cancel];
+    });
+    
+    [group waitUntilFinished];
+    
+    XCTAssert(thumbnailCalled == 2, @"Called: %d", thumbnailCalled);
     
 }
 

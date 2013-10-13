@@ -26,4 +26,6 @@
 
 - (BOOL) isRequestFinished;
 
+- (CGSize) sizeToRender;
+
 @end

@@ -29,6 +29,7 @@
     if (self) {
         [self requestDidStarted];
         self.shouldCastCompletionsToMainThread = YES;
+        self.shouldAdjustSizeToScreenScale = YES;
     }
     return self;
 }
@@ -36,7 +37,8 @@
 - (NSString *) identifier
 {
     if (needUpdateIdentifier || !_cachedIdentifier) {
-        _cachedIdentifier = [[NSString alloc] initWithFormat:@"%@_%gx%g",[self.source identifier], self.size.width, self.size.height];
+        CGSize size = [self sizeToRender];
+        _cachedIdentifier = [[NSString alloc] initWithFormat:@"%@_%gx%g",[self.source identifier], size.width, size.height];
         needUpdateIdentifier = NO;
     }
 
@@ -53,6 +55,12 @@
 {
     _size = size;
     needUpdateIdentifier = YES;
+}
+
+- (CGSize)sizeToRender
+{
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return CGSizeMake(_size.width * scale, _size.height * scale);
 }
 
 - (void) setOperation:(TSOperation *)operation

@@ -50,12 +50,24 @@
                                     <segment title="PDF"/>
                                 </segments>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZi-QR-QJb">
+                                <rect key="frame" x="104" y="503" width="113" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Clear File Cache">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clearFileCache:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="8eg-lS-lpE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Oct-oF-2Wy" firstAttribute="centerX" secondItem="QfE-7O-0qI" secondAttribute="centerX" id="3sa-jt-04j"/>
                             <constraint firstItem="QfE-7O-0qI" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="T8q-YO-ZEp"/>
                             <constraint firstItem="uve-di-DEx" firstAttribute="top" secondItem="QfE-7O-0qI" secondAttribute="bottom" constant="159" id="b9u-Qf-wKa"/>
+                            <constraint firstItem="uve-di-DEx" firstAttribute="top" secondItem="nZi-QR-QJb" secondAttribute="bottom" constant="35" id="cel-zT-zMe"/>
+                            <constraint firstItem="nZi-QR-QJb" firstAttribute="centerX" secondItem="QfE-7O-0qI" secondAttribute="centerX" id="qCy-PG-NUw"/>
                             <constraint firstItem="Oct-oF-2Wy" firstAttribute="top" secondItem="eqg-70-SFW" secondAttribute="bottom" constant="158" id="tkx-yG-hM2"/>
                         </constraints>
                     </view>
@@ -81,7 +93,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2Cb-av-BiI">
-                                <rect key="frame" x="0.0" y="101" width="320" height="409"/>
+                                <rect key="frame" x="0.0" y="65" width="320" height="503"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.8980392157" green="0.90588235289999997" blue="0.92549019610000005" alpha="1" colorSpace="deviceRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="M7L-lW-CkY">
@@ -116,8 +128,8 @@
                         <constraints>
                             <constraint firstItem="2Cb-av-BiI" firstAttribute="leading" secondItem="Alf-OA-eJQ" secondAttribute="leading" id="JbS-F3-OPR"/>
                             <constraint firstAttribute="trailing" secondItem="2Cb-av-BiI" secondAttribute="trailing" id="Qxj-QK-zmN"/>
-                            <constraint firstItem="z3s-j2-kUs" firstAttribute="top" secondItem="2Cb-av-BiI" secondAttribute="bottom" constant="58" id="fnu-kZ-1u7"/>
-                            <constraint firstItem="2Cb-av-BiI" firstAttribute="top" secondItem="hEX-KW-Doc" secondAttribute="bottom" constant="37" id="ic0-vK-NqM"/>
+                            <constraint firstItem="z3s-j2-kUs" firstAttribute="top" secondItem="2Cb-av-BiI" secondAttribute="bottom" id="fnu-kZ-1u7"/>
+                            <constraint firstItem="2Cb-av-BiI" firstAttribute="top" secondItem="hEX-KW-Doc" secondAttribute="bottom" constant="1" id="ic0-vK-NqM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TQG-pB-9mh"/>

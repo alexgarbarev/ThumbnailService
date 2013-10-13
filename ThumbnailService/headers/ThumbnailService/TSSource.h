@@ -14,7 +14,7 @@
 - (NSString *) identifier;
 
 - (UIImage *) placeholder; 
-- (UIImage *) thumbnailWithSize:(CGSize)size;
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError **)error;
 
 @end
 
