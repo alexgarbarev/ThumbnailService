@@ -22,7 +22,7 @@
     return nil;
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     NSAssert(NO, @"Must override");
     return nil;

@@ -78,11 +78,15 @@
 
 - (void) cancel
 {
-    self.operation = nil;
     self.thumbnailBlock = nil;
     self.placeholderBlock = nil;
-    [self requestDidFinish];
-    [self.group didCancelRequest:self];
+    
+    if (![self isRequestFinished]) {
+        [self requestDidFinish];
+        [self.group didCancelRequest:self];
+    }
+    
+    self.operation = nil;
 }
 
 #pragma mark - Life-cycle
@@ -94,12 +98,22 @@
 
 - (void) requestDidFinish
 {
-    dispatch_semaphore_signal(liveSemaphore);
+    if (liveSemaphore != NULL) {
+        dispatch_semaphore_signal(liveSemaphore);
+        liveSemaphore = NULL;
+    }
+}
+
+- (BOOL) isRequestFinished
+{
+    return liveSemaphore == NULL;
 }
 
 - (void) waitUntilFinished
 {
-    dispatch_semaphore_wait(liveSemaphore, DISPATCH_TIME_FOREVER);
+    if (![self isRequestFinished]) {
+        dispatch_semaphore_wait(liveSemaphore, DISPATCH_TIME_FOREVER);
+    }
 }
 
 #pragma mark - Callbacks
@@ -133,8 +147,10 @@
 {
     [self performCompletion:self.thumbnailBlock withResult:image error:error];
 
-    [self.group didFinishRequest:self];
-    [self requestDidFinish];
+    if (![self isRequestFinished]) {
+        [self requestDidFinish];
+        [self.group didFinishRequest:self];
+    }
 }
 
 - (void) performCompletion:(TSRequestCompletion)completion withResult:(UIImage *)image error:(NSError *)error

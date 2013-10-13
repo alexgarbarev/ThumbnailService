@@ -24,4 +24,6 @@
 - (BOOL) needPlaceholder;
 - (BOOL) needThumbnail;
 
+- (BOOL) isRequestFinished;
+
 @end

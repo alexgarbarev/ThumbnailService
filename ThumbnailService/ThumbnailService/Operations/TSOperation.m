@@ -91,6 +91,7 @@
 
 - (void) _updatePriority
 {
+    NSLog(@"requests: %@",requests);
     NSOperationQueuePriority priority = NSOperationQueuePriorityVeryLow;
     
     for (TSRequest *request in requests) {
@@ -111,7 +112,7 @@
 
 - (void) onCancel
 {
-    [self callCompleteBlocks];
+    [self callCancelBlocks];
 }
 
 #pragma mark - Callbacks
@@ -150,7 +151,7 @@
 
 - (void) callCancelBlocks
 {
-    dispatch_async(callbackQueue, ^{
+    dispatch_sync(callbackQueue, ^{
         for (TSOperationCompletion cancel in self.cancelBlocks) {
             cancel(self);
         }
@@ -159,7 +160,7 @@
 
 - (void) callCompleteBlocks
 {
-    dispatch_async(callbackQueue, ^{
+    dispatch_sync(callbackQueue, ^{
         for (TSOperationCompletion complete in self.completionBlocks) {
             complete(self);
         }

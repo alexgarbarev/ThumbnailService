@@ -11,6 +11,7 @@
 @implementation TSGenerateOperation {
     TSSource *source;
     CGSize size;
+    BOOL isCancelled;
 }
 
 - (id) initWithSource:(TSSource *)_source size:(CGSize)_size
@@ -19,6 +20,7 @@
     if (self) {
         source = _source;
         size = _size;
+        isCancelled = NO;
     }
     return self;
 }
@@ -27,7 +29,9 @@
 {
     @autoreleasepool {
         if (![self isCancelled]) {
-            self.result = [source thumbnailWithSize:size];
+            NSError *error = nil;
+            self.result = [source thumbnailWithSize:size isCancelled:&isCancelled error:&error];
+            self.error = error;
         }
         if ([self isCancelled]) {
             self.result = nil;
@@ -35,8 +39,14 @@
     }
 }
 
+- (BOOL) isCancelled
+{
+    return isCancelled;
+}
+
 - (void) cancel
 {
+    isCancelled = YES;
     self.result = nil;
     [super cancel];
 }

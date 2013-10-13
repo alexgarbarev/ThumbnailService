@@ -12,7 +12,6 @@
 		FA2677521807AF7F00F5B02B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677421807AF7F00F5B02B /* Foundation.framework */; };
 		FA2677571807AF7F00F5B02B /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA26773F1807AF7F00F5B02B /* libThumbnailService.a */; };
 		FA26775D1807AF7F00F5B02B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA26775B1807AF7F00F5B02B /* InfoPlist.strings */; };
-		FA26775F1807AF7F00F5B02B /* ThumbnailServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26775E1807AF7F00F5B02B /* ThumbnailServiceTests.m */; };
 		FA26777B1807AFB900F5B02B /* TSFileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26776A1807AFB900F5B02B /* TSFileCache.m */; };
 		FA26777C1807AFB900F5B02B /* TSGenerateOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26776D1807AFB900F5B02B /* TSGenerateOperation.m */; };
 		FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26776F1807AFB900F5B02B /* TSLoadOperation.m */; };
@@ -28,6 +27,9 @@
 		FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54052E180A76220092752B /* TSRequestGroupSequence.m */; };
 		FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA540527180A74CE0092752B /* TSRequestGroup.h */; };
 		FA54053B180A83600092752B /* TSRequestGroupSequence.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA54052D180A76220092752B /* TSRequestGroupSequence.h */; };
+		FA54054B180AC88E0092752B /* TestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054A180AC88E0092752B /* TestUtils.m */; };
+		FA54054E180AD37E0092752B /* RequestGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054C180AD37E0092752B /* RequestGroupTests.m */; };
+		FA54054F180AD37E0092752B /* RequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054D180AD37E0092752B /* RequestTests.m */; };
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
@@ -68,7 +70,6 @@
 		FA2677531807AF7F00F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		FA26775A1807AF7F00F5B02B /* ThumbnailServiceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ThumbnailServiceTests-Info.plist"; sourceTree = "<group>"; };
 		FA26775C1807AF7F00F5B02B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		FA26775E1807AF7F00F5B02B /* ThumbnailServiceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThumbnailServiceTests.m; sourceTree = "<group>"; };
 		FA2677691807AFB900F5B02B /* TSFileCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFileCache.h; sourceTree = "<group>"; };
 		FA26776A1807AFB900F5B02B /* TSFileCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFileCache.m; sourceTree = "<group>"; };
 		FA26776C1807AFB900F5B02B /* TSGenerateOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSGenerateOperation.h; sourceTree = "<group>"; };
@@ -89,6 +90,10 @@
 		FA540528180A74CE0092752B /* TSRequestGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroup.m; sourceTree = "<group>"; };
 		FA54052D180A76220092752B /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
 		FA54052E180A76220092752B /* TSRequestGroupSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroupSequence.m; sourceTree = "<group>"; };
+		FA540549180AC88E0092752B /* TestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestUtils.h; sourceTree = "<group>"; };
+		FA54054A180AC88E0092752B /* TestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestUtils.m; sourceTree = "<group>"; };
+		FA54054C180AD37E0092752B /* RequestGroupTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestGroupTests.m; sourceTree = "<group>"; };
+		FA54054D180AD37E0092752B /* RequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestTests.m; sourceTree = "<group>"; };
 		FA67E49E18083C8500B64944 /* TSOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSOperationQueue.h; sourceTree = "<group>"; };
 		FA67E49F18083C8500B64944 /* TSOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperationQueue.m; sourceTree = "<group>"; };
 		FA67E4A118085FBD00B64944 /* TSCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCacheManager.h; sourceTree = "<group>"; };
@@ -169,9 +174,12 @@
 		FA2677581807AF7F00F5B02B /* ThumbnailServiceTests */ = {
 			isa = PBXGroup;
 			children = (
+				FA540549180AC88E0092752B /* TestUtils.h */,
+				FA54054A180AC88E0092752B /* TestUtils.m */,
 				FA69D3071807B3F800979C84 /* TSSourceTest.h */,
 				FA69D3081807B3F800979C84 /* TSSourceTest.m */,
-				FA26775E1807AF7F00F5B02B /* ThumbnailServiceTests.m */,
+				FA54054D180AD37E0092752B /* RequestTests.m */,
+				FA54054C180AD37E0092752B /* RequestGroupTests.m */,
 				FA2677591807AF7F00F5B02B /* Supporting Files */,
 			);
 			path = ThumbnailServiceTests;
@@ -349,8 +357,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA26775F1807AF7F00F5B02B /* ThumbnailServiceTests.m in Sources */,
 				FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */,
+				FA54054B180AC88E0092752B /* TestUtils.m in Sources */,
+				FA54054F180AD37E0092752B /* RequestTests.m in Sources */,
+				FA54054E180AD37E0092752B /* RequestGroupTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

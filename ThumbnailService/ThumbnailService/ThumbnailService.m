@@ -92,16 +92,23 @@
 
 - (void) performRequestOnMainThread:(TSRequest *)request
 {
-    [self performPlaceholderRequest:request];
-    
-    [self performThumbnailRequest:request onMainThread:YES];
+    [self performRequest:request onMainThread:YES];
 }
 
 - (void) performRequest:(TSRequest *)request
 {
+    [self performRequest:request onMainThread:NO];
+}
+
+- (void) performRequest:(TSRequest *)request onMainThread:(BOOL)runOnMainThread
+{
+    if ([request isRequestFinished]) {
+        @throw [NSException exceptionWithName:@"Invalid request exception" reason:[NSString stringWithFormat:@"Request %@ already finished", request] userInfo:nil];
+        return;
+    }
     [self performPlaceholderRequest:request];
     
-    [self performThumbnailRequest:request onMainThread:NO];
+    [self performThumbnailRequest:request onMainThread:runOnMainThread];
 }
 
 - (void) performPlaceholderRequest:(TSRequest *)request
