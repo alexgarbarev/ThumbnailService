@@ -47,6 +47,9 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    CGContextSetRenderingIntent(context, kCGRenderingIntentDefault);
+
     CGRect boundingRect = (CGRect){CGPointZero, size};
     
     CGRect pageFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:self.contentMode];
@@ -59,11 +62,22 @@
     
     CGContextTranslateCTM(context, pageFrame.origin.x, pageFrame.size.height + pageFrame.origin.y);
     CGContextScaleCTM(context, pageScales.x, -pageScales.y);
+    
+    if (*isCancelled) {
+        UIGraphicsEndImageContext();
+        return nil;
+    }
 
-    CGContextDrawPDFPage(context, page); 
+    CGContextDrawPDFPage(context, page);
 
-    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
     UIGraphicsEndImageContext();
+    
+    UIImage *result = [UIImage imageWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
     
     return result;
 }

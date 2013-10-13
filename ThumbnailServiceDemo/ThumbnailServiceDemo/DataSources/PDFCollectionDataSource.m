@@ -33,6 +33,11 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     return self;
 }
 
+- (void)dealloc
+{
+    CGPDFDocumentRelease(document);
+}
+
 - (void)setShouldPrecache:(BOOL)_shouldPrecache
 {
     if (_shouldPrecache) {
@@ -52,26 +57,34 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
 
 - (void) startPrecache
 {
-    CFAbsoluteTime timeBeforePrecache = CFAbsoluteTimeGetCurrent();
-    
+    [self precachePagesFromIndex:1];
+}
+
+
+- (void) precachePagesFromIndex:(NSInteger)i
+{
     NSUInteger pagesCount = CGPDFDocumentGetNumberOfPages(document);
-    __block NSUInteger pendingPrecache = pagesCount;
     
-    for (NSInteger i = 1; i < pagesCount; i++) {
+    static CFAbsoluteTime timeBeforePrecache;
+
+    if (i == 1) {
+        timeBeforePrecache = CFAbsoluteTimeGetCurrent();
+    }
+    
+    if (i < pagesCount) {
         TSRequest *request = [TSRequest new];
         
-        
-        TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:CGPDFDocumentGetPage(document, i) documentName:documentName];
+        CGPDFPageRef page = CGPDFDocumentGetPage(document, i);
+        TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
         request.source = pageSource;
         request.size = kSmallThumbnailSize;
         request.priority = NSOperationQueuePriorityVeryLow;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
-            pendingPrecache--;
-            if (pendingPrecache == 0) {
-                NSLog(@"all pdf pages precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
-            }
+            [self precachePagesFromIndex:i+1];
         }];
         [thumbnailService performRequest:request];
+    } else {
+        NSLog(@"all pdf pages precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
     }
 }
 
@@ -93,7 +106,6 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     CGPDFPageRef page = CGPDFDocumentGetPage(document, [indexPath item]+1);
     
     TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
-    pageSource.contentMode = UIViewContentModeScaleAspectFit;
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
     
@@ -108,7 +120,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     TSRequest *bigThumbRequest = [TSRequest new];
     bigThumbRequest.source = pageSource;
     bigThumbRequest.size = kThumbSize;
-    bigThumbRequest.priority = NSOperationQueuePriorityVeryHigh;
+    bigThumbRequest.priority = NSOperationQueuePriorityHigh;
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;

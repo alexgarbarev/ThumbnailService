@@ -66,17 +66,19 @@ static NSString *kCacheExtensionObject = @"object";
 - (void)setObject:(id)object forKey:(id)key cost:(NSUInteger)g
 {
     dispatch_block_t writeBlock = ^{
-        NSString *extension;
-        NSData *data;
-        if ([object isKindOfClass:[UIImage class]]) {
-            data = UIImagePNGRepresentation(object);
-            extension = kCacheExtensionImage;
-        } else {
-            data = [NSKeyedArchiver archivedDataWithRootObject:object];
-            extension = kCacheExtensionObject;
+        @autoreleasepool {
+            NSString *extension;
+            NSData *data;
+            if ([object isKindOfClass:[UIImage class]]) {
+                data = UIImagePNGRepresentation(object);
+                extension = kCacheExtensionImage;
+            } else {
+                data = [NSKeyedArchiver archivedDataWithRootObject:object];
+                extension = kCacheExtensionObject;
+            }
+            NSString *path = [[[self cacheDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:extension];
+            [data writeToFile:path options:0 error:nil];
         }
-        NSString *path = [[[self cacheDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:extension];
-        [data writeToFile:path options:0 error:nil];
     };
     
     if (self.shouldWriteAsynchronically) {

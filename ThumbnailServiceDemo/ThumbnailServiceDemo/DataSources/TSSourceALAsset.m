@@ -57,7 +57,7 @@ NSError *lastError;
     @autoreleasepool {
         source = CGImageSourceCreateWithDataProvider(provider, NULL);
     }
-    if (lastError) {
+    if (lastError || *isCancelled) {
         *error = lastError;
         CFRelease(source);
         CFRelease(provider);

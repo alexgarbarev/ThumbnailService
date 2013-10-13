@@ -21,6 +21,8 @@
         memoryCache = [NSCache new];
         fileCache = [TSFileCache new];
         fileCache.shouldWriteAsynchronically = YES;
+        
+        memoryCache.totalCostLimit = 3 * 1024 * 1024;
     }
     return self;
 }
@@ -84,9 +86,19 @@
     return object;
 }
 
+- (NSUInteger) decompressedSizeForImage:(UIImage *)image
+{
+    return CGImageGetBytesPerRow(image.CGImage) * CGImageGetHeight(image.CGImage);
+}
+
 - (void)setObject:(id)obj forKey:(id)key mode:(TSCacheManagerMode)mode
 {
-    [self setObject:obj forKey:key cost:0 mode:mode];
+    NSUInteger cost = 0;
+    if ([obj isKindOfClass:[UIImage class]]) {
+        cost = [self decompressedSizeForImage:obj];
+    }
+    
+    [self setObject:obj forKey:key cost:cost mode:mode];
 }
 
 - (void)setObject:(id)obj forKey:(id)key cost:(NSUInteger)g mode:(TSCacheManagerMode)mode
