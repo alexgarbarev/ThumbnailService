@@ -81,6 +81,7 @@
     self.thumbnailBlock = nil;
     self.placeholderBlock = nil;
     [self requestDidFinish];
+    [self.group didCancelRequest:self];
 }
 
 #pragma mark - Life-cycle
@@ -139,6 +140,7 @@
         });
     }
     [self requestDidFinish];
+    [self.group didFinishRequest:self];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "TSRequest.h"
 #import "TSOperation.h"
+#import "TSRequestGroup.h"
 
 @interface TSRequest ()
 
@@ -15,7 +16,7 @@
 
 @property (nonatomic, readonly) NSString *identifier;
 
-@property (nonatomic, strong) TSRequest *nextRequest;
+@property (nonatomic, strong) TSRequestGroup *group;
 
 - (void) takeThumbnail:(UIImage *)image error:(NSError *)error;
 - (void) takePlaceholder:(UIImage *)image error:(NSError *)error;

@@ -73,12 +73,31 @@
 
 #pragma mark - Public methods
 
+- (void) performRequestGroup:(TSRequestGroup *)group
+{
+    NSArray *requests = [group pullPendingRequests];
+    
+    if (!requests) {
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        for (TSRequest *request in requests) {
+            if ([group shouldPerformOnMainQueueRequest:request]) {
+                [self performRequestOnCurrentThread:request];
+            } else {
+                [self performRequest:request];
+            }
+        }
+        
+    });
+}
+
 - (void) performRequestOnCurrentThread:(TSRequest *)request
 {
     [self performPlaceholderRequest:request];
     
     [self performThumbnailRequest:request onCurrentThread:YES];
-    
 }
 
 - (void) performRequest:(TSRequest *)request
@@ -198,9 +217,7 @@
     for (TSRequest *request in requests) {
         [request takeThumbnail:image error:error];
 
-        if (request.nextRequest) {
-            [self performRequest:request.nextRequest];
-        }
+        [self performRequestGroup:request.group];
     }
 }
 

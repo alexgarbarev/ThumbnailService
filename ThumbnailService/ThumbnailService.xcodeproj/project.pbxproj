@@ -24,6 +24,8 @@
 		FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677741807AFB900F5B02B /* TSRequest.h */; };
 		FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; };
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
+		FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540528180A74CE0092752B /* TSRequestGroup.m */; };
+		FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54052E180A76220092752B /* TSRequestGroupSequence.m */; };
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
@@ -79,6 +81,10 @@
 		FA2677791807AFB900F5B02B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
 		FA26777A1807AFB900F5B02B /* ThumbnailService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailService.m; sourceTree = "<group>"; };
 		FA2677891807B1F500F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FA540527180A74CE0092752B /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
+		FA540528180A74CE0092752B /* TSRequestGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroup.m; sourceTree = "<group>"; };
+		FA54052D180A76220092752B /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
+		FA54052E180A76220092752B /* TSRequestGroupSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroupSequence.m; sourceTree = "<group>"; };
 		FA67E49E18083C8500B64944 /* TSOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSOperationQueue.h; sourceTree = "<group>"; };
 		FA67E49F18083C8500B64944 /* TSOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSOperationQueue.m; sourceTree = "<group>"; };
 		FA67E4A118085FBD00B64944 /* TSCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCacheManager.h; sourceTree = "<group>"; };
@@ -148,6 +154,7 @@
 				FA67E49D18083C6C00B64944 /* OperationQueue */,
 				FA26776B1807AFB900F5B02B /* Operations */,
 				FA2677721807AFB900F5B02B /* Request */,
+				FA540526180A74BE0092752B /* RequestGroup */,
 				FA2677761807AFB900F5B02B /* Sources */,
 				FA2677791807AFB900F5B02B /* ThumbnailService.h */,
 				FA26777A1807AFB900F5B02B /* ThumbnailService.m */,
@@ -217,6 +224,17 @@
 				FA2677781807AFB900F5B02B /* TSSource.m */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		FA540526180A74BE0092752B /* RequestGroup */ = {
+			isa = PBXGroup;
+			children = (
+				FA540527180A74CE0092752B /* TSRequestGroup.h */,
+				FA540528180A74CE0092752B /* TSRequestGroup.m */,
+				FA54052D180A76220092752B /* TSRequestGroupSequence.h */,
+				FA54052E180A76220092752B /* TSRequestGroupSequence.m */,
+			);
+			path = RequestGroup;
 			sourceTree = "<group>";
 		};
 		FA67E49D18083C6C00B64944 /* OperationQueue */ = {
@@ -313,11 +331,13 @@
 				FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */,
 				FA26777E1807AFB900F5B02B /* TSOperation.m in Sources */,
 				FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */,
+				FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */,
 				FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */,
 				FA26777B1807AFB900F5B02B /* TSFileCache.m in Sources */,
 				FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */,
 				FA26777C1807AFB900F5B02B /* TSGenerateOperation.m in Sources */,
 				FA2677801807AFB900F5B02B /* TSSource.m in Sources */,
+				FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

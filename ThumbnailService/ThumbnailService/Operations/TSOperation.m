@@ -7,12 +7,15 @@
 //
 
 #import "TSOperation.h"
+#import <pthread.h>
 
 @implementation TSOperation {
     NSMutableSet *requests;
     
     NSMutableSet *completionBlocks;
     NSMutableSet *cancelBlocks;
+    
+    dispatch_queue_t synchronizationQueue;
 }
 
 - (id) init
@@ -22,6 +25,9 @@
         requests = [NSMutableSet new];
         completionBlocks = [NSMutableSet new];
         cancelBlocks = [NSMutableSet new];
+       
+        synchronizationQueue = dispatch_queue_create("synchronizationQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(synchronizationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         __weak typeof (self) weakSelf = self;
         [super setCompletionBlock:^{
@@ -39,27 +45,42 @@
 
 - (void) addRequest:(TSRequest *)request
 {
-    [requests addObject:request];
-    [self updatePriority];
+    dispatch_sync(synchronizationQueue, ^{
+        [requests addObject:request];
+        [self _updatePriority];
+    });
 }
 
 - (void) removeRequest:(TSRequest *)request
 {
-    [requests removeObject:request];
-
-    if ([requests count] > 0) {
-        [self updatePriority];
-    } else {
-        [self cancel];
-    }
+    dispatch_sync(synchronizationQueue, ^{
+        [requests removeObject:request];
+        
+        if ([requests count] > 0) {
+            [self _updatePriority];
+        } else {
+            [self cancel];
+        }
+    });
 }
 
 - (NSSet *) requests
 {
-    return requests;
+    __block NSSet *result;
+    dispatch_sync(synchronizationQueue, ^{
+        result = requests;
+    });
+    return result;
 }
 
 - (void) updatePriority
+{
+    dispatch_sync(synchronizationQueue, ^{
+        [self _updatePriority];
+    });
+}
+
+- (void) _updatePriority
 {
     NSOperationQueuePriority priority = NSOperationQueuePriorityVeryLow;
     
@@ -88,26 +109,34 @@
 
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock
 {
-    [completionBlocks addObject:completionBlock];
+    dispatch_sync(synchronizationQueue, ^{
+        [completionBlocks addObject:completionBlock];
+    });
 }
 
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock
 {
-    [cancelBlocks addObject:cancelBlock];
+    dispatch_sync(synchronizationQueue, ^{
+        [cancelBlocks addObject:cancelBlock];
+    });
 }
 
 - (void) callCancelBlocks
 {
-    for (TSOperationCompletion cancel in cancelBlocks) {
-        cancel(self);
-    }
+    dispatch_sync(synchronizationQueue, ^{
+        for (TSOperationCompletion cancel in cancelBlocks) {
+            cancel(self);
+        }
+    });
 }
 
 - (void) callCompleteBlocks
 {
-    for (TSOperationCompletion complete in completionBlocks) {
-        complete(self);
-    }
+    dispatch_sync(synchronizationQueue, ^{
+        for (TSOperationCompletion complete in completionBlocks) {
+            complete(self);
+        }
+    });
 }
 
 @end
