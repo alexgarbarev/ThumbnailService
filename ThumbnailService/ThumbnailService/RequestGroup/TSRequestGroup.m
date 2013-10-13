@@ -30,4 +30,14 @@
     return NO;
 }
 
+- (void) cancel
+{
+    
+}
+
+- (void)waitUntilFinished
+{
+    
+}
+
 @end

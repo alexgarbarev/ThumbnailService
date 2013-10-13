@@ -14,6 +14,16 @@
     TSFileCache *fileCache;
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        memoryCache = [NSCache new];
+        fileCache = [TSFileCache new];
+    }
+    return self;
+}
+
 - (TSFileCache *)fileCache
 {
     return fileCache;

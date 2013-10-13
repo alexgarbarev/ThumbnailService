@@ -7,11 +7,14 @@
 //
 
 #import "TSRequestGroupSequence.h"
+#import "TSRequest+Private.h"
 
 @implementation TSRequestGroupSequence {
     NSMutableArray *sequence;
+    NSMutableDictionary *requestOnMainThread;
     
     dispatch_queue_t queue;
+    dispatch_semaphore_t semaphore;
 }
 
 - (id)init
@@ -19,6 +22,8 @@
     self = [super init];
     if (self) {
         sequence = [NSMutableArray new];
+        requestOnMainThread = [NSMutableDictionary new];
+        semaphore = dispatch_semaphore_create(0);
         
         queue = dispatch_queue_create("queue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
@@ -26,10 +31,12 @@
     return self;
 }
 
-- (void) addRequestSequence:(NSArray *)requests
+- (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
 {
     dispatch_sync(queue, ^{
-        [sequence addObjectsFromArray:requests];
+        [sequence addObject:request];
+        requestOnMainThread[request.identifier] = @(onMainThread);
+        request.group = self;
     });
 }
 
@@ -40,7 +47,6 @@
     dispatch_sync(queue, ^{
         if ([sequence count] > 0) {
             TSRequest *request = [sequence objectAtIndex:0];
-            [sequence removeObjectAtIndex:0];
             requests = @[request];
         }
     });
@@ -52,14 +58,37 @@
 {
     dispatch_sync(queue, ^{
         [sequence removeObject:request];
+        if (sequence.count == 0) {
+            dispatch_semaphore_signal(semaphore);
+        }
     });
 }
 
 - (void) didCancelRequest:(TSRequest *)request
 {
+//    [self didFinishRequest:request];
+}
+
+- (BOOL)shouldPerformOnMainQueueRequest:(TSRequest *)request
+{
+    return [requestOnMainThread[request.identifier] boolValue];
+}
+
+- (void) cancel
+{
     dispatch_sync(queue, ^{
-        [sequence removeAllObjects];
+        for (TSRequest *request in sequence) {
+            [request cancel];
+        }
+        sequence = nil;
+        requestOnMainThread = nil;
+        dispatch_semaphore_signal(semaphore);
     });
+}
+
+- (void)waitUntilFinished
+{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
 

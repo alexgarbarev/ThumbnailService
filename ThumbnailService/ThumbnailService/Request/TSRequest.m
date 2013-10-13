@@ -28,6 +28,7 @@
     self = [super init];
     if (self) {
         [self requestDidStarted];
+        self.shouldCastCompletionsToMainThread = YES;
     }
     return self;
 }
@@ -125,22 +126,32 @@
 
 - (void) takePlaceholder:(UIImage *)image error:(NSError *)error
 {
-    if (self.placeholderBlock) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-           self.placeholderBlock(image, error);
-        });
-    }
+    [self performCompletion:self.placeholderBlock withResult:image error:error];
 }
 
 - (void) takeThumbnail:(UIImage *)image error:(NSError *)error
 {
-    if (self.thumbnailBlock) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-           self.thumbnailBlock(image, error); 
-        });
-    }
-    [self requestDidFinish];
+    [self performCompletion:self.thumbnailBlock withResult:image error:error];
+
     [self.group didFinishRequest:self];
+    [self requestDidFinish];
+}
+
+- (void) performCompletion:(TSRequestCompletion)completion withResult:(UIImage *)image error:(NSError *)error
+{
+    if (completion) {
+        if (self.shouldCastCompletionsToMainThread) {
+            if ([NSThread isMainThread]) {
+                completion(image, error);
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(image, error);
+                });
+            }
+        } else {
+            completion(image, error);
+        }
+    }
 }
 
 @end

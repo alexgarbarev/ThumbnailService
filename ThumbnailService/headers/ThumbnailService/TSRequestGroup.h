@@ -22,6 +22,4 @@
 
 - (void) cancel;
 
-- (void) waitUntilFinished;
-
 @end

@@ -26,6 +26,8 @@
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
 		FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540528180A74CE0092752B /* TSRequestGroup.m */; };
 		FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54052E180A76220092752B /* TSRequestGroupSequence.m */; };
+		FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA540527180A74CE0092752B /* TSRequestGroup.h */; };
+		FA54053B180A83600092752B /* TSRequestGroupSequence.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA54052D180A76220092752B /* TSRequestGroupSequence.h */; };
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
@@ -50,6 +52,8 @@
 			files = (
 				FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */,
 				FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */,
+				FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */,
+				FA54053B180A83600092752B /* TSRequestGroupSequence.h in CopyFiles */,
 				FA2677841807B02100F5B02B /* ThumbnailService.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

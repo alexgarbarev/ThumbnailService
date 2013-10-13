@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static CGSize kThumbSize = {300, 300};
+
 @interface PreviewCollectionCell : UICollectionViewCell
 
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;

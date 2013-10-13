@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TSRequest.h"
-#import "TSRequestGroup.h"
+#import "TSRequestGroupSequence.h"
 
 @interface ThumbnailService : NSObject
 
@@ -16,7 +16,7 @@
 
 - (void) performRequest:(TSRequest *)request;
 
-- (void) performRequestOnCurrentThread:(TSRequest *)request;
+- (void) performRequestOnMainThread:(TSRequest *)request;
 
 - (void) performRequestGroup:(TSRequestGroup *)group;
 

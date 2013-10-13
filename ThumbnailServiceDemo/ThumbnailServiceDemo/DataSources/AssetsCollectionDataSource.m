@@ -15,8 +15,6 @@
 #import "ThumbnailService.h"
 #import "AssetSource.h"
 
-static CGSize kThumbSize = {200, 200};
-
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;
     ThumbnailService *thumbnailService;

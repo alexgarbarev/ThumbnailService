@@ -9,23 +9,29 @@
 #import "MenuViewController.h"
 #import "AssetsCollectionDataSource.h"
 #import "PreviewViewController.h"
+#import "PDFCollectionDataSource.h"
 
 @interface MenuViewController ()
+@property (weak, nonatomic) IBOutlet UISegmentedControl *menuSegmentedControl;
 
 @end
 
-@implementation MenuViewController {
-    Class selectedSourceClass;
-}
+@implementation MenuViewController 
 
-- (void)viewDidLoad
+- (Class) classForSelectedIndex:(NSUInteger)index
 {
-    selectedSourceClass = [AssetsCollectionDataSource class];
-    [super viewDidLoad];
+    switch (index) {
+        case 0:
+            return [AssetsCollectionDataSource class];
+        case 1:
+            return [PDFCollectionDataSource class];
+    }
+    return nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    Class selectedSourceClass = [self classForSelectedIndex:[self.menuSegmentedControl selectedSegmentIndex]];
     PreviewViewController *previewVC = segue.destinationViewController;
     id source = [selectedSourceClass new];
     [previewVC setSource:source];

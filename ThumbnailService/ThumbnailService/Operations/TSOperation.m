@@ -7,27 +7,36 @@
 //
 
 #import "TSOperation.h"
-#import <pthread.h>
+
+@interface TSOperation ()
+
+@property (nonatomic, strong) NSMutableSet *completionBlocks;
+@property (nonatomic, strong) NSMutableSet *cancelBlocks;
+
+@end
 
 @implementation TSOperation {
     NSMutableSet *requests;
     
-    NSMutableSet *completionBlocks;
-    NSMutableSet *cancelBlocks;
-    
     dispatch_queue_t synchronizationQueue;
+    dispatch_queue_t callbackQueue;
 }
+
+@synthesize completionBlocks = _completionBlocks;
+@synthesize cancelBlocks = _cancelBlocks;
 
 - (id) init
 {
     self = [super init];
     if (self) {
         requests = [NSMutableSet new];
-        completionBlocks = [NSMutableSet new];
-        cancelBlocks = [NSMutableSet new];
+        self.completionBlocks = [NSMutableSet new];
+        self.cancelBlocks = [NSMutableSet new];
        
         synchronizationQueue = dispatch_queue_create("synchronizationQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(synchronizationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        
+        callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         __weak typeof (self) weakSelf = self;
         [super setCompletionBlock:^{
@@ -102,7 +111,7 @@
 
 - (void) onCancel
 {
-    [self callCancelBlocks];
+    [self callCompleteBlocks];
 }
 
 #pragma mark - Callbacks
@@ -110,21 +119,39 @@
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock
 {
     dispatch_sync(synchronizationQueue, ^{
-        [completionBlocks addObject:completionBlock];
+        [_completionBlocks addObject:completionBlock];
     });
 }
 
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock
 {
     dispatch_sync(synchronizationQueue, ^{
-        [cancelBlocks addObject:cancelBlock];
+        [_cancelBlocks addObject:cancelBlock];
     });
+}
+
+- (NSMutableSet *)completionBlocks
+{
+    __block NSMutableSet *set;
+    dispatch_sync(synchronizationQueue, ^{
+        set = _completionBlocks;
+    });
+    return set;
+}
+
+- (NSMutableSet *)cancelBlocks
+{
+    __block NSMutableSet *set;
+    dispatch_sync(synchronizationQueue, ^{
+        set = _cancelBlocks;
+    });
+    return set;
 }
 
 - (void) callCancelBlocks
 {
-    dispatch_sync(synchronizationQueue, ^{
-        for (TSOperationCompletion cancel in cancelBlocks) {
+    dispatch_async(callbackQueue, ^{
+        for (TSOperationCompletion cancel in self.cancelBlocks) {
             cancel(self);
         }
     });
@@ -132,8 +159,8 @@
 
 - (void) callCompleteBlocks
 {
-    dispatch_sync(synchronizationQueue, ^{
-        for (TSOperationCompletion complete in completionBlocks) {
+    dispatch_async(callbackQueue, ^{
+        for (TSOperationCompletion complete in self.completionBlocks) {
             complete(self);
         }
     });

@@ -58,7 +58,7 @@
     return placeholder;
 }
 
-- (UIImage *)placeholderFromSource:(TSSource *)source
+- (UIImage *) placeholderFromSource:(TSSource *)source
 {
     UIImage *placeholder = nil;
     
@@ -80,31 +80,28 @@
     if (!requests) {
         return;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
         
-        for (TSRequest *request in requests) {
-            if ([group shouldPerformOnMainQueueRequest:request]) {
-                [self performRequestOnCurrentThread:request];
-            } else {
-                [self performRequest:request];
-            }
+    for (TSRequest *request in requests) {
+        if ([group shouldPerformOnMainQueueRequest:request]) {
+            [self performRequestOnMainThread:request];
+        } else {
+            [self performRequest:request];
         }
-        
-    });
+    }
 }
 
-- (void) performRequestOnCurrentThread:(TSRequest *)request
+- (void) performRequestOnMainThread:(TSRequest *)request
 {
     [self performPlaceholderRequest:request];
     
-    [self performThumbnailRequest:request onCurrentThread:YES];
+    [self performThumbnailRequest:request onMainThread:YES];
 }
 
 - (void) performRequest:(TSRequest *)request
 {
     [self performPlaceholderRequest:request];
     
-    [self performThumbnailRequest:request onCurrentThread:NO];
+    [self performThumbnailRequest:request onMainThread:NO];
 }
 
 - (void) performPlaceholderRequest:(TSRequest *)request
@@ -115,21 +112,21 @@
     }
 }
 
-- (void) performThumbnailRequest:(TSRequest *)request onCurrentThread:(BOOL)runOnCurrentThread
+- (void) performThumbnailRequest:(TSRequest *)request onMainThread:(BOOL)runOnMainThread
 {
     if ([request needThumbnail]) {
         UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
         
         if (!thumbnail)
         {
-            if (runOnCurrentThread) {
-                [self peformOperationForRequest:request];
+            if (runOnMainThread) {
+                [self peformOperationOnMainThreadForRequest:request];
             } else {
                 [self enqueueOperationForRequest:request];
             }
         }
         else {
-            [request takeThumbnail:thumbnail error:nil];
+            [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
         }
     }
 }
@@ -149,12 +146,20 @@
     }
 }
 
-- (void) peformOperationForRequest:(TSRequest *)request
+- (void) peformOperationOnMainThreadForRequest:(TSRequest *)request
 {
-    TSOperation *operation = [self newOperationForRequest:request];
-    request.operation = operation;
-    [operation start];
-    [operation onComplete];
+    dispatch_block_t performBlock = ^{
+        TSOperation *operation = [self newOperationForRequest:request];
+        request.operation = operation;
+        [operation start];
+        [operation onComplete];
+    };
+    
+    if ([NSThread isMainThread]) {
+        performBlock();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), performBlock);
+    };
 }
 
 #pragma mark - Operations creation
@@ -215,10 +220,14 @@
 - (void) takeThumbnailInRequests:(NSSet *)requests withImage:(UIImage *)image error:(NSError *)error
 {
     for (TSRequest *request in requests) {
-        [request takeThumbnail:image error:error];
-
-        [self performRequestGroup:request.group];
+        [self takeThumbnailInRequest:request withImage:image error:error];
     }
+}
+
+- (void) takeThumbnailInRequest:(TSRequest *)request withImage:(UIImage *)image error:(NSError *)error
+{
+    [request takeThumbnail:image error:error];
+    [self performRequestGroup:request.group];
 }
 
 
