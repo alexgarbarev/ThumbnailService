@@ -23,7 +23,8 @@ static NSString *kCacheExtensionObject = @"object";
     if (self) {
         fileManager = [NSFileManager defaultManager];
         [self createCacheDirectory];
-        fileCacheQueue = dispatch_queue_create("workQueue", DISPATCH_QUEUE_SERIAL);
+        fileCacheQueue = dispatch_queue_create("fileCacheQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
     }
     return self;
 }
@@ -40,7 +41,7 @@ static NSString *kCacheExtensionObject = @"object";
     __block id object = nil;
     
     dispatch_sync(fileCacheQueue, ^{
-        
+    
         if (![self objectExistsForKey:key]) {
             return;
         }
@@ -53,7 +54,7 @@ static NSString *kCacheExtensionObject = @"object";
         } else if ([extension isEqualToString:kCacheExtensionObject]){
             object = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         }
-
+        
     });
     return object;
 }

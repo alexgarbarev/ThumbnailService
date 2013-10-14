@@ -22,6 +22,8 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void) removeRequest:(TSRequest *)request;
 - (NSSet *) requests;
 
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock;
+
 - (void) updatePriority;
 
 /* Completion block is unavailable, since addCompletionBlock method available */

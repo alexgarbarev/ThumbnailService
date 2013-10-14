@@ -20,6 +20,7 @@
 #define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
 #define GET_BITMASK(source, mask) (source & mask)
 
+#define ShouldTrowExceptions 0
 
 @implementation ThumbnailService {
     
@@ -142,7 +143,9 @@
 - (void) performRequest:(TSRequest *)request onMainThread:(BOOL)runOnMainThread
 {
     if ([request isRequestFinished]) {
+#if ShouldTrowExceptions
         @throw [NSException exceptionWithName:@"Invalid request exception" reason:[NSString stringWithFormat:@"Request %@ already finished", request] userInfo:nil];
+#endif
         return;
     }
     [self performPlaceholderRequest:request];
@@ -224,8 +227,9 @@
 {
     TSOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:[request sizeToRender]];
 
+    __weak typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
-        [self didGenerateThumbnailForIdentifier:request.identifier fromOperation:operation];
+        [weakSelf didGenerateThumbnailForIdentifier:request.identifier fromOperation:operation];
     }];
     
     return operation;
@@ -235,8 +239,9 @@
 {
     TSOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:thumbnailsCache];
 
+    __weak typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
-        [self didLoadThumbnailForIdentifier:request.identifier fromOperation:operation];
+        [weakSelf didLoadThumbnailForIdentifier:request.identifier fromOperation:operation];
     }];
 
     return operation;
@@ -250,7 +255,7 @@
         [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeFileAndMemory];
     }
 
-    [self takeThumbnailInRequests:operation.requests withImage:operation.result error:operation.error];
+    [self takeThumnbailsForRequestsInOperation:operation];
 }
 
 - (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
@@ -259,7 +264,16 @@
         [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeMemory];
     }
     
-    [self takeThumbnailInRequests:operation.requests withImage:operation.result error:operation.error];
+    [self takeThumnbailsForRequestsInOperation:operation];
+}
+
+
+- (void) takeThumnbailsForRequestsInOperation:(TSOperation *)operation
+{
+    [operation enumerationRequests:^(TSRequest *request) {
+        [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
+    }];
+    
 }
 
 - (void) takeThumbnailInRequests:(NSSet *)requests withImage:(UIImage *)image error:(NSError *)error

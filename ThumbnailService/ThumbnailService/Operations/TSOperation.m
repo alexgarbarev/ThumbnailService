@@ -94,6 +94,19 @@
     return result;
 }
 
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock
+{
+    if (!enumerationBlock) {
+        return;
+    }
+    
+    dispatch_sync(synchronizationQueue, ^{
+        for (TSRequest *request in requests) {
+            enumerationBlock(request);
+        };
+    });
+}
+
 - (void) updatePriority
 {
     dispatch_sync(synchronizationQueue, ^{
@@ -118,7 +131,9 @@
 
 - (void) onComplete
 {
-    [self callCompleteBlocks];
+    if (![self isCancelled]) {
+        [self callCompleteBlocks];
+    }
 }
 
 - (void) onCancel

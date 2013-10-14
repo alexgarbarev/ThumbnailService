@@ -11,6 +11,7 @@
 
 @implementation TSLoadOperation {
     TSCacheManager *cache;
+    BOOL isCancelled;
     NSString *key;
 }
 
@@ -20,6 +21,7 @@
     if (self) {
         key = _key;
         cache = _cacheManager;
+        isCancelled = NO;
     }
     return self;
 }
@@ -45,11 +47,8 @@
             return;
         }
     
-        if (![self isCancelled]) {
+        if (!isCancelled) {
             [self decompressImage:self.result];
-        }
-        if ([self isCancelled]) {
-            self.result = nil;
         }
     }
 
@@ -62,10 +61,19 @@
     UIGraphicsEndImageContext();
 }
 
+- (BOOL)isCancelled
+{
+    return isCancelled;
+}
+
 - (void) cancel
 {
-    self.result = nil;
-    [super cancel];
+    if (![self isFinished]) {
+        isCancelled = YES;
+        self.result = nil;
+        self.error = [NSError errorWithDomain:@"LoadOperation" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Operation did cancelled"}];
+        [super cancel];
+    }
 }
 
 

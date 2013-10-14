@@ -46,9 +46,11 @@
 
 - (void) cancel
 {
-    isCancelled = YES;
-    self.result = nil;
-    [super cancel];
+    if (![self isFinished]) {
+        isCancelled = YES;
+        self.result = nil;
+        [super cancel];
+    }
 }
 
 @end
