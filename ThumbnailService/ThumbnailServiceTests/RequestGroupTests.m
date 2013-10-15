@@ -152,7 +152,7 @@
         [source fire];
     });
     
-    WaitAndCallInBackground(0.45, ^{
+    WaitAndCallInBackground(0.41, ^{
         [group cancel];
     });
     

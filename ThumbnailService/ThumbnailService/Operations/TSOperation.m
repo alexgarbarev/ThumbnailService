@@ -18,7 +18,7 @@
 @implementation TSOperation {
     NSMutableSet *requests;
     
-    dispatch_queue_t synchronizationQueue;
+    dispatch_queue_t operationQueue;
     dispatch_queue_t callbackQueue;
     
     int completionCalled;
@@ -39,8 +39,8 @@
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
        
-        synchronizationQueue = dispatch_queue_create("synchronizationQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(synchronizationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        operationQueue = dispatch_queue_create("TSOperationQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(operationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
@@ -54,7 +54,7 @@
 
 - (void)dealloc
 {
-    dispatch_release(synchronizationQueue);
+    dispatch_release(operationQueue);
     dispatch_release(callbackQueue);
 }
 
@@ -64,17 +64,23 @@
     [super cancel];
 }
 
-- (void) addRequest:(TSRequest *)request
+- (void) addRequest:(TSRequest *)request andWait:(BOOL)wait
 {
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_block_t work = ^{
         [requests addObject:request];
         [self _updatePriority];
-    });
+    };
+    
+    if (wait) {
+        dispatch_sync(operationQueue, work);
+    } else {
+        dispatch_async(operationQueue, work);
+    }
 }
 
-- (void) removeRequest:(TSRequest *)request
+- (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait
 {
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_block_t work = ^{
         [requests removeObject:request];
         
         if ([requests count] > 0) {
@@ -82,34 +88,42 @@
         } else {
             [self cancel];
         }
-    });
+    };
+    
+    if (wait) {
+        dispatch_sync(operationQueue, work);
+    } else {
+        dispatch_async(operationQueue, work);
+    }
 }
 
 - (NSSet *) requests
 {
     __block NSSet *result;
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         result = requests;
     });
     return result;
 }
 
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue
 {
     if (!enumerationBlock) {
         return;
     }
     
-    dispatch_sync(synchronizationQueue, ^{
-        for (TSRequest *request in requests) {
-            enumerationBlock(request);
-        };
+    dispatch_sync(operationQueue, ^{
+        dispatch_sync(queue, ^{
+            for (TSRequest *request in requests) {
+                enumerationBlock(request);
+            };
+        });
     });
 }
 
 - (void) updatePriority
 {
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         [self _updatePriority];
     });
 }
@@ -145,14 +159,14 @@
 
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock
 {
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         [_completionBlocks addObject:completionBlock];
     });
 }
 
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock
 {
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         [_cancelBlocks addObject:cancelBlock];
     });
 }
@@ -160,7 +174,7 @@
 - (NSMutableSet *)completionBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         set = _completionBlocks;
     });
     return set;
@@ -169,7 +183,7 @@
 - (NSMutableSet *)cancelBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(synchronizationQueue, ^{
+    dispatch_sync(operationQueue, ^{
         set = _cancelBlocks;
     });
     return set;
@@ -192,30 +206,5 @@
         }
     });
 }
-
-- (void) callCompleteBlocksOnMainThread
-{
-    dispatch_block_t completion = ^{
-        for (TSOperationCompletion complete in self.completionBlocks) {
-            complete(self);
-        }
-    };
-
-    if ([NSThread isMainThread]) {
-        completion();
-    } else {
-        dispatch_async(dispatch_get_main_queue(), completion);
-    }
-}
-
-#pragma mark - Manual running
-
-- (void) runOnMainThread
-{
-    [super setCompletionBlock:nil];
-    [self start];
-    [self callCompleteBlocksOnMainThread];
-}
-
 
 @end

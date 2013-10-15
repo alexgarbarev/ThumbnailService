@@ -18,11 +18,11 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 @property (nonatomic, strong) NSError *error;
 
 /* Relations with request */
-- (void) addRequest:(TSRequest *)request;
-- (void) removeRequest:(TSRequest *)request;
+- (void) addRequest:(TSRequest *)request andWait:(BOOL)wait;
+- (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait;
 - (NSSet *) requests;
 
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock;
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue;
 
 - (void) updatePriority;
 

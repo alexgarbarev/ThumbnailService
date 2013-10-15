@@ -98,7 +98,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     PreviewCollectionCell *viewCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PreviewCollectionCell" forIndexPath:indexPath];
     
     if (viewCell.context) {
-        TSRequestGroup *group = viewCell.context;
+        TSRequestGroupSequence *group = viewCell.context;
         [group cancel];
         viewCell.imageView.image = nil;
     }
@@ -113,8 +113,14 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     smallThumbRequest.source = pageSource;
     smallThumbRequest.size = kSmallThumbnailSize;
     smallThumbRequest.priority = NSOperationQueuePriorityVeryHigh;
+    [smallThumbRequest setPlaceholderCompletion:^(UIImage *result, NSError *error) {
+        viewCell.imageView.image = result;
+    }];
     [smallThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
+        if (!result) {
+            NSLog(@"small error: %@",error);
+        }
     }];
     
     TSRequest *bigThumbRequest = [TSRequest new];
@@ -124,12 +130,19 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
+        if (!result) {
+            NSLog(@"big error: %@",error);
+        }
+
     }];
     
     [group addRequest:smallThumbRequest runOnMainThread:NO];
     [group addRequest:bigThumbRequest runOnMainThread:NO];
     
     [thumbnailService performRequestGroup:group];
+    
+//    [smallThumbRequest waitPlaceholder];
+//    [smallThumbRequest waitUntilFinished];
     
     viewCell.context = group;
     

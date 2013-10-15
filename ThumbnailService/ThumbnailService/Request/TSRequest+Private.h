@@ -24,8 +24,9 @@
 - (BOOL) needPlaceholder;
 - (BOOL) needThumbnail;
 
-- (BOOL) isRequestFinished;
 
 - (CGSize) sizeToRender;
+
+- (void)setOperation:(TSOperation *)operation andWait:(BOOL)wait;
 
 @end

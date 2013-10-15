@@ -24,7 +24,12 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 
 - (void) cancel;
+- (void) cancelAndWait:(BOOL)wait;
 
 - (void) waitUntilFinished;
+- (void) waitPlaceholder;
+
+
+- (BOOL) isFinished;
 
 @end

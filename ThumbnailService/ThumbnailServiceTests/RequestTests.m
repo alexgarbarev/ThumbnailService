@@ -67,35 +67,6 @@
     XCTAssert(placeholderCalled, @"Called: %d",placeholderCalled);
 }
 
-- (void) testRequestOnMainThread
-{
-    __block BOOL thumbnailCalled = 0;
-    __block BOOL placeholderCalled = 0;
-    
-    TSSourceTest *source = [TSSourceTest new];
-    
-    TSRequest *request = [TSRequest new];
-    request.source = source;
-    request.size = CGSizeMake(100, 100);
-    request.priority = NSOperationQueuePriorityHigh;
-    request.shouldCastCompletionsToMainThread = NO;
-    [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
-        placeholderCalled = YES;
-    }];
-    [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
-        thumbnailCalled = YES;
-    }];
-    
-    WaitAndCallInBackground(0.3, ^{
-        [source fire];
-    });
-    
-    [thumbnailService performRequestOnMainThread:request];
-    
-    XCTAssert(thumbnailCalled, @"Called: %d", thumbnailCalled);
-    XCTAssert(placeholderCalled, @"Called: %d",placeholderCalled);
-}
-
 - (void) testRequestOnSameSource
 {
     __block int thumbnailCalled = 0;
@@ -139,13 +110,13 @@
     
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2];
+        [thumbnailService performRequest:request2 andWait:YES];
         XCTAssert(request1.operation == request2.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
     
     WaitAndCallInBackground(0.6, ^{
-        [thumbnailService performRequest:request3];
+        [thumbnailService performRequest:request3 andWait:YES];
         XCTAssert(request2.operation == request3.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
@@ -201,23 +172,23 @@
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
     
-    [thumbnailService performRequest:request1];
+    [thumbnailService performRequest:request1 andWait:YES];
     XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2];
+        [thumbnailService performRequest:request2 andWait:YES];
         XCTAssert(request1.operation == request2.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
     
     WaitAndCallInBackground(0.5, ^{
-        [request2 cancel];
+        [request2 cancelAndWait:YES];
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     });
     
     WaitAndCallInBackground(0.8, ^{
-        [thumbnailService performRequest:request3];
+        [thumbnailService performRequest:request3 andWait:YES];
         XCTAssert(request1.operation == request3.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"%d",request1.operation.queuePriority);
     });
@@ -273,26 +244,26 @@
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
 
-    [thumbnailService performRequest:request1];
+    [thumbnailService performRequest:request1 andWait:YES];
 
     TSOperation *operation = request1.operation;
     XCTAssert(operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2];
+        [thumbnailService performRequest:request2 andWait:YES];
         XCTAssert(operation == request2.operation, @"");
         XCTAssert(operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
     
     WaitAndCallInBackground(0.5, ^{
-        [thumbnailService performRequest:request3];
-        [request2 cancel];
+        [thumbnailService performRequest:request3 andWait:YES];
+        [request2 cancelAndWait:YES];
         XCTAssert(operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     });
     
     WaitAndCallInBackground(0.8, ^{
-        [request1 cancel];
-        [request3 cancel];
+        [request1 cancelAndWait:YES];
+        [request3 cancelAndWait:YES];
     });
     
     WaitAndCallInBackground(0.9, ^{

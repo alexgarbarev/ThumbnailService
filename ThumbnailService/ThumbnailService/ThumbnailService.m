@@ -15,7 +15,6 @@
 #import "TSOperationQueue.h"
 
 #import "TSRequest+Private.h"
-#import "TSOperation+Private.h"
 
 #define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
 #define GET_BITMASK(source, mask) (source & mask)
@@ -32,6 +31,8 @@
     TSCacheManagerMode cacheModeFile;
     TSCacheManagerMode cacheModeMemory;
     TSCacheManagerMode cacheModeFileAndMemory;
+    
+    dispatch_queue_t serviceQueue;
 }
 
 - (id)init
@@ -49,8 +50,16 @@
         
         self.useMemoryCache = YES;
         self.useFileCache = YES;
+        
+        serviceQueue = dispatch_queue_create("ThumbnailServiceQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(serviceQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
     }
     return self;
+}
+
+- (void)dealloc
+{
+    dispatch_release(serviceQueue);
 }
 
 - (void)setUseFileCache:(BOOL)useFileCache
@@ -115,42 +124,59 @@
 
 - (void) performRequestGroup:(TSRequestGroup *)group
 {
-    NSArray *requests = [group pullPendingRequests];
-    
-    if (!requests) {
-        return;
-    }
-        
-    for (TSRequest *request in requests) {
-        if ([group shouldPerformOnMainQueueRequest:request]) {
-            [self performRequestOnMainThread:request];
-        } else {
-            [self performRequest:request];
-        }
-    }
+    return [self performRequestGroup:group andWait:NO];
 }
 
-- (void) performRequestOnMainThread:(TSRequest *)request
+- (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait
 {
-    [self performRequest:request onMainThread:YES];
+    dispatch_block_t work = ^{
+        NSArray *requests = [group pullPendingRequests];
+        
+        for (TSRequest *request in requests) {
+            [self _performRequest:request];
+        }
+    };
+    
+    if (wait) {
+        dispatch_sync(serviceQueue, work);
+    } else {
+        dispatch_async(serviceQueue, work);
+    }
 }
 
 - (void) performRequest:(TSRequest *)request
 {
-    [self performRequest:request onMainThread:NO];
+    [self performRequest:request andWait:NO];
 }
 
-- (void) performRequest:(TSRequest *)request onMainThread:(BOOL)runOnMainThread
+- (void) performRequest:(TSRequest *)request andWait:(BOOL)wait
 {
-    if ([request isRequestFinished]) {
+    if ([request isFinished]) {
 #if ShouldTrowExceptions
         @throw [NSException exceptionWithName:@"Invalid request exception" reason:[NSString stringWithFormat:@"Request %@ already finished", request] userInfo:nil];
 #endif
         return;
     }
-    [self performPlaceholderRequest:request];
+    NSAssert(!request.group, @"You trying to perform request which owned by TSRequestGroup");
     
-    [self performThumbnailRequest:request onMainThread:runOnMainThread];
+    
+    dispatch_block_t work = ^{
+        [self _performRequest:request];
+    };
+    
+    if (wait) {
+        dispatch_sync(serviceQueue, work);
+    } else {
+        dispatch_async(serviceQueue, work);
+    }
+}
+
+#pragma mark - Peform request logic
+
+- (void) _performRequest:(TSRequest *)request
+{
+    [self performPlaceholderRequest:request];
+    [self performThumbnailRequest:request];
 }
 
 - (void) performPlaceholderRequest:(TSRequest *)request
@@ -161,18 +187,13 @@
     }
 }
 
-- (void) performThumbnailRequest:(TSRequest *)request onMainThread:(BOOL)runOnMainThread
+- (void) performThumbnailRequest:(TSRequest *)request
 {
     if ([request needThumbnail]) {
         UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
         
-        if (!thumbnail)
-        {
-            if (runOnMainThread) {
-                [self peformOperationOnMainThreadForRequest:request];
-            } else {
-                [self enqueueOperationForRequest:request];
-            }
+        if (!thumbnail) {
+            [self enqueueOperationForRequest:request];
         }
         else {
             [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
@@ -186,28 +207,15 @@
     
     if (!operation) {
         operation = [self newOperationForRequest:request];
-        request.operation = operation;
+//        request.operation = operation;
+        [request setOperation:operation andWait:YES];
         [queue addOperation:operation forIdentifider:request.identifier];
     } else if (operation.isFinished){
         [request takeThumbnail:operation.result error:operation.error];
     } else {
-        request.operation = operation;
+//        request.operation = operation;
+        [request setOperation:operation andWait:YES];
     }
-}
-
-- (void) peformOperationOnMainThreadForRequest:(TSRequest *)request
-{
-    dispatch_block_t performBlock = ^{
-        TSOperation *operation = [self newOperationForRequest:request];
-        request.operation = operation;
-        [operation runOnMainThread];
-    };
-    
-    if ([NSThread isMainThread]) {
-        performBlock();
-    } else {
-        dispatch_async(dispatch_get_main_queue(), performBlock);
-    };
 }
 
 #pragma mark - Operations creation
@@ -272,8 +280,7 @@
 {
     [operation enumerationRequests:^(TSRequest *request) {
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
-    }];
-    
+    } onQueue:serviceQueue];
 }
 
 - (void) takeThumbnailInRequests:(NSSet *)requests withImage:(UIImage *)image error:(NSError *)error

@@ -38,7 +38,23 @@
 
 - (UIImage *) placeholder
 {
-    return [UIImage new];
+    static UIImage *placeholder = nil;
+    if (!placeholder) {
+        CGRect boundingRect = (CGRect){CGPointZero, CGSizeMake(140, 140)};
+        CGRect placeholderFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:self.contentMode];
+        
+        UIGraphicsBeginImageContextWithOptions(placeholderFrame.size, NO, 1.0);
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        [[UIColor whiteColor] set];
+        CGContextFillRect(context, (CGRect){CGPointZero, placeholderFrame.size});
+        
+        placeholder = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    
+    return placeholder;
 }
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error

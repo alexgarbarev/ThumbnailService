@@ -98,6 +98,7 @@
         TSRequest *lastRequest = viewCell.context;
         [lastRequest cancel];
     }
+    viewCell.imageView.image = nil;
     
     ALAsset *asset = [source assetForIndex:[indexPath item]];
 
@@ -108,23 +109,23 @@
 
     [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
-        if (!viewCell.imageView.image){
-            NSLog(@"error :%@",error);
+        if (!result){
+            NSLog(@"placeholder error :%@",error);
         }
-//                NSAssert(viewCell.imageView.image, @"");
     }];
     
     [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
-//        NSAssert(viewCell.imageView.image, @"");
-        if (!viewCell.imageView.image){
-            NSLog(@"error :%@",error);
+        if (!result){
+            NSLog(@"thumbnail error :%@",error);
         }
 
     }];
     
     [thumbnailService performRequest:request];
     
+    [request waitPlaceholder];
+
     viewCell.context = request;
     
     return viewCell;

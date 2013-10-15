@@ -38,7 +38,7 @@
 
 - (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
 {
-    dispatch_sync(queue, ^{
+    dispatch_async(queue, ^{
         [sequence addObject:request];
         requestOnMainThread[request.identifier] = @(onMainThread);
         request.group = self;
@@ -61,7 +61,7 @@
 
 - (void) didFinishRequest:(TSRequest *)request
 {
-    dispatch_sync(queue, ^{
+    dispatch_async(queue, ^{
         [sequence removeObject:request];
         if (sequence.count == 0) {
             [self finishGroup];
@@ -79,16 +79,27 @@
     return [requestOnMainThread[request.identifier] boolValue];
 }
 
-- (void) cancel
+- (void) cancelAndWait:(BOOL)wait
 {
-    dispatch_sync(queue, ^{
+    dispatch_block_t work = ^{
         requestOnMainThread = nil;
         [self finishGroup];
         for (TSRequest *request in sequence) {
             [request cancel];
         }
         sequence = nil;
-    });
+    };
+    
+    if (wait) {
+        dispatch_sync(queue, work);
+    } else {
+        dispatch_async(queue, work);
+    }
+}
+
+- (void) cancel
+{
+    [self cancelAndWait:YES];
 }
 
 - (BOOL) isGroupFinished

@@ -22,7 +22,7 @@
     self.collectionView.delegate = source;
     self.collectionView.dataSource = source;
     
-    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
+//    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
     
     [super viewDidLoad];
 }

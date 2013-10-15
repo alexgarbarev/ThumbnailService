@@ -25,5 +25,6 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 - (void) cancel;
 
 - (void) waitUntilFinished;
+- (void) waitPlaceholder;
 
 @end

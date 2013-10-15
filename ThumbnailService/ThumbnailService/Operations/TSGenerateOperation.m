@@ -8,6 +8,13 @@
 
 #import "TSGenerateOperation.h"
 
+@interface TSGenerateOperation()
+
+@property (nonatomic, getter = isFinished)  BOOL finished;
+@property (nonatomic, getter = isExecuting) BOOL executing;
+@property (nonatomic, getter = isStarted)   BOOL started;
+@end
+
 @implementation TSGenerateOperation {
     TSSource *source;
     CGSize size;
@@ -21,8 +28,29 @@
         source = _source;
         size = _size;
         isCancelled = NO;
+        
     }
     return self;
+}
+
+- (void)start
+{
+    self.started = YES;
+    if (![self isCancelled]) {
+        self.executing = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [self main];
+            self.executing = NO;
+            self.finished = YES;
+        });
+    } else {
+        self.finished = YES;
+    }
+}
+
+- (BOOL) isConcurrent
+{
+    return YES;
 }
 
 - (void) main
@@ -33,11 +61,23 @@
             self.result = [source thumbnailWithSize:size isCancelled:&isCancelled error:&error];
             self.error = error;
         }
-        if ([self isCancelled]) {
-            self.result = nil;
-        }
     }
 }
+
+- (void)setExecuting:(BOOL)isExecuting
+{
+    [self willChangeValueForKey:@"isExecuting"];
+    _executing = isExecuting;
+    [self didChangeValueForKey:@"isExecuting"];
+}
+
+- (void)setFinished:(BOOL)isFinished
+{
+    [self willChangeValueForKey:@"isFinished"];
+    _finished = isFinished;
+    [self didChangeValueForKey:@"isFinished"];
+}
+
 
 - (BOOL) isCancelled
 {
@@ -46,9 +86,17 @@
 
 - (void) cancel
 {
-    if (![self isFinished]) {
+    if (!self.finished) {
+        
         isCancelled = YES;
+        
+        if (self.started) {
+            self.finished = YES;
+        }
+        
         self.result = nil;
+        self.error = [NSError errorWithDomain:@"TSGenerateOperation" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Operation did cancelled"}];
+        
         [super cancel];
     }
 }
