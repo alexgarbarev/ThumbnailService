@@ -16,6 +16,7 @@
 
 @property (nonatomic) BOOL useMemoryCache; /* Default: YES */
 @property (nonatomic) BOOL useFileCache;   /* Default: YES */
+@property (nonatomic) NSUInteger cacheMemoryLimitInBytes; /* Default: 3MB. 0 - unlimited */
 
 - (void) performRequest:(TSRequest *)request;
 - (void) performRequest:(TSRequest *)request andWait:(BOOL)wait;
@@ -24,5 +25,8 @@
 - (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait;
 
 - (void) clearFileCache;
+
++ (void) setShouldFailOnWarning:(BOOL)shouldFail;
++ (BOOL) shouldFailOnWarning;
 
 @end

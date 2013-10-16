@@ -37,7 +37,7 @@ NSError *lastError;
     return [UIImage imageWithCGImage:placeholder];
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     NSUInteger thumbSize = MAX(size.width, size.height);
     ALAssetRepresentation *rep = [asset defaultRepresentation];

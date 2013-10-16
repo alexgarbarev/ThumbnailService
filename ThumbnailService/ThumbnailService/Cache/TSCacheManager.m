@@ -21,10 +21,18 @@
         memoryCache = [NSCache new];
         fileCache = [TSFileCache new];
         fileCache.shouldWriteAsynchronically = YES;
-        
-        memoryCache.totalCostLimit = 3 * 1024 * 1024;
     }
     return self;
+}
+
+- (void)setMemoryLimitInBytes:(NSUInteger)memoryLimitInBytes
+{
+    memoryCache.totalCostLimit = memoryLimitInBytes;
+}
+
+- (NSUInteger)memoryLimitInBytes
+{
+    return memoryCache.totalCostLimit;
 }
 
 - (TSFileCache *)fileCache

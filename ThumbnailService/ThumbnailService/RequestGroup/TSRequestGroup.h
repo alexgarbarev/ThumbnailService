@@ -22,4 +22,6 @@
 
 - (void) waitUntilFinished;
 
+- (BOOL) isFinished;
+
 @end

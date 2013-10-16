@@ -10,6 +10,8 @@
 #import "TSRequest.h"
 #import "TSRequestGroupSequence.h"
 
+extern BOOL ThumbnailServiceShouldFailOnWarning;
+
 @interface ThumbnailService : NSObject
 
 @property (nonatomic) BOOL shouldCachePlaceholders; /* Default: NO */

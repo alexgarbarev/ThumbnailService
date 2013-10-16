@@ -40,4 +40,10 @@
     
 }
 
+- (BOOL)isFinished
+{
+    NSAssert(NO, @"You have to implement this method in subclass");
+    return NO;
+}
+
 @end

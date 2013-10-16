@@ -35,4 +35,7 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock;
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock;
 
+- (void)setThreadPriority:(double)p UNAVAILABLE_ATTRIBUTE;
+- (double)threadPriority UNAVAILABLE_ATTRIBUTE;
+
 @end

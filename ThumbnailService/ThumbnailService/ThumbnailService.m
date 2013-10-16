@@ -19,7 +19,7 @@
 #define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
 #define GET_BITMASK(source, mask) (source & mask)
 
-#define ShouldTrowExceptions 0
+static BOOL ThumbnailServiceShouldFailOnWarning = NO;
 
 @implementation ThumbnailService {
     
@@ -35,7 +35,7 @@
     dispatch_queue_t serviceQueue;
 }
 
-- (id)init
+- (id) init
 {
     self = [super init];
     if (self) {
@@ -50,6 +50,7 @@
         
         self.useMemoryCache = YES;
         self.useFileCache = YES;
+        self.cacheMemoryLimitInBytes = 3 * 1024 * 1024;
         
         serviceQueue = dispatch_queue_create("ThumbnailServiceQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(serviceQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
@@ -57,29 +58,39 @@
     return self;
 }
 
-- (void)dealloc
+- (void) setCacheMemoryLimitInBytes:(NSUInteger)cacheMemoryLimitInBytes
+{
+    thumbnailsCache.memoryLimitInBytes = cacheMemoryLimitInBytes;
+}
+
+- (NSUInteger) cacheMemoryLimitInBytes
+{
+    return thumbnailsCache.memoryLimitInBytes;
+}
+
+- (void) dealloc
 {
     dispatch_release(serviceQueue);
 }
 
-- (void)setUseFileCache:(BOOL)useFileCache
+- (void) setUseFileCache:(BOOL)useFileCache
 {
     SET_BITMASK(cacheModeFile, TSCacheManagerModeFile, useFileCache);
     SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeFile, useFileCache);
 }
 
-- (void)setUseMemoryCache:(BOOL)useMemoryCache
+- (void) setUseMemoryCache:(BOOL)useMemoryCache
 {
     SET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory, useMemoryCache);
     SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeMemory, useMemoryCache);
 }
 
-- (BOOL)useMemoryCache
+- (BOOL) useMemoryCache
 {
     return GET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory);
 }
 
-- (BOOL)useFileCache
+- (BOOL) useFileCache
 {
     return GET_BITMASK(cacheModeFile, TSCacheManagerModeFile);
 }
@@ -130,6 +141,13 @@
 - (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait
 {
     dispatch_block_t work = ^{
+        
+        if ([group isFinished]) {
+            NSString *warning = [NSString stringWithFormat:@"RequestGroup %@ already finished. Skipping",group];
+            [self handleWarning:warning];
+            return;
+        }
+        
         NSArray *requests = [group pullPendingRequests];
         
         for (TSRequest *request in requests) {
@@ -152,13 +170,14 @@
 - (void) performRequest:(TSRequest *)request andWait:(BOOL)wait
 {
     if ([request isFinished]) {
-#if ShouldTrowExceptions
-        @throw [NSException exceptionWithName:@"Invalid request exception" reason:[NSString stringWithFormat:@"Request %@ already finished", request] userInfo:nil];
-#endif
+        [self handleWarning:[NSString stringWithFormat:@"Request %@ already finished. Skipping", request]];
         return;
     }
-    NSAssert(!request.group, @"You trying to perform request which owned by TSRequestGroup");
     
+    if (request.group) {
+        [self handleWarning:[NSString stringWithFormat:@"You trying to perform request %@, which owned by group %@. Skipping", request, request.group]];
+        return;
+    }
     
     dispatch_block_t work = ^{
         [self _performRequest:request];
@@ -300,6 +319,26 @@
 {
     [request takeThumbnail:image error:error];
     [self performRequestGroup:request.group];
+}
+
+#pragma mark - Util
+
+- (void) handleWarning:(NSString *)warningString
+{
+    NSLog(@"ThumbnailService warning: %@",warningString);
+    if (ThumbnailServiceShouldFailOnWarning) {
+        NSAssert(NO, @"");
+    }
+}
+
++ (void)setShouldFailOnWarning:(BOOL)shouldFail
+{
+    ThumbnailServiceShouldFailOnWarning = shouldFail;
+}
+
++ (BOOL)shouldFailOnWarning
+{
+    return ThumbnailServiceShouldFailOnWarning;
 }
 
 

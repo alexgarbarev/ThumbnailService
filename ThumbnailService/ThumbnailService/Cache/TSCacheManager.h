@@ -18,6 +18,8 @@ static const TSCacheManagerMode TSCacheManagerModeFileAndMemory = TSCacheManager
 
 @interface TSCacheManager : NSObject
 
+@property (nonatomic) NSUInteger memoryLimitInBytes;
+
 - (void)setName:(NSString *)name;
 - (NSString *)name;
 

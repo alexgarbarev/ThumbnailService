@@ -117,7 +117,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
     [self cancelAndWait:YES];
 }
 
-- (BOOL) isGroupFinished
+- (BOOL) isFinished
 {
     return _state == TSRequestGroupSequenceCanceled || _state == TSRequestGroupSequenceFinished;
 }
@@ -126,14 +126,14 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
 {
     _state = state;
     
-    if ([self isGroupFinished]) {
+    if ([self isFinished]) {
         dispatch_semaphore_signal(semaphore);
     }
 }
 
 - (void) waitUntilFinished
 {
-    if (![self isGroupFinished]) {
+    if (![self isFinished]) {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
 }

@@ -57,7 +57,7 @@
     return placeholder;
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     UIGraphicsBeginImageContext(size);
     
@@ -75,7 +75,7 @@
         [self.pageBackgroundColor set];
         CGContextFillRect(context, pageFrame);
     }
-    
+        
     CGContextTranslateCTM(context, pageFrame.origin.x, pageFrame.size.height + pageFrame.origin.y);
     CGContextScaleCTM(context, pageScales.x, -pageScales.y);
     
@@ -83,6 +83,7 @@
         UIGraphicsEndImageContext();
         return nil;
     }
+    
 
     CGContextDrawPDFPage(context, page);
 
