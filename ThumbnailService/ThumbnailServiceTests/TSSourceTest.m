@@ -36,7 +36,7 @@
     return [UIImage new];
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+- (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return [UIImage new];

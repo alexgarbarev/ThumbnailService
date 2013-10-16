@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSFileCache.h"
 
 typedef enum {
     TSCacheManagerModeMemory = 1 << 0,

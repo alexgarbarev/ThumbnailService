@@ -100,6 +100,7 @@
 		FA67E4A218085FBD00B64944 /* TSCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCacheManager.m; sourceTree = "<group>"; };
 		FA69D3071807B3F800979C84 /* TSSourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceTest.h; sourceTree = "<group>"; };
 		FA69D3081807B3F800979C84 /* TSSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceTest.m; sourceTree = "<group>"; };
+		FAF9C72A180EE3160091CE94 /* ThumbnailService+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ThumbnailService+Testing.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +174,7 @@
 		FA2677581807AF7F00F5B02B /* ThumbnailServiceTests */ = {
 			isa = PBXGroup;
 			children = (
+				FAF9C72A180EE3160091CE94 /* ThumbnailService+Testing.h */,
 				FA540549180AC88E0092752B /* TestUtils.h */,
 				FA54054A180AC88E0092752B /* TestUtils.m */,
 				FA69D3071807B3F800979C84 /* TSSourceTest.h */,

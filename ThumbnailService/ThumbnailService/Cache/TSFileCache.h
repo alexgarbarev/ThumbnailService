@@ -9,14 +9,21 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, TSFileCacheImageWriteMode)
+{
+    TSFileCacheImageWriteModePNG,
+    TSFileCacheImageWriteModeJPG,
+    TSFileCacheImageWriteModeBase64
+};
+
 /* TSFileCache is threaded-safe */
 
 @interface TSFileCache : NSCache
 
 @property (nonatomic) BOOL shouldWriteAsynchronically;
 
-/* This class writes object to file instead of keep in memory. 
-   So, all memory-related properties and methods from NSCache will not work */
+@property (nonatomic) TSFileCacheImageWriteMode imageWriteMode; /* Default: PNG */
+@property (nonatomic) CGFloat imageWriteCompressionQuality; /* Default: 0.6. Used only in TSFileCacheImageWriteModeJPG */
 
 - (void)setName:(NSString *)n;
 - (NSString *)name;
@@ -29,5 +36,16 @@
 - (void)removeObjectForKey:(id)key;
 
 - (void)removeAllObjects;
+
+/* This class writes object to file instead of keep in memory.
+   So, all memory-related properties and methods from NSCache are unavailable */
+- (void)setDelegate:(id <NSCacheDelegate>)d UNAVAILABLE_ATTRIBUTE;
+- (id <NSCacheDelegate>)delegate UNAVAILABLE_ATTRIBUTE;
+- (void)setTotalCostLimit:(NSUInteger)lim UNAVAILABLE_ATTRIBUTE;
+- (NSUInteger)totalCostLimit UNAVAILABLE_ATTRIBUTE;
+- (void)setCountLimit:(NSUInteger)lim UNAVAILABLE_ATTRIBUTE;
+- (NSUInteger)countLimit UNAVAILABLE_ATTRIBUTE;
+- (BOOL)evictsObjectsWithDiscardedContent UNAVAILABLE_ATTRIBUTE;
+- (void)setEvictsObjectsWithDiscardedContent:(BOOL)b UNAVAILABLE_ATTRIBUTE;
 
 @end

@@ -28,6 +28,6 @@
 
 - (CGSize) sizeToRender;
 
-- (void)setOperation:(TSOperation *)operation andWait:(BOOL)wait;
+- (void) setOperation:(TSOperation *)operation andWait:(BOOL)wait;
 
 @end

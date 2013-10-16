@@ -26,7 +26,7 @@
     return self;
 }
 
-- (void)main
+- (void) main
 {
     @autoreleasepool {
         
@@ -61,7 +61,7 @@
     UIGraphicsEndImageContext();
 }
 
-- (BOOL)isCancelled
+- (BOOL) isCancelled
 {
     return isCancelled;
 }

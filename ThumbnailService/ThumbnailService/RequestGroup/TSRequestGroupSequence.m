@@ -25,36 +25,36 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
 @implementation TSRequestGroupSequence {
     NSMutableArray *sequence;
     
-    dispatch_queue_t queue;
+    dispatch_queue_t groupSyncQueue;
     dispatch_semaphore_t semaphore;
     
     NSInteger stepNumber;
 }
 
-- (id)init
+- (id) init
 {
     self = [super init];
     if (self) {
         sequence = [NSMutableArray new];
         semaphore = dispatch_semaphore_create(0);
         
-        queue = dispatch_queue_create("queue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        groupSyncQueue = dispatch_queue_create("TSRequestGroupSequenceQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(groupSyncQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         self.state = TSRequestGroupSequenceNotStarted;
     }
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
-    dispatch_release(queue);
+    dispatch_release(groupSyncQueue);
     dispatch_release(semaphore);
 }
 
-- (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
+- (void) addRequest:(TSRequest *)request
 {
-    dispatch_async(queue, ^{
+    dispatch_async(groupSyncQueue, ^{
         [sequence addObject:request];
         request.group = self;
     });
@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
 {
     __block NSArray *requests = nil;
 
-    dispatch_sync(queue, ^{
+    dispatch_sync(groupSyncQueue, ^{
         
         if (stepNumber == 0) {
             self.state = TSRequestGroupSequenceStarted;
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
 
 - (void) didFinishRequest:(TSRequest *)request
 {
-    dispatch_async(queue, ^{
+    dispatch_async(groupSyncQueue, ^{
         [sequence removeObject:request];
         if (sequence.count == 0) {
             self.state = TSRequestGroupSequenceFinished;
@@ -107,9 +107,9 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
     };
     
     if (wait) {
-        dispatch_sync(queue, work);
+        dispatch_sync(groupSyncQueue, work);
     } else {
-        dispatch_async(queue, work);
+        dispatch_async(groupSyncQueue, work);
     }
 }
 
@@ -123,7 +123,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
     return _state == TSRequestGroupSequenceCanceled || _state == TSRequestGroupSequenceFinished;
 }
 
-- (void)setState:(TSRequestGroupSequenceState)state
+- (void) setState:(TSRequestGroupSequenceState)state
 {
     _state = state;
     

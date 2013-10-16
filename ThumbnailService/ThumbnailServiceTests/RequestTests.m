@@ -13,6 +13,7 @@
 
 #import "TestUtils.h"
 #import "TSRequest+Private.h"
+#import "ThumbnailService+Testing.h"
 
 @interface RequestsTests : XCTestCase
 

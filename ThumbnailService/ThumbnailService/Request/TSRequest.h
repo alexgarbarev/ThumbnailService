@@ -29,22 +29,30 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 @interface TSRequest : NSObject
 
+/* Thumbnail Source */
 @property (nonatomic, strong) TSSource *source;
-@property (nonatomic) CGSize size;
+
+/* Priorities */
 @property (nonatomic) TSRequestQueuePriority queuePriority;   /* Default: TSRequestQueuePriorityNormal */
 @property (nonatomic) TSRequestThreadPriority threadPriority; /* Default: TSRequestThreadPriorityLow */
 
+/* Thumbnail Size */
 @property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */
-@property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
+@property (nonatomic) CGSize size;
 
+/* Caches options */
 @property (nonatomic) BOOL shouldCacheInMemory; /* Default: YES */
 @property (nonatomic) BOOL shouldCacheOnDisk;   /* Default: YES */
 
+/* Completions */
+@property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
 - (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 
+/* Canceling request */
 - (void) cancel;
 
+/* Waiting for completions */
 - (void) waitUntilFinished;
 - (void) waitPlaceholder;
 

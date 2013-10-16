@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     BOOL needUpdateIdentifier;
     NSString *_cachedIdentifier;
     
-    dispatch_queue_t requestDispatchQueue;
+    dispatch_queue_t requestSyncQueue;
 }
 
 @synthesize finishWaitSemaphore = _finishWaitSemaphore;
@@ -43,8 +43,8 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 {
     self = [super init];
     if (self) {
-        requestDispatchQueue = dispatch_queue_create("TSRequestQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(requestDispatchQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        requestSyncQueue = dispatch_queue_create("TSRequestQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(requestSyncQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         self.shouldCastCompletionsToMainThread = YES;
         self.shouldAdjustSizeToScreenScale = YES;
@@ -89,7 +89,13 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     needUpdateIdentifier = YES;
 }
 
-- (CGSize)sizeToRender
+- (void)setShouldAdjustSizeToScreenScale:(BOOL)shouldAdjustSizeToScreenScale
+{
+    _shouldAdjustSizeToScreenScale = shouldAdjustSizeToScreenScale;
+    needUpdateIdentifier = YES;
+}
+
+- (CGSize) sizeToRender
 {
     CGFloat scale = [[UIScreen mainScreen] scale];
     return CGSizeMake(_size.width * scale, _size.height * scale);
@@ -150,19 +156,9 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 #pragma mark - Request State
 
-- (void) printState:(TSRequestState)state
-{
-    if (state & TSRequestStateEnqueued) NSLog(@"Enqueud");
-    if (state & TSRequestStateCancelled) NSLog(@"Canceled");
-    if (state & TSRequestStateGotPlaceholder) NSLog(@"Got placeholder");
-    if (state & TSRequestStateGotThumbnail) NSLog(@"Got thumbnail");
-    if (state == TSRequestStateNotStarted) NSLog(@"Not started");
-    
-}
-
 - (void) setState:(TSRequestState)newState
 {
-    dispatch_sync(requestDispatchQueue, ^{
+    dispatch_sync(requestSyncQueue, ^{
         TSRequestState oldState = _state;
         _state = newState;
         
@@ -170,7 +166,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
             dispatch_semaphore_signal(self.placeholderWaitSemaphore);
         }
         
-        if ([self isDidFinishInState:newState afterState:oldState]) {
+        if ([self isFinished]) {
             dispatch_semaphore_signal(self.finishWaitSemaphore);
             
             if (newState & TSRequestStateCancelled) {
@@ -184,18 +180,10 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     });
 }
 
-- (BOOL) isDidFinishInState:(TSRequestState)newState afterState:(TSRequestState)oldState
-{
-    return [self isFinishedState:newState] ;
-}
-
 - (BOOL) isFinished
 {
-    return [self isFinishedState:self.state];
-}
-
-- (BOOL) isFinishedState:(TSRequestState)state
-{
+    TSRequestState state = self.state;
+    
     BOOL isFinished = (state != TSRequestStateNotStarted);
     
     if ([self needPlaceholder]) {

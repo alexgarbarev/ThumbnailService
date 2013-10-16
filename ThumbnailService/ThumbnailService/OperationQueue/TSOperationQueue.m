@@ -37,7 +37,7 @@
 - (void) addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
 {
     dispatch_sync(syncQueue, ^{
-        [self addOperation:operation];
+        [super addOperation:operation];
         dictionary[identifier] = operation;
         
         __weak typeof (self) weakSelf = self;

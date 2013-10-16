@@ -58,27 +58,13 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     dispatch_release(operationQueue);
     dispatch_release(callbackQueue);
 }
 
-- (dispatch_queue_priority_t)queuePriorityFromThreadPriority:(TSOperationThreadPriority)priority
-{
-    switch (priority) {
-        case TSOperationThreadPriorityBackground:
-            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
-        default:
-        case TSOperationThreadPriorityLow:
-            return DISPATCH_QUEUE_PRIORITY_LOW;
-        case TSOperationThreadPriorityNormal:
-            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
-        case TSOperationThreadPriorityHight:
-            return DISPATCH_QUEUE_PRIORITY_HIGH;
-    }
-}
-
+#pragma mark - NSOperation cuncurrent support
 
 - (void) start
 {
@@ -109,6 +95,23 @@
     [self onCancel];
     [super cancel];
 }
+
+- (dispatch_queue_priority_t)queuePriorityFromThreadPriority:(TSOperationThreadPriority)priority
+{
+    switch (priority) {
+        case TSOperationThreadPriorityBackground:
+            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
+        default:
+        case TSOperationThreadPriorityLow:
+            return DISPATCH_QUEUE_PRIORITY_LOW;
+        case TSOperationThreadPriorityNormal:
+            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
+        case TSOperationThreadPriorityHight:
+            return DISPATCH_QUEUE_PRIORITY_HIGH;
+    }
+}
+
+#pragma mark - Managing requests
 
 - (void) addRequest:(TSRequest *)request andWait:(BOOL)wait
 {
@@ -276,7 +279,7 @@
     });
 }
 
-- (NSMutableSet *)completionBlocks
+- (NSMutableSet *) completionBlocks
 {
     __block NSMutableSet *set;
     dispatch_sync(operationQueue, ^{
@@ -285,7 +288,7 @@
     return set;
 }
 
-- (NSMutableSet *)cancelBlocks
+- (NSMutableSet *) cancelBlocks
 {
     __block NSMutableSet *set;
     dispatch_sync(operationQueue, ^{

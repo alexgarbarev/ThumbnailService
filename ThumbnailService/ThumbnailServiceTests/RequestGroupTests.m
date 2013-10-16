@@ -12,7 +12,7 @@
 #import "TSSourceTest.h"
 
 #import "TestUtils.h"
-
+#import "ThumbnailService+Testing.h"
 
 @interface RequestsGroupTests : XCTestCase
 
@@ -76,9 +76,9 @@
     request3.shouldCastCompletionsToMainThread = NO;
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
-    [group addRequest:request1 runOnMainThread:NO];
-    [group addRequest:request2 runOnMainThread:NO];
-    [group addRequest:request3 runOnMainThread:NO];
+    [group addRequest:request1];
+    [group addRequest:request2];
+    [group addRequest:request3];
     
     [thumbnailService performRequestGroup:group];
     
@@ -134,9 +134,9 @@
     request3.shouldCastCompletionsToMainThread = NO;
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
-    [group addRequest:request1 runOnMainThread:NO];
-    [group addRequest:request2 runOnMainThread:NO];
-    [group addRequest:request3 runOnMainThread:NO];
+    [group addRequest:request1];
+    [group addRequest:request2];
+    [group addRequest:request3];
     
     [thumbnailService performRequestGroup:group];
     

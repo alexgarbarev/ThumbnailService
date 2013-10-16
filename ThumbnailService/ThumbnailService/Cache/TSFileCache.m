@@ -8,7 +8,7 @@
 
 #import "TSFileCache.h"
 
-static NSString *kCacheExtensionImage = @"image";
+static NSString *kCacheExtensionImage  = @"image";
 static NSString *kCacheExtensionObject = @"object";
 
 @implementation TSFileCache {
@@ -25,6 +25,9 @@ static NSString *kCacheExtensionObject = @"object";
         [self createCacheDirectory];
         fileCacheQueue = dispatch_queue_create("fileCacheQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+        
+        self.imageWriteMode = TSFileCacheImageWriteModePNG;
+        self.imageWriteCompressionQuality = 0.6;
     }
     return self;
 }
@@ -71,8 +74,8 @@ static NSString *kCacheExtensionObject = @"object";
             NSString *extension;
             NSData *data;
             if ([object isKindOfClass:[UIImage class]]) {
-                data = UIImagePNGRepresentation(object);
-                extension = kCacheExtensionImage;
+                data = [self dataFromImage:object];
+                extension = [self imageExtension];
             } else {
                 data = [NSKeyedArchiver archivedDataWithRootObject:object];
                 extension = kCacheExtensionObject;
@@ -187,41 +190,30 @@ static NSString *kCacheExtensionObject = @"object";
     [fileManager createDirectoryAtPath:[self cacheDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-#pragma mark - Asserts
+#pragma mark - Image Compression
 
-
-- (void)setDelegate:(id <NSCacheDelegate>)d
+- (NSData *) dataFromImage:(UIImage *)image
 {
-    NSAssert(NO, @"Is not implemented");
-}
-- (id <NSCacheDelegate>)delegate
-{
-    return nil;
-}
-- (void)setTotalCostLimit:(NSUInteger)lim
-{
-    NSAssert(NO, @"Is not implemented");
-}
-- (NSUInteger)totalCostLimit
-{
-    return 0;
-}
-- (void)setCountLimit:(NSUInteger)lim
-{
-    NSAssert(NO, @"Is not implemented");
-}
-- (NSUInteger)countLimit
-{
-    return 0;
-}
-- (BOOL)evictsObjectsWithDiscardedContent
-{
-    return NO;
-}
-- (void)setEvictsObjectsWithDiscardedContent:(BOOL)b
-{
-    NSAssert(NO, @"Is not implemented");
+    NSData *imageData = nil;
+    if (self.imageWriteMode == TSFileCacheImageWriteModeJPG) {
+        imageData = UIImageJPEGRepresentation(image, self.imageWriteCompressionQuality);
+    } else if (self.imageWriteMode == TSFileCacheImageWriteModePNG) {
+        imageData = UIImagePNGRepresentation(image);
+    } else {
+        imageData = [NSKeyedArchiver archivedDataWithRootObject:image];
+    }
+    return imageData;
 }
 
+- (NSString *) imageExtension
+{
+    NSString *imageExtension;
+    if (self.imageWriteMode == TSFileCacheImageWriteModeBase64) {
+        imageExtension = kCacheExtensionObject;
+    } else {
+        imageExtension = kCacheExtensionImage;
+    }
+    return imageExtension;
+}
 
 @end

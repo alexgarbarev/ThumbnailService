@@ -10,6 +10,6 @@
 
 @interface TSRequestGroupSequence : TSRequestGroup
 
-- (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
+- (void) addRequest:(TSRequest *)request;
 
 @end

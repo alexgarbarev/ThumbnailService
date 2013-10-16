@@ -19,9 +19,6 @@
 #define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
 #define GET_BITMASK(source, mask) (source & mask)
 
-static BOOL ThumbnailServiceShouldFailOnWarning = NO;
-static BOOL ThumbnailServiceShouldPrintWarning = NO;
-
 @implementation ThumbnailService {
     
     TSCacheManager *placeholderCache;
@@ -323,32 +320,7 @@ static BOOL ThumbnailServiceShouldPrintWarning = NO;
 
 - (void) handleWarning:(NSString *)warningString
 {
-    if (ThumbnailServiceShouldPrintWarning) {
-        NSLog(@"ThumbnailService warning: %@",warningString);
-    }
-    if (ThumbnailServiceShouldFailOnWarning) {
-        NSAssert(NO, @"");
-    }
-}
-
-+ (void)setShouldFailOnWarning:(BOOL)shouldFail
-{
-    ThumbnailServiceShouldFailOnWarning = shouldFail;
-}
-
-+ (BOOL)shouldFailOnWarning
-{
-    return ThumbnailServiceShouldFailOnWarning;
-}
-
-+ (void) setShouldPrintWarnings:(BOOL)shouldPrint
-{
-    ThumbnailServiceShouldPrintWarning = shouldPrint;
-}
-
-+ (BOOL) shouldPrintWarnings
-{
-    return ThumbnailServiceShouldPrintWarning;
+    NSLog(@"ThumbnailService warning: %@",warningString);
 }
 
 
