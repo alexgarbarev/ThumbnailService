@@ -27,9 +27,7 @@
 		FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */; };
 		FA2A93B6180B9D76004281DD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FA2A93B5180B9D76004281DD /* sample.pdf */; };
 		FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540532180A82910092752B /* PDFCollectionDataSource.m */; };
-		FA540536180A82910092752B /* TSSourcePdfPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540534180A82910092752B /* TSSourcePdfPage.m */; };
 		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
-		FA67E4B918087B9900B64944 /* TSSourceALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4B818087B9900B64944 /* TSSourceALAsset.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,17 +92,16 @@
 		FA2A93B5180B9D76004281DD /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		FA540531180A82910092752B /* PDFCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFCollectionDataSource.h; sourceTree = "<group>"; };
 		FA540532180A82910092752B /* PDFCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFCollectionDataSource.m; sourceTree = "<group>"; };
-		FA540533180A82910092752B /* TSSourcePdfPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePdfPage.h; sourceTree = "<group>"; };
-		FA540534180A82910092752B /* TSSourcePdfPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourcePdfPage.m; sourceTree = "<group>"; };
-		FA54053D180A83BE0092752B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
-		FA54053E180A83BE0092752B /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
-		FA54053F180A83BE0092752B /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
-		FA540540180A83BE0092752B /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
-		FA540541180A83BE0092752B /* TSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSource.h; sourceTree = "<group>"; };
 		FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ThumbnailService.xcodeproj; sourceTree = "<group>"; };
-		FA67E4B718087B9900B64944 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
-		FA67E4B818087B9900B64944 /* TSSourceALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceALAsset.m; sourceTree = "<group>"; };
 		FAF8E918180B1FC000654C00 /* PreviewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewDataSource.h; sourceTree = "<group>"; };
+		FAF9C741180EFC1A0091CE94 /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
+		FAF9C742180EFC1A0091CE94 /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
+		FAF9C743180EFC1A0091CE94 /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
+		FAF9C744180EFC1A0091CE94 /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
+		FAF9C745180EFC1A0091CE94 /* TSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSource.h; sourceTree = "<group>"; };
+		FAF9C746180EFC1A0091CE94 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
+		FAF9C747180EFC1A0091CE94 /* TSSourcePDFPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePDFPage.h; sourceTree = "<group>"; };
+		FAF9C748180EFC1A0091CE94 /* TSSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSources.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,7 +164,7 @@
 		FA2676371806F77200F5B02B /* ThumbnailService */ = {
 			isa = PBXGroup;
 			children = (
-				FA54053C180A83BE0092752B /* ThumbnailService */,
+				FAF9C740180EFC1A0091CE94 /* ThumbnailService */,
 				FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */,
 			);
 			name = ThumbnailService;
@@ -249,29 +246,12 @@
 			isa = PBXGroup;
 			children = (
 				FAF8E918180B1FC000654C00 /* PreviewDataSource.h */,
-				FA67E4B718087B9900B64944 /* TSSourceALAsset.h */,
-				FA67E4B818087B9900B64944 /* TSSourceALAsset.m */,
-				FA540533180A82910092752B /* TSSourcePdfPage.h */,
-				FA540534180A82910092752B /* TSSourcePdfPage.m */,
 				FA2676A218071FFD00F5B02B /* AssetsCollectionDataSource.h */,
 				FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */,
 				FA540531180A82910092752B /* PDFCollectionDataSource.h */,
 				FA540532180A82910092752B /* PDFCollectionDataSource.m */,
 			);
 			path = DataSources;
-			sourceTree = "<group>";
-		};
-		FA54053C180A83BE0092752B /* ThumbnailService */ = {
-			isa = PBXGroup;
-			children = (
-				FA54053D180A83BE0092752B /* ThumbnailService.h */,
-				FA54053E180A83BE0092752B /* TSRequest.h */,
-				FA54053F180A83BE0092752B /* TSRequestGroup.h */,
-				FA540540180A83BE0092752B /* TSRequestGroupSequence.h */,
-				FA540541180A83BE0092752B /* TSSource.h */,
-			);
-			name = ThumbnailService;
-			path = headers/ThumbnailService;
 			sourceTree = "<group>";
 		};
 		FA67E4A81808799F00B64944 /* Products */ = {
@@ -281,6 +261,22 @@
 				FA67E4AF180879A000B64944 /* ThumbnailServiceTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FAF9C740180EFC1A0091CE94 /* ThumbnailService */ = {
+			isa = PBXGroup;
+			children = (
+				FAF9C741180EFC1A0091CE94 /* ThumbnailService.h */,
+				FAF9C742180EFC1A0091CE94 /* TSRequest.h */,
+				FAF9C743180EFC1A0091CE94 /* TSRequestGroup.h */,
+				FAF9C744180EFC1A0091CE94 /* TSRequestGroupSequence.h */,
+				FAF9C745180EFC1A0091CE94 /* TSSource.h */,
+				FAF9C746180EFC1A0091CE94 /* TSSourceALAsset.h */,
+				FAF9C747180EFC1A0091CE94 /* TSSourcePDFPage.h */,
+				FAF9C748180EFC1A0091CE94 /* TSSources.h */,
+			);
+			name = ThumbnailService;
+			path = headers/ThumbnailService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -378,11 +374,9 @@
 				FA26768518071D5D00F5B02B /* UIImage+Decompress.m in Sources */,
 				FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */,
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
-				FA67E4B918087B9900B64944 /* TSSourceALAsset.m in Sources */,
 				FA2676A018071FBB00F5B02B /* main.m in Sources */,
 				FA26768618071D5D00F5B02B /* UIImageView+ImageFrame.m in Sources */,
 				FA26768C18071E6800F5B02B /* PreviewCollectionCell.m in Sources */,
-				FA540536180A82910092752B /* TSSourcePdfPage.m in Sources */,
 				FA26768318071D5D00F5B02B /* NotificationUtils.m in Sources */,
 				FA26768118071D5D00F5B02B /* ALAsset+Identifier.m in Sources */,
 				FA2676581806F9F400F5B02B /* AssetsLibrarySource.m in Sources */,

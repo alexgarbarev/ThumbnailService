@@ -13,7 +13,6 @@
 #import "NotificationUtils.h"
 
 #import "ThumbnailService.h"
-#import "TSSourceALAsset.h"
 
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;

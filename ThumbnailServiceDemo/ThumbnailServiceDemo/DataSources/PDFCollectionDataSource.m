@@ -9,7 +9,6 @@
 #import "PDFCollectionDataSource.h"
 #import "ThumbnailService.h"
 #import "PreviewCollectionCell.h"
-#import "TSSourcePdfPage.h"
 #import "TSRequestGroupSequence.h"
 
 static CGSize kSmallThumbnailSize = (CGSize){144, 144};
@@ -75,7 +74,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
         TSRequest *request = [TSRequest new];
         
         CGPDFPageRef page = CGPDFDocumentGetPage(document, i);
-        TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
+        TSSourcePDFPage *pageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
         request.source = pageSource;
         request.size = kSmallThumbnailSize;
         request.queuePriority = NSOperationQueuePriorityVeryLow;
@@ -107,7 +106,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     
     CGPDFPageRef page = CGPDFDocumentGetPage(document, [indexPath item]+1);
     
-    TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
+    TSSourcePDFPage *pageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
     
@@ -138,8 +137,8 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
 
     }];
     
-    [group addRequest:smallThumbRequest runOnMainThread:NO];
-    [group addRequest:bigThumbRequest runOnMainThread:NO];
+    [group addRequest:smallThumbRequest];
+    [group addRequest:bigThumbRequest];
     
     [thumbnailService performRequestGroup:group];
     

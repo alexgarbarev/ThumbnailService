@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSSource.h"
+#import "TSSources.h"
 
 typedef NS_ENUM(NSInteger, TSRequestThreadPriority)
 {

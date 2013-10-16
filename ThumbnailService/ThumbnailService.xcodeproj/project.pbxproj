@@ -33,6 +33,15 @@
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
+		FAF9C733180EF6D10091CE94 /* TSSourceALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */; };
+		FAF9C734180EF6D10091CE94 /* TSSourcePDFPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */; };
+		FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */; };
+		FAF9C73B180EF6DB0091CE94 /* UIImageView+ImageFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C739180EF6DB0091CE94 /* UIImageView+ImageFrame.m */; };
+		FAF9C73D180EFBFB0091CE94 /* TSSources.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C73C180EFBBF0091CE94 /* TSSources.h */; };
+		FAF9C73E180EFBFB0091CE94 /* TSSourceALAsset.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */; };
+		FAF9C73F180EFBFB0091CE94 /* TSSourcePDFPage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */; };
+		FAF9C74B180EFEE90091CE94 /* TSSourceImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */; };
+		FAF9C74C180F01FD0091CE94 /* TSSourceImage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C749180EFEE90091CE94 /* TSSourceImage.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +61,10 @@
 			dstPath = "headers/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				FAF9C73D180EFBFB0091CE94 /* TSSources.h in CopyFiles */,
+				FAF9C73E180EFBFB0091CE94 /* TSSourceALAsset.h in CopyFiles */,
+				FAF9C73F180EFBFB0091CE94 /* TSSourcePDFPage.h in CopyFiles */,
+				FAF9C74C180F01FD0091CE94 /* TSSourceImage.h in CopyFiles */,
 				FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */,
 				FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */,
 				FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */,
@@ -101,6 +114,17 @@
 		FA69D3071807B3F800979C84 /* TSSourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceTest.h; sourceTree = "<group>"; };
 		FA69D3081807B3F800979C84 /* TSSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceTest.m; sourceTree = "<group>"; };
 		FAF9C72A180EE3160091CE94 /* ThumbnailService+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ThumbnailService+Testing.h"; sourceTree = "<group>"; };
+		FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
+		FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceALAsset.m; sourceTree = "<group>"; };
+		FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePDFPage.h; sourceTree = "<group>"; };
+		FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourcePDFPage.m; sourceTree = "<group>"; };
+		FAF9C736180EF6DB0091CE94 /* ALAsset+Identifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+Identifier.h"; sourceTree = "<group>"; };
+		FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAsset+Identifier.m"; sourceTree = "<group>"; };
+		FAF9C738180EF6DB0091CE94 /* UIImageView+ImageFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+ImageFrame.h"; sourceTree = "<group>"; };
+		FAF9C739180EF6DB0091CE94 /* UIImageView+ImageFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+ImageFrame.m"; sourceTree = "<group>"; };
+		FAF9C73C180EFBBF0091CE94 /* TSSources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TSSources.h; sourceTree = "<group>"; };
+		FAF9C749180EFEE90091CE94 /* TSSourceImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceImage.h; sourceTree = "<group>"; };
+		FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,8 +256,16 @@
 		FA2677761807AFB900F5B02B /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				FAF9C73C180EFBBF0091CE94 /* TSSources.h */,
+				FAF9C735180EF6DB0091CE94 /* Utils */,
 				FA2677771807AFB900F5B02B /* TSSource.h */,
 				FA2677781807AFB900F5B02B /* TSSource.m */,
+				FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */,
+				FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */,
+				FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */,
+				FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */,
+				FAF9C749180EFEE90091CE94 /* TSSourceImage.h */,
+				FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -256,6 +288,17 @@
 				FA67E49F18083C8500B64944 /* TSOperationQueue.m */,
 			);
 			path = OperationQueue;
+			sourceTree = "<group>";
+		};
+		FAF9C735180EF6DB0091CE94 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				FAF9C736180EF6DB0091CE94 /* ALAsset+Identifier.h */,
+				FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */,
+				FAF9C738180EF6DB0091CE94 /* UIImageView+ImageFrame.h */,
+				FAF9C739180EF6DB0091CE94 /* UIImageView+ImageFrame.m */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,15 +383,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA26777F1807AFB900F5B02B /* TSRequest.m in Sources */,
+				FAF9C733180EF6D10091CE94 /* TSSourceALAsset.m in Sources */,
 				FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */,
+				FAF9C73B180EF6DB0091CE94 /* UIImageView+ImageFrame.m in Sources */,
 				FA26777E1807AFB900F5B02B /* TSOperation.m in Sources */,
+				FAF9C74B180EFEE90091CE94 /* TSSourceImage.m in Sources */,
 				FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */,
 				FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */,
+				FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */,
 				FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */,
 				FA26777B1807AFB900F5B02B /* TSFileCache.m in Sources */,
 				FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */,
 				FA26777C1807AFB900F5B02B /* TSGenerateOperation.m in Sources */,
 				FA2677801807AFB900F5B02B /* TSSource.m in Sources */,
+				FAF9C734180EF6D10091CE94 /* TSSourcePDFPage.m in Sources */,
 				FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

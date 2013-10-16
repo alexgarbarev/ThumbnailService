@@ -9,9 +9,13 @@
 #import "TSSourceALAsset.h"
 #import "ALAsset+Identifier.h"
 
-#import <ImageIO/ImageIO.h>
+#define Retain(object) CFRetain((__bridge CFTypeRef)object)
+#define Release(object) CFRelease((__bridge CFTypeRef)object)
 
-NSError *lastError;
+typedef struct {
+    __unsafe_unretained ALAssetRepresentation *representation;
+    __unsafe_unretained NSError *error;
+} ProviderCreationInfo;
 
 @implementation TSSourceALAsset {
     ALAsset *asset;
@@ -40,31 +44,36 @@ NSError *lastError;
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     NSUInteger thumbSize = MAX(size.width, size.height);
-    ALAssetRepresentation *rep = [asset defaultRepresentation];
+    ALAssetRepresentation *representation = [asset defaultRepresentation];
     
     CGDataProviderDirectCallbacks callbacks = {
         .version = 0,
         .getBytePointer = NULL,
         .releaseBytePointer = NULL,
-        .getBytesAtPosition = getAssetBytesCallback,
-        .releaseInfo = releaseAssetCallback,
+        .getBytesAtPosition = GetBytesCallback,
+        .releaseInfo = ReleaseInfoCallback,
     };
     
-    CGDataProviderRef provider = CGDataProviderCreateDirect((void *)CFBridgingRetain(rep), [rep size], &callbacks);
+    ProviderCreationInfo *info = malloc(sizeof(ProviderCreationInfo));
+    info->representation = Retain(representation);
+    info->error = nil;
+
+    CGDataProviderRef provider = CGDataProviderCreateDirect((void *)info, [representation size], &callbacks);
     
+    NSError *providerError = info->error;
     
     CGImageSourceRef source;
     @autoreleasepool {
         source = CGImageSourceCreateWithDataProvider(provider, NULL);
     }
-    if (lastError || *isCancelled) {
-        *error = lastError;
+    
+    if (providerError || *isCancelled) {
+        *error = providerError;
         CFRelease(source);
         CFRelease(provider);
         return nil;
     }
 
-    
     NSDictionary *options = @{ (NSString *)kCGImageSourceCreateThumbnailFromImageAlways : @YES,
                                (NSString *)kCGImageSourceThumbnailMaxPixelSize : @(thumbSize),
                                (NSString *)kCGImageSourceCreateThumbnailWithTransform : @YES
@@ -75,6 +84,7 @@ NSError *lastError;
     CFRelease(provider);
     
     if (!imageRef) {
+        *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Can't create thumbnail by CGImageSourceCreateThumbnailAtIndex. Unknown error."}];
         return nil;
     }
     
@@ -85,23 +95,27 @@ NSError *lastError;
     return toReturn;
 }
 
-static size_t getAssetBytesCallback(void *info, void *buffer, off_t position, size_t count) {
+static size_t GetBytesCallback(void *info, void *buffer, off_t position, size_t count)
+{
+    ProviderCreationInfo *providerInfo = (ProviderCreationInfo *)info;
     size_t countRead;
     
-    ALAssetRepresentation *rep = (__bridge id)info;
+    ALAssetRepresentation *rep = providerInfo->representation;
     
     NSError *error = nil;
     countRead = [rep getBytes:(uint8_t *)buffer fromOffset:position length:count error:&error];
     
     if (countRead == 0 && error) {
-        lastError = error;
+        providerInfo->error = error;
     }
     return countRead;
 }
 
-static void releaseAssetCallback(void *info)
+static void ReleaseInfoCallback(void *info)
 {
-    CFRelease(info);
+    ProviderCreationInfo *providerInfo = (ProviderCreationInfo *)info;
+    Release(providerInfo->representation);
+    free(providerInfo);
 }
 
 @end

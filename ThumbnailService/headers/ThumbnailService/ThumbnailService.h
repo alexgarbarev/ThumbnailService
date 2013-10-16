@@ -10,20 +10,16 @@
 #import "TSRequest.h"
 #import "TSRequestGroupSequence.h"
 
-extern BOOL ThumbnailServiceShouldFailOnWarning;
-
 @interface ThumbnailService : NSObject
 
 @property (nonatomic) BOOL shouldCachePlaceholders; /* Default: NO */
 
 @property (nonatomic) BOOL useMemoryCache; /* Default: YES */
 @property (nonatomic) BOOL useFileCache;   /* Default: YES */
+@property (nonatomic) NSUInteger cacheMemoryLimitInBytes; /* Default: 3MB. 0 - unlimited */
 
 - (void) performRequest:(TSRequest *)request;
-- (void) performRequest:(TSRequest *)request andWait:(BOOL)wait;
-
 - (void) performRequestGroup:(TSRequestGroup *)group;
-- (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait;
 
 - (void) clearFileCache;
 

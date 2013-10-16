@@ -18,10 +18,10 @@
 - (void) didFinishRequest:(TSRequest *)request;
 - (void) didCancelRequest:(TSRequest *)request;
 
-- (BOOL) shouldPerformOnMainQueueRequest:(TSRequest *)request;
-
 - (void) cancel;
 
 - (void) waitUntilFinished;
+
+- (BOOL) isFinished;
 
 @end

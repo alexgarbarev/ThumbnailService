@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Aleksey Garbarev. All rights reserved.
 //
 
-#import "TSSourcePdfPage.h"
+#import "TSSourcePDFPage.h"
 #import "UIImageView+ImageFrame.h"
 
-@implementation TSSourcePdfPage {
+@implementation TSSourcePDFPage {
     CGPDFPageRef page;
     NSString *documentName;
 }
