@@ -17,12 +17,11 @@
 @property (nonatomic) BOOL useMemoryCache; /* Default: YES */
 @property (nonatomic) BOOL useFileCache;   /* Default: YES */
 
-
 - (void) performRequest:(TSRequest *)request;
-
-- (void) performRequestOnMainThread:(TSRequest *)request;
+- (void) performRequest:(TSRequest *)request andWait:(BOOL)wait;
 
 - (void) performRequestGroup:(TSRequestGroup *)group;
+- (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait;
 
 - (void) clearFileCache;
 

@@ -20,9 +20,10 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 /* Relations with request */
 - (void) addRequest:(TSRequest *)request andWait:(BOOL)wait;
 - (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait;
-- (NSSet *) requests;
 
 - (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue;
+- (BOOL) shouldCacheOnDisk;
+- (BOOL) shouldCacheInMemory;
 
 - (void) updatePriority;
 

@@ -79,6 +79,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
         request.source = pageSource;
         request.size = kSmallThumbnailSize;
         request.priority = NSOperationQueuePriorityVeryLow;
+        request.shouldCacheInMemory = NO;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
             [self precachePagesFromIndex:i+1];
         }];
@@ -92,6 +93,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
 {
     return CGPDFDocumentGetNumberOfPages(document);
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -119,7 +121,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     [smallThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
         if (!result) {
-            NSLog(@"small error: %@",error);
+            NSLog(@"small thumb error: %@",error);
         }
     }];
     
@@ -131,7 +133,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
         if (!result) {
-            NSLog(@"big error: %@",error);
+            NSLog(@"big thumb error: %@",error);
         }
 
     }];
@@ -141,9 +143,12 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     
     [thumbnailService performRequestGroup:group];
     
-//    [smallThumbRequest waitPlaceholder];
-//    [smallThumbRequest waitUntilFinished];
     
+//    [bigThumbRequest waitUntilFinished];
+    
+//    [smallThumbRequest waitPlaceholder];
+    [smallThumbRequest waitUntilFinished];
+
     viewCell.context = group;
     
     return viewCell;

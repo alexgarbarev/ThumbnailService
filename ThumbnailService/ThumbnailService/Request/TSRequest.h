@@ -20,6 +20,9 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 @property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */
 @property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
 
+@property (nonatomic) BOOL shouldCacheInMemory; /* Default: YES */
+@property (nonatomic) BOOL shouldCacheOnDisk;   /* Default: YES */
+
 - (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 

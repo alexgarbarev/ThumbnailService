@@ -97,20 +97,14 @@
     }
 }
 
-- (NSSet *) requests
-{
-    __block NSSet *result;
-    dispatch_sync(operationQueue, ^{
-        result = requests;
-    });
-    return result;
-}
 
 - (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue
 {
     if (!enumerationBlock) {
         return;
     }
+    
+    NSParameterAssert(queue);
     
     dispatch_sync(operationQueue, ^{
         dispatch_sync(queue, ^{
@@ -120,6 +114,35 @@
         });
     });
 }
+
+- (BOOL) shouldCacheOnDisk
+{
+    __block BOOL shouldCache = NO;
+    dispatch_sync(operationQueue, ^{
+        for (TSRequest *requst in requests) {
+            if (requst.shouldCacheOnDisk) {
+                shouldCache = YES;
+                break;
+            }
+        }
+    });
+    return shouldCache;
+}
+
+- (BOOL) shouldCacheInMemory
+{
+    __block BOOL shouldCache = NO;
+    dispatch_sync(operationQueue, ^{
+        for (TSRequest *requst in requests) {
+            if (requst.shouldCacheInMemory) {
+                shouldCache = YES;
+                break;
+            }
+        }
+    });
+    return shouldCache;
+}
+
 
 - (void) updatePriority
 {

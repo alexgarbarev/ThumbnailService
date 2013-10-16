@@ -9,12 +9,26 @@
 #import "TSRequestGroupSequence.h"
 #import "TSRequest+Private.h"
 
+typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
+    TSRequestGroupSequenceNotStarted,
+    TSRequestGroupSequenceStarted,
+    TSRequestGroupSequenceCanceled,
+    TSRequestGroupSequenceFinished
+};
+
+@interface TSRequestGroupSequence ()
+
+@property (nonatomic) TSRequestGroupSequenceState state;
+
+@end
+
 @implementation TSRequestGroupSequence {
     NSMutableArray *sequence;
-    NSMutableDictionary *requestOnMainThread;
     
     dispatch_queue_t queue;
     dispatch_semaphore_t semaphore;
+    
+    NSInteger stepNumber;
 }
 
 - (id)init
@@ -22,11 +36,12 @@
     self = [super init];
     if (self) {
         sequence = [NSMutableArray new];
-        requestOnMainThread = [NSMutableDictionary new];
         semaphore = dispatch_semaphore_create(0);
         
         queue = dispatch_queue_create("queue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        
+        self.state = TSRequestGroupSequenceNotStarted;
     }
     return self;
 }
@@ -34,13 +49,13 @@
 - (void)dealloc
 {
     dispatch_release(queue);
+    dispatch_release(semaphore);
 }
 
 - (void) addRequest:(TSRequest *)request runOnMainThread:(BOOL)onMainThread;
 {
     dispatch_async(queue, ^{
         [sequence addObject:request];
-        requestOnMainThread[request.identifier] = @(onMainThread);
         request.group = self;
     });
 }
@@ -50,6 +65,12 @@
     __block NSArray *requests = nil;
 
     dispatch_sync(queue, ^{
+        
+        if (stepNumber == 0) {
+            self.state = TSRequestGroupSequenceStarted;
+        }
+        stepNumber++;
+        
         if ([sequence count] > 0) {
             TSRequest *request = [sequence objectAtIndex:0];
             requests = @[request];
@@ -64,7 +85,7 @@
     dispatch_async(queue, ^{
         [sequence removeObject:request];
         if (sequence.count == 0) {
-            [self finishGroup];
+            self.state = TSRequestGroupSequenceFinished;
         }
     });
 }
@@ -74,16 +95,10 @@
 
 }
 
-- (BOOL)shouldPerformOnMainQueueRequest:(TSRequest *)request
-{
-    return [requestOnMainThread[request.identifier] boolValue];
-}
-
 - (void) cancelAndWait:(BOOL)wait
 {
     dispatch_block_t work = ^{
-        requestOnMainThread = nil;
-        [self finishGroup];
+        self.state = TSRequestGroupSequenceCanceled;
         for (TSRequest *request in sequence) {
             [request cancel];
         }
@@ -104,21 +119,21 @@
 
 - (BOOL) isGroupFinished
 {
-    return semaphore == NULL;
+    return _state == TSRequestGroupSequenceCanceled || _state == TSRequestGroupSequenceFinished;
 }
 
-- (void) finishGroup
+- (void)setState:(TSRequestGroupSequenceState)state
 {
-    if (semaphore) {
+    _state = state;
+    
+    if ([self isGroupFinished]) {
         dispatch_semaphore_signal(semaphore);
-        dispatch_release(semaphore);
-        semaphore = NULL;
     }
 }
 
-- (void)waitUntilFinished
+- (void) waitUntilFinished
 {
-    if (semaphore != NULL) {
+    if (![self isGroupFinished]) {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
 }

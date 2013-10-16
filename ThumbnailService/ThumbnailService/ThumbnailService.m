@@ -204,16 +204,14 @@
 - (void) enqueueOperationForRequest:(TSRequest *)request
 {
     TSOperation *operation = [queue operationWithIdentifier:request.identifier];
-    
+
     if (!operation) {
         operation = [self newOperationForRequest:request];
-//        request.operation = operation;
         [request setOperation:operation andWait:YES];
         [queue addOperation:operation forIdentifider:request.identifier];
     } else if (operation.isFinished){
-        [request takeThumbnail:operation.result error:operation.error];
+        [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
     } else {
-//        request.operation = operation;
         [request setOperation:operation andWait:YES];
     }
 }
@@ -259,8 +257,16 @@
 
 - (void) didGenerateThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
-    if (operation.result && !operation.error) {
-        [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeFileAndMemory];
+    if (operation.result && !operation.error)
+    {
+        TSCacheManagerMode mode = 0;
+        if ([operation shouldCacheInMemory]) {
+            mode |= cacheModeMemory;
+        }
+        if ([operation shouldCacheOnDisk]) {
+            mode |= cacheModeFile;
+        }
+        [thumbnailsCache setObject:operation.result forKey:identifier mode:mode];
     }
 
     [self takeThumnbailsForRequestsInOperation:operation];
@@ -268,7 +274,7 @@
 
 - (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
 {
-    if (operation.result && !operation.error) {
+    if (operation.result && !operation.error && operation.shouldCacheInMemory) {
         [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeMemory];
     }
     

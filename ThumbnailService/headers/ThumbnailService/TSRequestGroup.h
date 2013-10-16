@@ -21,7 +21,6 @@
 - (BOOL) shouldPerformOnMainQueueRequest:(TSRequest *)request;
 
 - (void) cancel;
-- (void) cancelAndWait:(BOOL)wait;
 
 - (void) waitUntilFinished;
 

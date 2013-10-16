@@ -17,14 +17,22 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 @property (nonatomic) CGSize size;
 @property (nonatomic) NSOperationQueuePriority priority;
 
+@property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */
 @property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
+
+@property (nonatomic) BOOL shouldCacheInMemory; /* Default: YES */
+@property (nonatomic) BOOL shouldCacheOnDisk;   /* Default: YES */
 
 - (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 
 - (void) cancel;
+- (void) cancelAndWait:(BOOL)wait;
 
 - (void) waitUntilFinished;
 - (void) waitPlaceholder;
+
+
+- (BOOL) isFinished;
 
 @end

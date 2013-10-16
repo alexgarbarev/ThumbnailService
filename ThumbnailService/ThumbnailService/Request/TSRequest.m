@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
         
         self.shouldCastCompletionsToMainThread = YES;
         self.shouldAdjustSizeToScreenScale = YES;
+        self.shouldCacheOnDisk = YES;
+        self.shouldCacheInMemory = YES;
         
         self.finishWaitSemaphore = dispatch_semaphore_create(0);
         self.placeholderWaitSemaphore = dispatch_semaphore_create(0);
