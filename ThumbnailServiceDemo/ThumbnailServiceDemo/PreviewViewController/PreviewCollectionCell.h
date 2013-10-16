@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-static CGSize kThumbSize = {300, 300};
+extern CGSize kSmallThumbnailSize;
+extern CGSize kBigThumbSize;
 
 @interface PreviewCollectionCell : UICollectionViewCell
 

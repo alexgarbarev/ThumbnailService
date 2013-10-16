@@ -28,6 +28,8 @@
 		FA2A93B6180B9D76004281DD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FA2A93B5180B9D76004281DD /* sample.pdf */; };
 		FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540532180A82910092752B /* PDFCollectionDataSource.m */; };
 		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
+		FAF9C758180F07920091CE94 /* 1680-x-1050.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */; };
+		FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,14 +96,9 @@
 		FA540532180A82910092752B /* PDFCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFCollectionDataSource.m; sourceTree = "<group>"; };
 		FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ThumbnailService.xcodeproj; sourceTree = "<group>"; };
 		FAF8E918180B1FC000654C00 /* PreviewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewDataSource.h; sourceTree = "<group>"; };
-		FAF9C741180EFC1A0091CE94 /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
-		FAF9C742180EFC1A0091CE94 /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequest.h; sourceTree = "<group>"; };
-		FAF9C743180EFC1A0091CE94 /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
-		FAF9C744180EFC1A0091CE94 /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
-		FAF9C745180EFC1A0091CE94 /* TSSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSource.h; sourceTree = "<group>"; };
-		FAF9C746180EFC1A0091CE94 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
-		FAF9C747180EFC1A0091CE94 /* TSSourcePDFPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePDFPage.h; sourceTree = "<group>"; };
-		FAF9C748180EFC1A0091CE94 /* TSSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSources.h; sourceTree = "<group>"; };
+		FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1680-x-1050.jpg"; sourceTree = "<group>"; };
+		FAF9C759180F07A50091CE94 /* ImagesCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagesCollectionDataSource.h; sourceTree = "<group>"; };
+		FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagesCollectionDataSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +161,6 @@
 		FA2676371806F77200F5B02B /* ThumbnailService */ = {
 			isa = PBXGroup;
 			children = (
-				FAF9C740180EFC1A0091CE94 /* ThumbnailService */,
 				FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */,
 			);
 			name = ThumbnailService;
@@ -214,6 +210,7 @@
 		FA26768F18071F7C00F5B02B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */,
 				FA2A93B5180B9D76004281DD /* sample.pdf */,
 				FA26769018071F7C00F5B02B /* Images.xcassets */,
 				FA26769118071F7C00F5B02B /* Main.storyboard */,
@@ -250,6 +247,8 @@
 				FA2676A318071FFD00F5B02B /* AssetsCollectionDataSource.m */,
 				FA540531180A82910092752B /* PDFCollectionDataSource.h */,
 				FA540532180A82910092752B /* PDFCollectionDataSource.m */,
+				FAF9C759180F07A50091CE94 /* ImagesCollectionDataSource.h */,
+				FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -261,22 +260,6 @@
 				FA67E4AF180879A000B64944 /* ThumbnailServiceTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		FAF9C740180EFC1A0091CE94 /* ThumbnailService */ = {
-			isa = PBXGroup;
-			children = (
-				FAF9C741180EFC1A0091CE94 /* ThumbnailService.h */,
-				FAF9C742180EFC1A0091CE94 /* TSRequest.h */,
-				FAF9C743180EFC1A0091CE94 /* TSRequestGroup.h */,
-				FAF9C744180EFC1A0091CE94 /* TSRequestGroupSequence.h */,
-				FAF9C745180EFC1A0091CE94 /* TSSource.h */,
-				FAF9C746180EFC1A0091CE94 /* TSSourceALAsset.h */,
-				FAF9C747180EFC1A0091CE94 /* TSSourcePDFPage.h */,
-				FAF9C748180EFC1A0091CE94 /* TSSources.h */,
-			);
-			name = ThumbnailService;
-			path = headers/ThumbnailService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA26769418071F7C00F5B02B /* Main.storyboard in Resources */,
+				FAF9C758180F07920091CE94 /* 1680-x-1050.jpg in Resources */,
 				FA26769318071F7C00F5B02B /* Images.xcassets in Resources */,
 				FA2A93B6180B9D76004281DD /* sample.pdf in Resources */,
 			);
@@ -374,6 +358,7 @@
 				FA26768518071D5D00F5B02B /* UIImage+Decompress.m in Sources */,
 				FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */,
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
+				FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */,
 				FA2676A018071FBB00F5B02B /* main.m in Sources */,
 				FA26768618071D5D00F5B02B /* UIImageView+ImageFrame.m in Sources */,
 				FA26768C18071E6800F5B02B /* PreviewCollectionCell.m in Sources */,
@@ -476,8 +461,17 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ThumbnailServiceDemo/Application/ThumbnailServiceDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(TARGET_BUILD_DIR)/include\"/**",
+				);
 				INFOPLIST_FILE = "ThumbnailServiceDemo/Resources/ThumbnailServiceDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -492,8 +486,17 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ThumbnailServiceDemo/Application/ThumbnailServiceDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(TARGET_BUILD_DIR)/include\"/**",
+				);
 				INFOPLIST_FILE = "ThumbnailServiceDemo/Resources/ThumbnailServiceDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;

@@ -1,39 +1,31 @@
 //
-//  PDFCollectionDataSource.m
+//  ImagesCollectionDataSource.m
 //  ThumbnailServiceDemo
 //
-//  Created by Sovelu on 12.10.13.
+//  Created by Aleksey Garbarev on 17.10.13.
 //  Copyright (c) 2013 Aleksey Garbarev. All rights reserved.
 //
 
-#import "PDFCollectionDataSource.h"
+#import "ImagesCollectionDataSource.h"
+#import "PreviewCollectionCell.h"
+
 #import <ThumbnailService/ThumbnailService.h>
 
-#import "PreviewCollectionCell.h"
-#import "TSRequestGroupSequence.h"
-
-@implementation PDFCollectionDataSource {
-    CGPDFDocumentRef document;
+@implementation ImagesCollectionDataSource {
     ThumbnailService *thumbnailService;
-    NSString *documentName;
+    NSArray *imagePaths;
 }
 
-- (id) init
+- (id)init
 {
     self = [super init];
     if (self) {
-        documentName = @"sample";
-        NSURL *documentURL = [[NSBundle mainBundle] URLForResource:documentName withExtension:@"pdf"];
-        document = CGPDFDocumentCreateWithURL((__bridge CFURLRef)documentURL);
+        thumbnailService = [[ThumbnailService alloc] init];
         
-        thumbnailService = [ThumbnailService new];
+        imagePaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"png" inDirectory:nil];
+        imagePaths = [imagePaths arrayByAddingObjectsFromArray:[[NSBundle mainBundle] pathsForResourcesOfType:@"jpg" inDirectory:nil]];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    CGPDFDocumentRelease(document);
 }
 
 - (void)setShouldPrecache:(BOOL)_shouldPrecache
@@ -61,35 +53,12 @@
 
 - (void) precachePagesFromIndex:(NSInteger)i
 {
-    NSUInteger pagesCount = CGPDFDocumentGetNumberOfPages(document);
-    
-    static CFAbsoluteTime timeBeforePrecache;
 
-    if (i == 1) {
-        timeBeforePrecache = CFAbsoluteTimeGetCurrent();
-    }
-    
-    if (i < pagesCount) {
-        TSRequest *request = [TSRequest new];
-        
-        CGPDFPageRef page = CGPDFDocumentGetPage(document, i);
-        TSSourcePDFPage *pageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
-        request.source = pageSource;
-        request.size = kSmallThumbnailSize;
-        request.queuePriority = NSOperationQueuePriorityVeryLow;
-        request.shouldCacheInMemory = NO;
-        [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
-            [self precachePagesFromIndex:i+1];
-        }];
-        [thumbnailService performRequest:request];
-    } else {
-        NSLog(@"all pdf pages precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
-    }
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return CGPDFDocumentGetNumberOfPages(document);
+    return [imagePaths count];
 }
 
 
@@ -103,14 +72,13 @@
         viewCell.imageView.image = nil;
     }
     
-    CGPDFPageRef page = CGPDFDocumentGetPage(document, [indexPath item]+1);
-    
-    TSSourcePDFPage *pageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
+    NSString *imagePath = imagePaths[[indexPath item]];
+    TSSourceImage *imageSource = [[TSSourceImage alloc] initWithImagePath:imagePath];
     
     TSRequestGroupSequence *group = [TSRequestGroupSequence new];
     
     TSRequest *smallThumbRequest = [TSRequest new];
-    smallThumbRequest.source = pageSource;
+    smallThumbRequest.source = imageSource;
     smallThumbRequest.size = kSmallThumbnailSize;
     smallThumbRequest.queuePriority = NSOperationQueuePriorityVeryHigh;
     [smallThumbRequest setPlaceholderCompletion:^(UIImage *result, NSError *error) {
@@ -118,22 +86,15 @@
     }];
     [smallThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
-        if (!result) {
-            NSLog(@"small thumb error: %@",error);
-        }
     }];
     
     TSRequest *bigThumbRequest = [TSRequest new];
-    bigThumbRequest.source = pageSource;
+    bigThumbRequest.source = imageSource;
     bigThumbRequest.size = kBigThumbSize;
     bigThumbRequest.queuePriority = NSOperationQueuePriorityHigh;
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
-        if (!result) {
-            NSLog(@"big thumb error: %@",error);
-        }
-
     }];
     
     [group addRequest:smallThumbRequest];
@@ -142,11 +103,11 @@
     [thumbnailService performRequestGroup:group];
     
     
-//    [bigThumbRequest waitUntilFinished];
+    //    [bigThumbRequest waitUntilFinished];
     
-//    [smallThumbRequest waitPlaceholder];
-//    [smallThumbRequest waitUntilFinished];
-
+    //    [smallThumbRequest waitPlaceholder];
+    //    [smallThumbRequest waitUntilFinished];
+    
     viewCell.context = group;
     
     return viewCell;

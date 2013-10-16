@@ -10,8 +10,9 @@
 #import "AssetsCollectionDataSource.h"
 #import "PreviewViewController.h"
 #import "PDFCollectionDataSource.h"
+#import "ImagesCollectionDataSource.h"
 
-#import "ThumbnailService.h"
+#import <ThumbnailService/ThumbnailService.h>
 #import "PreviewDataSource.h"
 
 @interface MenuViewController ()
@@ -28,6 +29,8 @@
             return [AssetsCollectionDataSource class];
         case 1:
             return [PDFCollectionDataSource class];
+        case 2:
+            return [ImagesCollectionDataSource class];
     }
     return nil;
 }

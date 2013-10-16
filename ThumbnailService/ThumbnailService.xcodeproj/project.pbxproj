@@ -19,14 +19,9 @@
 		FA26777F1807AFB900F5B02B /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2677751807AFB900F5B02B /* TSRequest.m */; };
 		FA2677801807AFB900F5B02B /* TSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2677781807AFB900F5B02B /* TSSource.m */; };
 		FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26777A1807AFB900F5B02B /* ThumbnailService.m */; };
-		FA2677841807B02100F5B02B /* ThumbnailService.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677791807AFB900F5B02B /* ThumbnailService.h */; };
-		FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677741807AFB900F5B02B /* TSRequest.h */; };
-		FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; };
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
 		FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540528180A74CE0092752B /* TSRequestGroup.m */; };
 		FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54052E180A76220092752B /* TSRequestGroupSequence.m */; };
-		FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA540527180A74CE0092752B /* TSRequestGroup.h */; };
-		FA54053B180A83600092752B /* TSRequestGroupSequence.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA54052D180A76220092752B /* TSRequestGroupSequence.h */; };
 		FA54054B180AC88E0092752B /* TestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054A180AC88E0092752B /* TestUtils.m */; };
 		FA54054E180AD37E0092752B /* RequestGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054C180AD37E0092752B /* RequestGroupTests.m */; };
 		FA54054F180AD37E0092752B /* RequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054D180AD37E0092752B /* RequestTests.m */; };
@@ -37,11 +32,16 @@
 		FAF9C734180EF6D10091CE94 /* TSSourcePDFPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */; };
 		FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */; };
 		FAF9C73B180EF6DB0091CE94 /* UIImageView+ImageFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C739180EF6DB0091CE94 /* UIImageView+ImageFrame.m */; };
-		FAF9C73D180EFBFB0091CE94 /* TSSources.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C73C180EFBBF0091CE94 /* TSSources.h */; };
-		FAF9C73E180EFBFB0091CE94 /* TSSourceALAsset.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */; };
-		FAF9C73F180EFBFB0091CE94 /* TSSourcePDFPage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */; };
 		FAF9C74B180EFEE90091CE94 /* TSSourceImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */; };
-		FAF9C74C180F01FD0091CE94 /* TSSourceImage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAF9C749180EFEE90091CE94 /* TSSourceImage.h */; };
+		FAF9C74E180F045D0091CE94 /* ThumbnailService.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677791807AFB900F5B02B /* ThumbnailService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C74F180F04710091CE94 /* TSSource.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C750180F04730091CE94 /* TSSourceALAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C751180F04780091CE94 /* TSSourcePDFPage.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C752180F047C0091CE94 /* TSSourceImage.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C749180EFEE90091CE94 /* TSSourceImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C753180F047F0091CE94 /* TSSources.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C73C180EFBBF0091CE94 /* TSSources.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C754180F048C0091CE94 /* TSRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677741807AFB900F5B02B /* TSRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C755180F04920091CE94 /* TSRequestGroupSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = FA54052D180A76220092752B /* TSRequestGroupSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAF9C756180F04950091CE94 /* TSRequestGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = FA540527180A74CE0092752B /* TSRequestGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,27 +53,6 @@
 			remoteInfo = ThumbnailService;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		FA26773D1807AF7F00F5B02B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "headers/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				FAF9C73D180EFBFB0091CE94 /* TSSources.h in CopyFiles */,
-				FAF9C73E180EFBFB0091CE94 /* TSSourceALAsset.h in CopyFiles */,
-				FAF9C73F180EFBFB0091CE94 /* TSSourcePDFPage.h in CopyFiles */,
-				FAF9C74C180F01FD0091CE94 /* TSSourceImage.h in CopyFiles */,
-				FA2677861807B02500F5B02B /* TSSource.h in CopyFiles */,
-				FA2677851807B02300F5B02B /* TSRequest.h in CopyFiles */,
-				FA54053A180A835D0092752B /* TSRequestGroup.h in CopyFiles */,
-				FA54053B180A83600092752B /* TSRequestGroupSequence.h in CopyFiles */,
-				FA2677841807B02100F5B02B /* ThumbnailService.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FA26773F1807AF7F00F5B02B /* libThumbnailService.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libThumbnailService.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,7 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				FAF9C73C180EFBBF0091CE94 /* TSSources.h */,
-				FAF9C735180EF6DB0091CE94 /* Utils */,
 				FA2677771807AFB900F5B02B /* TSSource.h */,
 				FA2677781807AFB900F5B02B /* TSSource.m */,
 				FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */,
@@ -266,6 +244,7 @@
 				FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */,
 				FAF9C749180EFEE90091CE94 /* TSSourceImage.h */,
 				FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */,
+				FAF9C735180EF6DB0091CE94 /* Utils */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -303,6 +282,25 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		FAF9C74D180F04540091CE94 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAF9C753180F047F0091CE94 /* TSSources.h in Headers */,
+				FAF9C74E180F045D0091CE94 /* ThumbnailService.h in Headers */,
+				FAF9C74F180F04710091CE94 /* TSSource.h in Headers */,
+				FAF9C750180F04730091CE94 /* TSSourceALAsset.h in Headers */,
+				FAF9C751180F04780091CE94 /* TSSourcePDFPage.h in Headers */,
+				FAF9C752180F047C0091CE94 /* TSSourceImage.h in Headers */,
+				FAF9C754180F048C0091CE94 /* TSRequest.h in Headers */,
+				FAF9C755180F04920091CE94 /* TSRequestGroupSequence.h in Headers */,
+				FAF9C756180F04950091CE94 /* TSRequestGroup.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		FA26773E1807AF7F00F5B02B /* ThumbnailService */ = {
 			isa = PBXNativeTarget;
@@ -310,7 +308,7 @@
 			buildPhases = (
 				FA26773B1807AF7F00F5B02B /* Sources */,
 				FA26773C1807AF7F00F5B02B /* Frameworks */,
-				FA26773D1807AF7F00F5B02B /* CopyFiles */,
+				FAF9C74D180F04540091CE94 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -514,6 +512,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -528,6 +527,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = "armv7 armv7s";
 			};

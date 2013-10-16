@@ -8,6 +8,9 @@
 
 #import "PreviewCollectionCell.h"
 
+CGSize kSmallThumbnailSize = (CGSize){144, 144};
+CGSize kBigThumbSize = {300, 300};
+
 @implementation PreviewCollectionCell
 
 @end

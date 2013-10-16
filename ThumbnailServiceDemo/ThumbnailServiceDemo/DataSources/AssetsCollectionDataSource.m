@@ -12,7 +12,7 @@
 #import "PreviewCollectionCell.h"
 #import "NotificationUtils.h"
 
-#import "ThumbnailService.h"
+#import <ThumbnailService/ThumbnailService.h>
 
 @implementation AssetsCollectionDataSource {
     AssetsLibrarySource *source;
@@ -70,7 +70,7 @@
     for (ALAsset *asset in allAssets) {
         TSRequest *request = [TSRequest new];
         request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
-        request.size = kThumbSize;
+        request.size = kBigThumbSize;
         request.queuePriority = NSOperationQueuePriorityVeryLow;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
             pendingPrecache--;
@@ -103,7 +103,7 @@
 
     TSRequest *request = [TSRequest new];
     request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
-    request.size = kThumbSize;
+    request.size = kBigThumbSize;
     request.queuePriority = NSOperationQueuePriorityVeryHigh;
     
 
