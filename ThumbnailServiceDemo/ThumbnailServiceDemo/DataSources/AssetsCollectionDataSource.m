@@ -72,7 +72,7 @@
         TSRequest *request = [TSRequest new];
         request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
         request.size = kThumbSize;
-        request.priority = NSOperationQueuePriorityVeryLow;
+        request.queuePriority = NSOperationQueuePriorityVeryLow;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
             pendingPrecache--;
             if (pendingPrecache == 0) {
@@ -105,7 +105,8 @@
     TSRequest *request = [TSRequest new];
     request.source = [[TSSourceALAsset alloc] initWithAsset:asset];
     request.size = kThumbSize;
-    request.priority = NSOperationQueuePriorityVeryHigh;
+    request.queuePriority = NSOperationQueuePriorityVeryHigh;
+    
 
     [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;

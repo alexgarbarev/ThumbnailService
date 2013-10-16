@@ -10,9 +10,6 @@
 
 @interface TSGenerateOperation()
 
-@property (nonatomic, getter = isFinished)  BOOL finished;
-@property (nonatomic, getter = isExecuting) BOOL executing;
-@property (nonatomic, getter = isStarted)   BOOL started;
 @end
 
 @implementation TSGenerateOperation {
@@ -33,26 +30,6 @@
     return self;
 }
 
-- (void)start
-{
-    self.started = YES;
-    if (![self isCancelled]) {
-        self.executing = YES;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self main];
-            self.executing = NO;
-            self.finished = YES;
-        });
-    } else {
-        self.finished = YES;
-    }
-}
-
-- (BOOL) isConcurrent
-{
-    return YES;
-}
-
 - (void) main
 {
     @autoreleasepool {
@@ -64,21 +41,6 @@
     }
 }
 
-- (void)setExecuting:(BOOL)isExecuting
-{
-    [self willChangeValueForKey:@"isExecuting"];
-    _executing = isExecuting;
-    [self didChangeValueForKey:@"isExecuting"];
-}
-
-- (void)setFinished:(BOOL)isFinished
-{
-    [self willChangeValueForKey:@"isFinished"];
-    _finished = isFinished;
-    [self didChangeValueForKey:@"isFinished"];
-}
-
-
 - (BOOL) isCancelled
 {
     return isCancelled;
@@ -86,14 +48,10 @@
 
 - (void) cancel
 {
-    if (!self.finished) {
+    if (![self isFinished]) {
         
         isCancelled = YES;
-        
-        if (self.started) {
-            self.finished = YES;
-        }
-        
+                
         self.result = nil;
         self.error = [NSError errorWithDomain:@"TSGenerateOperation" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Operation did cancelled"}];
         

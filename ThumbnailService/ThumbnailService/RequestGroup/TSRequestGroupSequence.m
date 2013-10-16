@@ -86,6 +86,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
         [sequence removeObject:request];
         if (sequence.count == 0) {
             self.state = TSRequestGroupSequenceFinished;
+            request.group = nil;
         }
     });
 }

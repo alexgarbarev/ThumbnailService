@@ -46,7 +46,7 @@
     TSRequest *request = [TSRequest new];
     request.source = source;
     request.size = CGSizeMake(100, 100);
-    request.priority = NSOperationQueuePriorityHigh;
+    request.queuePriority = NSOperationQueuePriorityHigh;
     request.shouldCastCompletionsToMainThread = NO;
     [request setPlaceholderCompletion:^(UIImage *result, NSError *error) {
         placeholderCalled = YES;
@@ -84,7 +84,7 @@
     TSRequest *request1 = [TSRequest new];
     request1.source = source;
     request1.size = CGSizeMake(300, 300);
-    request1.priority = NSOperationQueuePriorityNormal;
+    request1.queuePriority = NSOperationQueuePriorityNormal;
     request1.shouldCastCompletionsToMainThread = NO;
     [request1 setPlaceholderCompletion:placeholderCompletion];
     [request1 setThumbnailCompletion:thumbnailCompletion];
@@ -92,7 +92,7 @@
     TSRequest *request2 = [TSRequest new];
     request2.source = source;
     request2.size = CGSizeMake(300, 300);
-    request2.priority = NSOperationQueuePriorityHigh;
+    request2.queuePriority = NSOperationQueuePriorityHigh;
     request2.shouldCastCompletionsToMainThread = NO;
     [request2 setPlaceholderCompletion:placeholderCompletion];
     [request2 setThumbnailCompletion:thumbnailCompletion];
@@ -100,7 +100,7 @@
     TSRequest *request3 = [TSRequest new];
     request3.source = source;
     request3.size = CGSizeMake(300, 300);
-    request3.priority = NSOperationQueuePriorityLow;
+    request3.queuePriority = NSOperationQueuePriorityLow;
     request3.shouldCastCompletionsToMainThread = NO;
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
@@ -151,7 +151,7 @@
     TSRequest *request1 = [TSRequest new];
     request1.source = source;
     request1.size = CGSizeMake(300, 300);
-    request1.priority = NSOperationQueuePriorityNormal;
+    request1.queuePriority = NSOperationQueuePriorityNormal;
     request1.shouldCastCompletionsToMainThread = NO;
     [request1 setPlaceholderCompletion:placeholderCompletion];
     [request1 setThumbnailCompletion:thumbnailCompletion];
@@ -159,7 +159,7 @@
     TSRequest *request2 = [TSRequest new];
     request2.source = source;
     request2.size = CGSizeMake(300, 300);
-    request2.priority = NSOperationQueuePriorityHigh;
+    request2.queuePriority = NSOperationQueuePriorityHigh;
     request2.shouldCastCompletionsToMainThread = NO;
     [request2 setPlaceholderCompletion:placeholderCompletion];
     [request2 setThumbnailCompletion:thumbnailCompletion];
@@ -167,7 +167,7 @@
     TSRequest *request3 = [TSRequest new];
     request3.source = source;
     request3.size = CGSizeMake(300, 300);
-    request3.priority = NSOperationQueuePriorityLow;
+    request3.queuePriority = NSOperationQueuePriorityLow;
     request3.shouldCastCompletionsToMainThread = NO;
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
@@ -223,7 +223,7 @@
     TSRequest *request1 = [TSRequest new];
     request1.source = source;
     request1.size = CGSizeMake(300, 300);
-    request1.priority = NSOperationQueuePriorityNormal;
+    request1.queuePriority = NSOperationQueuePriorityNormal;
     request1.shouldCastCompletionsToMainThread = NO;
     [request1 setPlaceholderCompletion:placeholderCompletion];
     [request1 setThumbnailCompletion:thumbnailCompletion];
@@ -231,7 +231,7 @@
     TSRequest *request2 = [TSRequest new];
     request2.source = source;
     request2.size = CGSizeMake(300, 300);
-    request2.priority = NSOperationQueuePriorityHigh;
+    request2.queuePriority = NSOperationQueuePriorityHigh;
     request2.shouldCastCompletionsToMainThread = NO;
     [request2 setPlaceholderCompletion:placeholderCompletion];
     [request2 setThumbnailCompletion:thumbnailCompletion];
@@ -239,7 +239,7 @@
     TSRequest *request3 = [TSRequest new];
     request3.source = source;
     request3.size = CGSizeMake(300, 300);
-    request3.priority = NSOperationQueuePriorityLow;
+    request3.queuePriority = NSOperationQueuePriorityLow;
     request3.shouldCastCompletionsToMainThread = NO;
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];

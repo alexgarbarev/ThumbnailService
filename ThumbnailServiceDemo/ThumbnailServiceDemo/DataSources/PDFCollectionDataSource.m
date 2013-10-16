@@ -78,7 +78,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
         TSSourcePdfPage *pageSource = [[TSSourcePdfPage alloc] initWithPdfPage:page documentName:documentName];
         request.source = pageSource;
         request.size = kSmallThumbnailSize;
-        request.priority = NSOperationQueuePriorityVeryLow;
+        request.queuePriority = NSOperationQueuePriorityVeryLow;
         request.shouldCacheInMemory = NO;
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
             [self precachePagesFromIndex:i+1];
@@ -114,7 +114,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     TSRequest *smallThumbRequest = [TSRequest new];
     smallThumbRequest.source = pageSource;
     smallThumbRequest.size = kSmallThumbnailSize;
-    smallThumbRequest.priority = NSOperationQueuePriorityVeryHigh;
+    smallThumbRequest.queuePriority = NSOperationQueuePriorityVeryHigh;
     [smallThumbRequest setPlaceholderCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
     }];
@@ -128,7 +128,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
     TSRequest *bigThumbRequest = [TSRequest new];
     bigThumbRequest.source = pageSource;
     bigThumbRequest.size = kThumbSize;
-    bigThumbRequest.priority = NSOperationQueuePriorityHigh;
+    bigThumbRequest.queuePriority = NSOperationQueuePriorityHigh;
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;

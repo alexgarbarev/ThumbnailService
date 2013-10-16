@@ -13,6 +13,10 @@
 @property (nonatomic, strong) NSMutableSet *completionBlocks;
 @property (nonatomic, strong) NSMutableSet *cancelBlocks;
 
+@property (nonatomic, getter = isFinished)  BOOL finished;
+@property (nonatomic, getter = isExecuting) BOOL executing;
+@property (nonatomic, getter = isStarted)   BOOL started;
+
 @end
 
 @implementation TSOperation {
@@ -23,6 +27,8 @@
     
     int completionCalled;
     int calledFromBlock;
+    
+    TSOperationThreadPriority threadPriority;
 }
 
 @synthesize completionBlocks = _completionBlocks;
@@ -58,8 +64,48 @@
     dispatch_release(callbackQueue);
 }
 
+- (dispatch_queue_priority_t)queuePriorityFromThreadPriority:(TSOperationThreadPriority)priority
+{
+    switch (priority) {
+        case TSOperationThreadPriorityBackground:
+            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
+        default:
+        case TSOperationThreadPriorityLow:
+            return DISPATCH_QUEUE_PRIORITY_LOW;
+        case TSOperationThreadPriorityNormal:
+            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
+        case TSOperationThreadPriorityHight:
+            return DISPATCH_QUEUE_PRIORITY_HIGH;
+    }
+}
+
+
+- (void) start
+{
+    self.started = YES;
+    if (![self isCancelled]) {
+        self.executing = YES;
+        dispatch_async(dispatch_get_global_queue([self queuePriorityFromThreadPriority:self.threadPriority], 0), ^{
+            [self main];
+            self.executing = NO;
+            self.finished = YES;
+        });
+    } else {
+        self.finished = YES;
+    }
+}
+
+- (BOOL) isConcurrent
+{
+    return YES;
+}
+
 - (void) cancel
 {
+    if (self.started && !self.finished) {
+        self.finished = YES;
+    }
+
     [self onCancel];
     [super cancel];
 }
@@ -153,15 +199,35 @@
 
 - (void) _updatePriority
 {
-    NSOperationQueuePriority priority = NSOperationQueuePriorityVeryLow;
+    TSOperationThreadPriority tPriority = TSOperationThreadPriorityBackground;
+    TSRequestQueuePriority priority = TSRequestQueuePriorityVeryLow;
     
     for (TSRequest *request in requests) {
-        if (request.priority > priority) {
-            priority = request.priority;
+        if (request.queuePriority > priority) {
+            priority = request.queuePriority;
+        }
+        if ((TSOperationThreadPriority)request.threadPriority > tPriority) {
+            tPriority = (TSOperationThreadPriority)request.threadPriority;
         }
     }
     
     self.queuePriority = priority;
+    
+    if (!self.executing) {
+        self.threadPriority = tPriority;
+    }
+}
+
+#pragma mark - Thread priority
+
+- (void) setThreadPriority:(TSOperationThreadPriority)priority
+{
+    threadPriority = priority;
+}
+
+- (TSOperationThreadPriority) threadPriority
+{
+    return threadPriority;
 }
 
 #pragma mark - Operation termination
@@ -176,6 +242,22 @@
 - (void) onCancel
 {
     [self callCancelBlocks];
+}
+
+#pragma mark - KVO notifications
+
+- (void)setExecuting:(BOOL)isExecuting
+{
+    [self willChangeValueForKey:@"isExecuting"];
+    _executing = isExecuting;
+    [self didChangeValueForKey:@"isExecuting"];
+}
+
+- (void)setFinished:(BOOL)isFinished
+{
+    [self willChangeValueForKey:@"isFinished"];
+    _finished = isFinished;
+    [self didChangeValueForKey:@"isFinished"];
 }
 
 #pragma mark - Callbacks

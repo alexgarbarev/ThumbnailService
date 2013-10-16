@@ -29,4 +29,7 @@
 + (void) setShouldFailOnWarning:(BOOL)shouldFail;
 + (BOOL) shouldFailOnWarning;
 
++ (void) setShouldPrintWarnings:(BOOL)shouldPrint;
++ (BOOL) shouldPrintWarnings;
+
 @end

@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "TSRequest.h"
 
+typedef NS_ENUM(NSInteger, TSOperationThreadPriority)
+{
+    TSOperationThreadPriorityBackground,
+    TSOperationThreadPriorityLow,
+    TSOperationThreadPriorityNormal,
+    TSOperationThreadPriorityHight
+};
+
 @class TSOperation;
 typedef void(^TSOperationCompletion)(TSOperation *operation);
 
@@ -35,7 +43,7 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock;
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock;
 
-- (void)setThreadPriority:(double)p UNAVAILABLE_ATTRIBUTE;
-- (double)threadPriority UNAVAILABLE_ATTRIBUTE;
+- (void) setThreadPriority:(TSOperationThreadPriority)priority;
+- (TSOperationThreadPriority) threadPriority;
 
 @end

@@ -55,6 +55,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
         self.placeholderWaitSemaphore = dispatch_semaphore_create(0);
         
         self.state = TSRequestStateNotStarted;
+        self.threadPriority = TSRequestThreadPriorityLow;
     }
     return self;
 }
@@ -120,9 +121,15 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 #pragma mark - Modifying request reqirements
 
-- (void)setPriority:(NSOperationQueuePriority)priority
+- (void)setQueuePriority:(TSRequestQueuePriority)priority
 {
-    _priority = priority;
+    _queuePriority = priority;
+    [self.operation updatePriority];
+}
+
+- (void) setThreadPriority:(TSRequestThreadPriority)threadPriority
+{
+    _threadPriority = threadPriority;
     [self.operation updatePriority];
 }
 

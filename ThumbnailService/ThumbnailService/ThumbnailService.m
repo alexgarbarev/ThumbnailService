@@ -20,6 +20,7 @@
 #define GET_BITMASK(source, mask) (source & mask)
 
 static BOOL ThumbnailServiceShouldFailOnWarning = NO;
+static BOOL ThumbnailServiceShouldPrintWarning = NO;
 
 @implementation ThumbnailService {
     
@@ -143,8 +144,6 @@ static BOOL ThumbnailServiceShouldFailOnWarning = NO;
     dispatch_block_t work = ^{
         
         if ([group isFinished]) {
-            NSString *warning = [NSString stringWithFormat:@"RequestGroup %@ already finished. Skipping",group];
-            [self handleWarning:warning];
             return;
         }
         
@@ -300,7 +299,6 @@ static BOOL ThumbnailServiceShouldFailOnWarning = NO;
     [self takeThumnbailsForRequestsInOperation:operation];
 }
 
-
 - (void) takeThumnbailsForRequestsInOperation:(TSOperation *)operation
 {
     [operation enumerationRequests:^(TSRequest *request) {
@@ -321,11 +319,13 @@ static BOOL ThumbnailServiceShouldFailOnWarning = NO;
     [self performRequestGroup:request.group];
 }
 
-#pragma mark - Util
+#pragma mark - Class configuration
 
 - (void) handleWarning:(NSString *)warningString
 {
-    NSLog(@"ThumbnailService warning: %@",warningString);
+    if (ThumbnailServiceShouldPrintWarning) {
+        NSLog(@"ThumbnailService warning: %@",warningString);
+    }
     if (ThumbnailServiceShouldFailOnWarning) {
         NSAssert(NO, @"");
     }
@@ -339,6 +339,16 @@ static BOOL ThumbnailServiceShouldFailOnWarning = NO;
 + (BOOL)shouldFailOnWarning
 {
     return ThumbnailServiceShouldFailOnWarning;
+}
+
++ (void) setShouldPrintWarnings:(BOOL)shouldPrint
+{
+    ThumbnailServiceShouldPrintWarning = shouldPrint;
+}
+
++ (BOOL) shouldPrintWarnings
+{
+    return ThumbnailServiceShouldPrintWarning;
 }
 
 

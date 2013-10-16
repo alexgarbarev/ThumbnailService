@@ -9,13 +9,30 @@
 #import <Foundation/Foundation.h>
 #import "TSSource.h"
 
+typedef NS_ENUM(NSInteger, TSRequestThreadPriority)
+{
+    TSRequestThreadPriorityBackground,
+    TSRequestThreadPriorityLow,
+    TSRequestThreadPriorityNormal,
+    TSRequestThreadPriorityHight
+};
+
+typedef NS_ENUM(NSInteger, TSRequestQueuePriority) {
+	TSRequestQueuePriorityVeryLow = -8L,
+	TSRequestQueuePriorityLow = -4L,
+	TSRequestQueuePriorityNormal = 0,
+	TSRequestQueuePriorityHigh = 4,
+	TSRequestQueuePriorityVeryHigh = 8
+};
+
 typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 @interface TSRequest : NSObject
 
 @property (nonatomic, strong) TSSource *source;
 @property (nonatomic) CGSize size;
-@property (nonatomic) NSOperationQueuePriority priority;
+@property (nonatomic) TSRequestQueuePriority queuePriority;   /* Default: TSRequestQueuePriorityNormal */
+@property (nonatomic) TSRequestThreadPriority threadPriority; /* Default: TSRequestThreadPriorityLow */
 
 @property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */
 @property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
@@ -27,7 +44,6 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 
 - (void) cancel;
-- (void) cancelAndWait:(BOOL)wait;
 
 - (void) waitUntilFinished;
 - (void) waitPlaceholder;

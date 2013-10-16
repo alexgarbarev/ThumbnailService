@@ -24,6 +24,7 @@
 - (BOOL) needPlaceholder;
 - (BOOL) needThumbnail;
 
+- (void) cancelAndWait:(BOOL)wait;
 
 - (CGSize) sizeToRender;
 

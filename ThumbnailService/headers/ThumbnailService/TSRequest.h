@@ -9,13 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "TSSource.h"
 
+typedef NS_ENUM(NSInteger, TSRequestThreadPriority)
+{
+    TSRequestThreadPriorityBackground,
+    TSRequestThreadPriorityLow,
+    TSRequestThreadPriorityNormal,
+    TSRequestThreadPriorityHight
+};
+
 typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 @interface TSRequest : NSObject
 
 @property (nonatomic, strong) TSSource *source;
 @property (nonatomic) CGSize size;
-@property (nonatomic) NSOperationQueuePriority priority;
+@property (nonatomic) NSOperationQueuePriority queuePriority;
+@property (nonatomic) TSRequestThreadPriority threadPriority; /* Default: TSRequestThreadPriorityLow */
 
 @property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */
 @property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
