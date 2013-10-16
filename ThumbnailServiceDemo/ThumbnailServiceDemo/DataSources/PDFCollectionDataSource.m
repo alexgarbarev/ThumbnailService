@@ -147,7 +147,7 @@ static CGSize kSmallThumbnailSize = (CGSize){144, 144};
 //    [bigThumbRequest waitUntilFinished];
     
 //    [smallThumbRequest waitPlaceholder];
-    [smallThumbRequest waitUntilFinished];
+//    [smallThumbRequest waitUntilFinished];
 
     viewCell.context = group;
     
