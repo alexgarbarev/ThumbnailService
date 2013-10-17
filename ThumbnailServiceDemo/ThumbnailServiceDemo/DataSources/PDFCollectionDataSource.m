@@ -10,7 +10,7 @@
 #import <ThumbnailService/ThumbnailService.h>
 
 #import "PreviewCollectionCell.h"
-#import "TSRequestGroupSequence.h"
+
 
 @implementation PDFCollectionDataSource {
     CGPDFDocumentRef document;
