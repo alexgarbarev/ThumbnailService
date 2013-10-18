@@ -7,6 +7,7 @@
 //
 
 #import "TSOperation.h"
+#import "TSOperation+Private.h"
 
 @interface TSOperation ()
 
@@ -20,9 +21,6 @@
 @end
 
 @implementation TSOperation {
-    NSMutableSet *requests;
-    
-    dispatch_queue_t operationQueue;
     dispatch_queue_t callbackQueue;
     
     int completionCalled;
@@ -41,12 +39,11 @@
         completionCalled = 0;
         calledFromBlock = 0;
         
-        requests = [NSMutableSet new];
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
        
-        operationQueue = dispatch_queue_create("TSOperationQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(operationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+        self.operationQueue = dispatch_queue_create("TSOperationQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(self.operationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
@@ -60,7 +57,7 @@
 
 - (void) dealloc
 {
-    dispatch_release(operationQueue);
+    dispatch_release(self.operationQueue);
     dispatch_release(callbackQueue);
 }
 
@@ -111,115 +108,6 @@
     }
 }
 
-#pragma mark - Managing requests
-
-- (void) addRequest:(TSRequest *)request andWait:(BOOL)wait
-{
-    dispatch_block_t work = ^{
-        [requests addObject:request];
-        [self _updatePriority];
-    };
-    
-    if (wait) {
-        dispatch_sync(operationQueue, work);
-    } else {
-        dispatch_async(operationQueue, work);
-    }
-}
-
-- (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait
-{
-    dispatch_block_t work = ^{
-        [requests removeObject:request];
-        
-        if ([requests count] > 0) {
-            [self _updatePriority];
-        } else {
-            [self cancel];
-        }
-    };
-    
-    if (wait) {
-        dispatch_sync(operationQueue, work);
-    } else {
-        dispatch_async(operationQueue, work);
-    }
-}
-
-
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue
-{
-    if (!enumerationBlock) {
-        return;
-    }
-    
-    NSParameterAssert(queue);
-    
-    dispatch_sync(operationQueue, ^{
-        dispatch_sync(queue, ^{
-            for (TSRequest *request in requests) {
-                enumerationBlock(request);
-            };
-        });
-    });
-}
-
-- (BOOL) shouldCacheOnDisk
-{
-    __block BOOL shouldCache = NO;
-    dispatch_sync(operationQueue, ^{
-        for (TSRequest *requst in requests) {
-            if (requst.shouldCacheOnDisk) {
-                shouldCache = YES;
-                break;
-            }
-        }
-    });
-    return shouldCache;
-}
-
-- (BOOL) shouldCacheInMemory
-{
-    __block BOOL shouldCache = NO;
-    dispatch_sync(operationQueue, ^{
-        for (TSRequest *requst in requests) {
-            if (requst.shouldCacheInMemory) {
-                shouldCache = YES;
-                break;
-            }
-        }
-    });
-    return shouldCache;
-}
-
-
-- (void) updatePriority
-{
-    dispatch_sync(operationQueue, ^{
-        [self _updatePriority];
-    });
-}
-
-- (void) _updatePriority
-{
-    TSOperationThreadPriority tPriority = TSOperationThreadPriorityBackground;
-    TSRequestQueuePriority priority = TSRequestQueuePriorityVeryLow;
-    
-    for (TSRequest *request in requests) {
-        if (request.queuePriority > priority) {
-            priority = request.queuePriority;
-        }
-        if ((TSOperationThreadPriority)request.threadPriority > tPriority) {
-            tPriority = (TSOperationThreadPriority)request.threadPriority;
-        }
-    }
-    
-    self.queuePriority = priority;
-    
-    if (!self.executing) {
-        self.threadPriority = tPriority;
-    }
-}
 
 #pragma mark - Thread priority
 
@@ -267,14 +155,14 @@
 
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock
 {
-    dispatch_sync(operationQueue, ^{
+    dispatch_sync(self.operationQueue, ^{
         [_completionBlocks addObject:completionBlock];
     });
 }
 
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock
 {
-    dispatch_sync(operationQueue, ^{
+    dispatch_sync(self.operationQueue, ^{
         [_cancelBlocks addObject:cancelBlock];
     });
 }
@@ -282,7 +170,7 @@
 - (NSMutableSet *) completionBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(operationQueue, ^{
+    dispatch_sync(self.operationQueue, ^{
         set = _completionBlocks;
     });
     return set;
@@ -291,7 +179,7 @@
 - (NSMutableSet *) cancelBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(operationQueue, ^{
+    dispatch_sync(self.operationQueue, ^{
         set = _cancelBlocks;
     });
     return set;

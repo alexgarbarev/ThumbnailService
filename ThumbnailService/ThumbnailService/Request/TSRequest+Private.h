@@ -7,12 +7,12 @@
 //
 
 #import "TSRequest.h"
-#import "TSOperation.h"
+#import "TSRequestedOperation.h"
 #import "TSRequestGroup.h"
 
 @interface TSRequest ()
 
-@property (nonatomic, weak) TSOperation *operation;
+@property (nonatomic, weak) TSRequestedOperation *operation;
 
 @property (nonatomic, readonly) NSString *identifier;
 
@@ -28,6 +28,6 @@
 
 - (CGSize) sizeToRender;
 
-- (void) setOperation:(TSOperation *)operation andWait:(BOOL)wait;
+- (void) setOperation:(TSRequestedOperation *)operation andWait:(BOOL)wait;
 
 @end

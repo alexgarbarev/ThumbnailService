@@ -8,6 +8,7 @@
 
 #import "TSRequest.h"
 #import "TSRequest+Private.h"
+#import "TSRequestedOperation.h"
 
 typedef NS_ENUM(NSInteger, TSRequestState) {
     TSRequestStateNotStarted       = 0,
@@ -101,12 +102,12 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     return CGSizeMake(_size.width * scale, _size.height * scale);
 }
 
-- (void) setOperation:(TSOperation *)operation
+- (void) setOperation:(TSRequestedOperation *)operation
 {
     [self setOperation:operation andWait:NO];
 }
 
-- (void) setOperation:(TSOperation *)operation andWait:(BOOL)wait
+- (void) setOperation:(TSRequestedOperation *)operation andWait:(BOOL)wait
 {
     if (_operation) {
         [_operation removeRequest:self andWait:wait];

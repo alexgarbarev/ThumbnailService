@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSOperation.h"
+#import "TSRequestedOperation.h"
 #import "TSSource.h"
 
-@interface TSGenerateOperation : TSOperation
+@interface TSGenerateOperation : TSRequestedOperation
 
 - (id) initWithSource:(TSSource *)source size:(CGSize)size;
 

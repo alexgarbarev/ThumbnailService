@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSOperation.h"
+#import "TSRequestedOperation.h"
 #import "TSCacheManager.h"
 
-@interface TSLoadOperation : TSOperation
+@interface TSLoadOperation : TSRequestedOperation
 
 - (id) initWithKey:(NSString *)key andCacheManager:(TSCacheManager *)cacheManager;
 

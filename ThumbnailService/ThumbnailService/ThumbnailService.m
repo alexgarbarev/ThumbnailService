@@ -15,6 +15,7 @@
 #import "TSOperationQueue.h"
 
 #import "TSRequest+Private.h"
+#import "TSRequestedOperation.h"
 
 #define SET_BITMASK(source, mask, enabled) if (enabled) { source |= mask; } else { source &= ~mask; }
 #define GET_BITMASK(source, mask) (source & mask)
@@ -218,7 +219,7 @@
 
 - (void) enqueueOperationForRequest:(TSRequest *)request
 {
-    TSOperation *operation = [queue operationWithIdentifier:request.identifier];
+    TSRequestedOperation *operation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
 
     if (!operation) {
         operation = [self newOperationForRequest:request];
@@ -233,9 +234,9 @@
 
 #pragma mark - Operations creation
 
-- (TSOperation *) newOperationForRequest:(TSRequest *)request
+- (TSRequestedOperation *) newOperationForRequest:(TSRequest *)request
 {
-    TSOperation *operation;
+    TSRequestedOperation *operation;
     if (cacheModeFile && [thumbnailsCache objectExistsForKey:request.identifier mode:cacheModeFile]) {
         operation = [self newOperationToLoadThumbnailForRequest:request];
     } else {
@@ -244,25 +245,25 @@
     return operation;
 }
 
-- (TSOperation *) newOperationToGenerateThumbnailForRequest:(TSRequest *)request
+- (TSRequestedOperation *) newOperationToGenerateThumbnailForRequest:(TSRequest *)request
 {
-    TSOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:[request sizeToRender]];
+    TSRequestedOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:[request sizeToRender]];
 
     __weak typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
-        [weakSelf didGenerateThumbnailForIdentifier:request.identifier fromOperation:operation];
+        [weakSelf didGenerateThumbnailForIdentifier:request.identifier fromOperation:(TSRequestedOperation *)operation];
     }];
     
     return operation;
 }
 
-- (TSOperation *) newOperationToLoadThumbnailForRequest:(TSRequest *)request
+- (TSRequestedOperation *) newOperationToLoadThumbnailForRequest:(TSRequest *)request
 {
-    TSOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:thumbnailsCache];
+    TSRequestedOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:thumbnailsCache];
 
     __weak typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
-        [weakSelf didLoadThumbnailForIdentifier:request.identifier fromOperation:operation];
+        [weakSelf didLoadThumbnailForIdentifier:request.identifier fromOperation:(TSRequestedOperation *)operation];
     }];
 
     return operation;
@@ -270,7 +271,7 @@
 
 #pragma mark - Thumbnails Operations completions
 
-- (void) didGenerateThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
+- (void) didGenerateThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSRequestedOperation *)operation
 {
     if (operation.result && !operation.error)
     {
@@ -287,7 +288,7 @@
     [self takeThumnbailsForRequestsInOperation:operation];
 }
 
-- (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSOperation *)operation
+- (void) didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSRequestedOperation *)operation
 {
     if (operation.result && !operation.error && operation.shouldCacheInMemory) {
         [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeMemory];
@@ -296,7 +297,7 @@
     [self takeThumnbailsForRequestsInOperation:operation];
 }
 
-- (void) takeThumnbailsForRequestsInOperation:(TSOperation *)operation
+- (void) takeThumnbailsForRequestsInOperation:(TSRequestedOperation *)operation
 {
     [operation enumerationRequests:^(TSRequest *request) {
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
