@@ -13,7 +13,7 @@
     NSString *identifier;
     NSURL *videoURL;
     CGFloat thumbnailSecond;
-    AVURLAsset *videoAsset;
+    AVURLAsset *_videoAsset;
 }
 
 - (id) initWithVideoFilePath:(NSString *)filePath thumbnailSecond:(CGFloat)second
@@ -45,15 +45,15 @@
 
 - (AVURLAsset *) videoAsset
 {
-    if (!videoAsset) {
-        videoAsset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    if (!_videoAsset) {
+        _videoAsset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
     }
-    return videoAsset;
+    return _videoAsset;
 }
 
 - (double) videoDuration
 {
-    return CMTimeGetSeconds(videoAsset.duration);
+    return CMTimeGetSeconds([self videoAsset].duration);
 }
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
