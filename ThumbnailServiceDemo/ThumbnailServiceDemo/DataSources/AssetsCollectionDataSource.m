@@ -25,6 +25,7 @@
     self = [super init];
     if (self) {
         source = [[AssetsLibrarySource alloc] init];
+        source.filterType = AssetsLibrarySourceTypeAll;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetLibraryDidReload) name:AssetsLibrarySourceDidReloadNotification object:nil];
         
         thumbnailService = [ThumbnailService new];

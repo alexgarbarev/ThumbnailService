@@ -28,6 +28,7 @@
 		FA2A93B6180B9D76004281DD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FA2A93B5180B9D76004281DD /* sample.pdf */; };
 		FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540532180A82910092752B /* PDFCollectionDataSource.m */; };
 		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
+		FA6A86E7181198C30063C6F9 /* VideosCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */; };
 		FAF9C758180F07920091CE94 /* 1680-x-1050.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */; };
 		FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */; };
 /* End PBXBuildFile section */
@@ -95,6 +96,8 @@
 		FA540531180A82910092752B /* PDFCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFCollectionDataSource.h; sourceTree = "<group>"; };
 		FA540532180A82910092752B /* PDFCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFCollectionDataSource.m; sourceTree = "<group>"; };
 		FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ThumbnailService.xcodeproj; sourceTree = "<group>"; };
+		FA6A86E5181198C30063C6F9 /* VideosCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosCollectionDataSource.h; sourceTree = "<group>"; };
+		FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideosCollectionDataSource.m; sourceTree = "<group>"; };
 		FAF8E918180B1FC000654C00 /* PreviewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewDataSource.h; sourceTree = "<group>"; };
 		FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1680-x-1050.jpg"; sourceTree = "<group>"; };
 		FAF9C759180F07A50091CE94 /* ImagesCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagesCollectionDataSource.h; sourceTree = "<group>"; };
@@ -249,6 +252,8 @@
 				FA540532180A82910092752B /* PDFCollectionDataSource.m */,
 				FAF9C759180F07A50091CE94 /* ImagesCollectionDataSource.h */,
 				FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */,
+				FA6A86E5181198C30063C6F9 /* VideosCollectionDataSource.h */,
+				FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -360,6 +365,7 @@
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
 				FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */,
 				FA2676A018071FBB00F5B02B /* main.m in Sources */,
+				FA6A86E7181198C30063C6F9 /* VideosCollectionDataSource.m in Sources */,
 				FA26768618071D5D00F5B02B /* UIImageView+ImageFrame.m in Sources */,
 				FA26768C18071E6800F5B02B /* PreviewCollectionCell.m in Sources */,
 				FA26768318071D5D00F5B02B /* NotificationUtils.m in Sources */,

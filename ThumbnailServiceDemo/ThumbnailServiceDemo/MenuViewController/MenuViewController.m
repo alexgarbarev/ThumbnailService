@@ -11,6 +11,7 @@
 #import "PreviewViewController.h"
 #import "PDFCollectionDataSource.h"
 #import "ImagesCollectionDataSource.h"
+#import "VideosCollectionDataSource.h"
 
 #import <ThumbnailService/ThumbnailService.h>
 #import "PreviewDataSource.h"
@@ -31,6 +32,8 @@
             return [PDFCollectionDataSource class];
         case 2:
             return [ImagesCollectionDataSource class];
+        case 3:
+            return [VideosCollectionDataSource class];
     }
     return nil;
 }

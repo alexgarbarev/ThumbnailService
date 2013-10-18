@@ -9,3 +9,4 @@
 #import "TSSourceALAsset.h"
 #import "TSSourcePDFPage.h"
 #import "TSSourceImage.h"
+#import "TSSourceVideo.h"

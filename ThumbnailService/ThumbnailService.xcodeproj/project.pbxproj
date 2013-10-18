@@ -28,9 +28,12 @@
 		FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E49F18083C8500B64944 /* TSOperationQueue.m */; };
 		FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67E4A218085FBD00B64944 /* TSCacheManager.m */; };
 		FA69D3091807B3F800979C84 /* TSSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA69D3081807B3F800979C84 /* TSSourceTest.m */; };
-		FA6A86CE1810F6510063C6F9 /* TSRequestedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6A86CC1810F6510063C6F9 /* TSRequestedOperation.h */; };
 		FA6A86CF1810F6510063C6F9 /* TSRequestedOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86CD1810F6510063C6F9 /* TSRequestedOperation.m */; };
-		FA6A86D21810F7640063C6F9 /* TSOperation+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6A86D01810F7640063C6F9 /* TSOperation+Private.h */; };
+		FA6A86DA181190370063C6F9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A86D9181190370063C6F9 /* ImageIO.framework */; };
+		FA6A86DC1811903B0063C6F9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A86DB1811903B0063C6F9 /* AVFoundation.framework */; };
+		FA6A86DE1811904C0063C6F9 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A86DD1811904C0063C6F9 /* AssetsLibrary.framework */; };
+		FA6A86E1181195090063C6F9 /* TSSourceVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6A86DF181195090063C6F9 /* TSSourceVideo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA6A86E2181195090063C6F9 /* TSSourceVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86E0181195090063C6F9 /* TSSourceVideo.m */; };
 		FAF9C733180EF6D10091CE94 /* TSSourceALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */; };
 		FAF9C734180EF6D10091CE94 /* TSSourcePDFPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */; };
 		FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */; };
@@ -38,8 +41,6 @@
 		FAF9C74B180EFEE90091CE94 /* TSSourceImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */; };
 		FAF9C74E180F045D0091CE94 /* ThumbnailService.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677791807AFB900F5B02B /* ThumbnailService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAF9C74F180F04710091CE94 /* TSSource.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677771807AFB900F5B02B /* TSSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAF9C750180F04730091CE94 /* TSSourceALAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAF9C751180F04780091CE94 /* TSSourcePDFPage.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAF9C752180F047C0091CE94 /* TSSourceImage.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C749180EFEE90091CE94 /* TSSourceImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAF9C753180F047F0091CE94 /* TSSources.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C73C180EFBBF0091CE94 /* TSSources.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAF9C754180F048C0091CE94 /* TSRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = FA2677741807AFB900F5B02B /* TSRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -98,6 +99,11 @@
 		FA6A86CC1810F6510063C6F9 /* TSRequestedOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestedOperation.h; sourceTree = "<group>"; };
 		FA6A86CD1810F6510063C6F9 /* TSRequestedOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestedOperation.m; sourceTree = "<group>"; };
 		FA6A86D01810F7640063C6F9 /* TSOperation+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TSOperation+Private.h"; sourceTree = "<group>"; };
+		FA6A86D9181190370063C6F9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		FA6A86DB1811903B0063C6F9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FA6A86DD1811904C0063C6F9 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		FA6A86DF181195090063C6F9 /* TSSourceVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceVideo.h; sourceTree = "<group>"; };
+		FA6A86E0181195090063C6F9 /* TSSourceVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceVideo.m; sourceTree = "<group>"; };
 		FAF9C72A180EE3160091CE94 /* ThumbnailService+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ThumbnailService+Testing.h"; sourceTree = "<group>"; };
 		FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceALAsset.h; sourceTree = "<group>"; };
 		FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceALAsset.m; sourceTree = "<group>"; };
@@ -117,6 +123,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA6A86DE1811904C0063C6F9 /* AssetsLibrary.framework in Frameworks */,
+				FA6A86DC1811903B0063C6F9 /* AVFoundation.framework in Frameworks */,
+				FA6A86DA181190370063C6F9 /* ImageIO.framework in Frameworks */,
 				FA2677431807AF7F00F5B02B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,6 +166,9 @@
 		FA2677411807AF7F00F5B02B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA6A86DD1811904C0063C6F9 /* AssetsLibrary.framework */,
+				FA6A86DB1811903B0063C6F9 /* AVFoundation.framework */,
+				FA6A86D9181190370063C6F9 /* ImageIO.framework */,
 				FA2677891807B1F500F5B02B /* UIKit.framework */,
 				FA2677421807AF7F00F5B02B /* Foundation.framework */,
 				FA2677501807AF7F00F5B02B /* XCTest.framework */,
@@ -253,6 +265,8 @@
 				FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */,
 				FAF9C749180EFEE90091CE94 /* TSSourceImage.h */,
 				FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */,
+				FA6A86DF181195090063C6F9 /* TSSourceVideo.h */,
+				FA6A86E0181195090063C6F9 /* TSSourceVideo.m */,
 				FAF9C735180EF6DB0091CE94 /* Utils */,
 			);
 			path = Sources;
@@ -299,10 +313,7 @@
 				FAF9C753180F047F0091CE94 /* TSSources.h in Headers */,
 				FAF9C74E180F045D0091CE94 /* ThumbnailService.h in Headers */,
 				FAF9C74F180F04710091CE94 /* TSSource.h in Headers */,
-				FA6A86D21810F7640063C6F9 /* TSOperation+Private.h in Headers */,
-				FA6A86CE1810F6510063C6F9 /* TSRequestedOperation.h in Headers */,
-				FAF9C750180F04730091CE94 /* TSSourceALAsset.h in Headers */,
-				FAF9C751180F04780091CE94 /* TSSourcePDFPage.h in Headers */,
+				FA6A86E1181195090063C6F9 /* TSSourceVideo.h in Headers */,
 				FAF9C752180F047C0091CE94 /* TSSourceImage.h in Headers */,
 				FAF9C754180F048C0091CE94 /* TSRequest.h in Headers */,
 				FAF9C755180F04920091CE94 /* TSRequestGroupSequence.h in Headers */,
@@ -400,6 +411,7 @@
 				FA67E4A018083C8500B64944 /* TSOperationQueue.m in Sources */,
 				FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */,
 				FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */,
+				FA6A86E2181195090063C6F9 /* TSSourceVideo.m in Sources */,
 				FA26777D1807AFB900F5B02B /* TSLoadOperation.m in Sources */,
 				FA26777B1807AFB900F5B02B /* TSFileCache.m in Sources */,
 				FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */,

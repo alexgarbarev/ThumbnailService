@@ -8,6 +8,8 @@
 
 #import "TSSourceALAsset.h"
 #import "ALAsset+Identifier.h"
+#import "UIImageView+ImageFrame.h"
+#import "TSSourceVideo.h"
 
 #define Retain(object) CFRetain((__bridge CFTypeRef)object)
 #define Release(object) CFRelease((__bridge CFTypeRef)object)
@@ -17,8 +19,15 @@ typedef struct {
     __unsafe_unretained NSError *error;
 } ProviderCreationInfo;
 
+typedef enum {
+    AssetTypeUnknown,
+    AssetTypePhoto,
+    AssetTypeVideo
+} AssetType;
+
 @implementation TSSourceALAsset {
     ALAsset *asset;
+    AssetType type;
 }
 
 - (id) initWithAsset:(ALAsset *)_asset
@@ -27,8 +36,40 @@ typedef struct {
     if (self) {
         NSParameterAssert(_asset);
         asset = _asset;
+        [self setupAssetType];
     }
     return self;
+}
+
+- (void) setupAssetType
+{
+    NSString *assetTypeString = [asset valueForProperty:ALAssetPropertyType];
+    if ([assetTypeString isEqualToString:ALAssetTypePhoto]) {
+        type = AssetTypePhoto;
+    } else if ([assetTypeString isEqualToString:ALAssetTypeVideo]){
+        type = AssetTypeVideo;
+    } else {
+        type = AssetTypeUnknown;
+    }
+}
+
+- (BOOL) isPhoto
+{
+    return type == AssetTypePhoto;
+}
+
+- (BOOL) isVideo
+{
+    return type == AssetTypeVideo;
+}
+
+- (double) videoDuration
+{
+    double result = 0;
+    if ([self isVideo]) {
+        result = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+    }
+    return result;
 }
 
 - (NSString *) identifier
@@ -43,6 +84,31 @@ typedef struct {
 }
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+{
+    UIImage *result = nil;
+    @autoreleasepool {
+        if ([self isPhoto]) {
+            result = [self imageThumbnailWithSize:size isCancelled:isCancelled error:error];
+        } else if ([self isVideo]){
+            result = [self videoThumbnailWithSize:size isCancelled:isCancelled error:error];
+        } else {
+            *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Unknown type of ALAsset"}];
+        }
+    }
+    return result;
+}
+
+- (UIImage *) videoThumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+{
+    ALAssetRepresentation *representation = [asset defaultRepresentation];
+    NSURL *videoURL = [representation url];
+    
+    TSSourceVideo *videoSource = [[TSSourceVideo alloc] initWithVideoURL:videoURL thumbnailSecond:0];
+    
+    return [videoSource thumbnailWithSize:size isCancelled:isCancelled error:error];
+}
+
+- (UIImage *) imageThumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
     NSUInteger thumbSize = MAX(size.width, size.height);
     ALAssetRepresentation *representation = [asset defaultRepresentation];
