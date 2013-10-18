@@ -25,6 +25,7 @@ typedef struct {
 {
     self = [super init];
     if (self) {
+        NSParameterAssert(_asset);
         asset = _asset;
     }
     return self;
