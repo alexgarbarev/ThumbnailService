@@ -29,6 +29,7 @@
 		FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540532180A82910092752B /* PDFCollectionDataSource.m */; };
 		FA67E4B2180879BC00B64944 /* libThumbnailService.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67E4AD180879A000B64944 /* libThumbnailService.a */; };
 		FA6A86E7181198C30063C6F9 /* VideosCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */; };
+		FA6A86EC1811A03A0063C6F9 /* CustomAssetSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86EB1811A03A0063C6F9 /* CustomAssetSource.m */; };
 		FAF9C758180F07920091CE94 /* 1680-x-1050.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */; };
 		FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */; };
 /* End PBXBuildFile section */
@@ -98,6 +99,8 @@
 		FA67E4A71808799F00B64944 /* ThumbnailService.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ThumbnailService.xcodeproj; sourceTree = "<group>"; };
 		FA6A86E5181198C30063C6F9 /* VideosCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosCollectionDataSource.h; sourceTree = "<group>"; };
 		FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideosCollectionDataSource.m; sourceTree = "<group>"; };
+		FA6A86EA1811A03A0063C6F9 /* CustomAssetSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAssetSource.h; sourceTree = "<group>"; };
+		FA6A86EB1811A03A0063C6F9 /* CustomAssetSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAssetSource.m; sourceTree = "<group>"; };
 		FAF8E918180B1FC000654C00 /* PreviewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewDataSource.h; sourceTree = "<group>"; };
 		FAF9C757180F07910091CE94 /* 1680-x-1050.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1680-x-1050.jpg"; sourceTree = "<group>"; };
 		FAF9C759180F07A50091CE94 /* ImagesCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagesCollectionDataSource.h; sourceTree = "<group>"; };
@@ -254,6 +257,8 @@
 				FAF9C75A180F07A50091CE94 /* ImagesCollectionDataSource.m */,
 				FA6A86E5181198C30063C6F9 /* VideosCollectionDataSource.h */,
 				FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */,
+				FA6A86EA1811A03A0063C6F9 /* CustomAssetSource.h */,
+				FA6A86EB1811A03A0063C6F9 /* CustomAssetSource.m */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -362,6 +367,7 @@
 				FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */,
 				FA26768518071D5D00F5B02B /* UIImage+Decompress.m in Sources */,
 				FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */,
+				FA6A86EC1811A03A0063C6F9 /* CustomAssetSource.m in Sources */,
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
 				FAF9C75B180F07A50091CE94 /* ImagesCollectionDataSource.m in Sources */,
 				FA2676A018071FBB00F5B02B /* main.m in Sources */,

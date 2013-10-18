@@ -34,6 +34,7 @@
 		FA6A86DE1811904C0063C6F9 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A86DD1811904C0063C6F9 /* AssetsLibrary.framework */; };
 		FA6A86E1181195090063C6F9 /* TSSourceVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = FA6A86DF181195090063C6F9 /* TSSourceVideo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FA6A86E2181195090063C6F9 /* TSSourceVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A86E0181195090063C6F9 /* TSSourceVideo.m */; };
+		FA6A86EE1811A1D80063C6F9 /* TSSourceALAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF9C72F180EF6D10091CE94 /* TSSourceALAsset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAF9C733180EF6D10091CE94 /* TSSourceALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */; };
 		FAF9C734180EF6D10091CE94 /* TSSourcePDFPage.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */; };
 		FAF9C73A180EF6DB0091CE94 /* ALAsset+Identifier.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF9C737180EF6DB0091CE94 /* ALAsset+Identifier.m */; };
@@ -313,6 +314,7 @@
 				FAF9C753180F047F0091CE94 /* TSSources.h in Headers */,
 				FAF9C74E180F045D0091CE94 /* ThumbnailService.h in Headers */,
 				FAF9C74F180F04710091CE94 /* TSSource.h in Headers */,
+				FA6A86EE1811A1D80063C6F9 /* TSSourceALAsset.h in Headers */,
 				FA6A86E1181195090063C6F9 /* TSSourceVideo.h in Headers */,
 				FAF9C752180F047C0091CE94 /* TSSourceImage.h in Headers */,
 				FAF9C754180F048C0091CE94 /* TSRequest.h in Headers */,
