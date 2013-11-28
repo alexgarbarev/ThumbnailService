@@ -48,7 +48,9 @@
     CGDataProviderRef provider = CGDataProviderCreateWithURL((__bridge CFURLRef)imageURL);
     
     if (!provider) {
-        *error = [NSError errorWithDomain:@"TSSourceImage" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Can't create CGDataProviderRef. Check filePath or URL"}];
+        if (error) {
+            *error = [NSError errorWithDomain:@"TSSourceImage" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Can't create CGDataProviderRef. Check filePath or URL"}];
+        }
         return nil;
     }
     
@@ -73,7 +75,9 @@
     CFRelease(provider);
     
     if (!imageRef) {
-        *error = [NSError errorWithDomain:@"TSSourceImage" code:1 userInfo:@{NSLocalizedDescriptionKey : @"Can't create thumbnail by CGImageSourceCreateThumbnailAtIndex. Unknown error."}];
+        if (error) {
+            *error = [NSError errorWithDomain:@"TSSourceImage" code:1 userInfo:@{NSLocalizedDescriptionKey : @"Can't create thumbnail by CGImageSourceCreateThumbnailAtIndex. Unknown error."}];
+        }
         return nil;
     }
     

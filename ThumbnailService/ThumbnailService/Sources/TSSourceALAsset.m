@@ -92,7 +92,9 @@ typedef enum {
         } else if ([self isVideo]){
             result = [self videoThumbnailWithSize:size isCancelled:isCancelled error:error];
         } else {
-            *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Unknown type of ALAsset"}];
+            if (error) {
+                *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Unknown type of ALAsset"}];
+            }
         }
     }
     return result;
@@ -135,7 +137,9 @@ typedef enum {
     }
     
     if (providerError || *isCancelled) {
-        *error = providerError;
+        if (error) {
+            *error = providerError;
+        }
         CFRelease(source);
         CFRelease(provider);
         return nil;
@@ -151,7 +155,9 @@ typedef enum {
     CFRelease(provider);
     
     if (!imageRef) {
-        *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Can't create thumbnail by CGImageSourceCreateThumbnailAtIndex. Unknown error."}];
+        if (error) {
+            *error = [NSError errorWithDomain:@"TSSourceALAsset" code:0 userInfo:@{NSLocalizedDescriptionKey : @"Can't create thumbnail by CGImageSourceCreateThumbnailAtIndex. Unknown error."}];
+        }
         return nil;
     }
     

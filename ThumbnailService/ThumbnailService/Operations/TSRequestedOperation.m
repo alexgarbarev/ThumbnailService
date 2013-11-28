@@ -26,21 +26,6 @@
     return self;
 }
 
-- (dispatch_queue_priority_t)queuePriorityFromThreadPriority:(TSOperationThreadPriority)priority
-{
-    switch (priority) {
-        case TSOperationThreadPriorityBackground:
-            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
-        default:
-        case TSOperationThreadPriorityLow:
-            return DISPATCH_QUEUE_PRIORITY_LOW;
-        case TSOperationThreadPriorityNormal:
-            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
-        case TSOperationThreadPriorityHight:
-            return DISPATCH_QUEUE_PRIORITY_HIGH;
-    }
-}
-
 #pragma mark - Managing requests
 
 - (void) addRequest:(TSRequest *)request andWait:(BOOL)wait
@@ -132,23 +117,28 @@
 
 - (void) _updatePriority
 {
-    TSOperationThreadPriority tPriority = TSOperationThreadPriorityBackground;
+    TSRequestThreadPriority tPriority = TSRequestThreadPriorityBackground;
     TSRequestQueuePriority priority = TSRequestQueuePriorityVeryLow;
     
     for (TSRequest *request in self.requests) {
         if (request.queuePriority > priority) {
             priority = request.queuePriority;
         }
-        if ((TSOperationThreadPriority)request.threadPriority > tPriority) {
-            tPriority = (TSOperationThreadPriority)request.threadPriority;
+        if (request.threadPriority > tPriority) {
+            tPriority = request.threadPriority;
         }
     }
     
     self.queuePriority = priority;
     
     if (![self isExecuting]) {
-        self.threadPriority = tPriority;
+        self.dispatchQueuePriority = OperationDispatchQueuePriorityFromRequestThreadPriority(tPriority);
     }
+}
+
+TSOperationDispatchQueuePriority OperationDispatchQueuePriorityFromRequestThreadPriority(TSRequestThreadPriority requestPriority)
+{
+    return (TSOperationDispatchQueuePriority)requestPriority;
 }
 
 @end

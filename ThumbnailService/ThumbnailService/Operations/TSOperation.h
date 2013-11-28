@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "TSRequest.h"
 
-typedef NS_ENUM(NSInteger, TSOperationThreadPriority)
+typedef NS_ENUM(NSInteger, TSOperationDispatchQueuePriority)
 {
-    TSOperationThreadPriorityBackground,
-    TSOperationThreadPriorityLow,
-    TSOperationThreadPriorityNormal,
-    TSOperationThreadPriorityHight
+    TSOperationDispatchQueuePriorityBackground,
+    TSOperationDispatchQueuePriorityLow,
+    TSOperationDispatchQueuePriorityNormal,
+    TSOperationDispatchQueuePriorityHight
 };
 
 @class TSOperation;
@@ -29,11 +29,16 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void (^)(void))completionBlock NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 - (void)setCompletionBlock:(void (^)(void))block NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 
+/* threadPriority is unavailable, since we using dispatch_queue inside and you can control priority by dispatchQueuePrioriy */
+- (double) threadPriority NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
+- (void) setThreadPriority:(double)p NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
+
 /* Callbacks */
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock;
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock;
 
-- (void) setThreadPriority:(TSOperationThreadPriority)priority;
-- (TSOperationThreadPriority) threadPriority;
+/* Thread priority */
+- (void) setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority;
+- (TSOperationDispatchQueuePriority) dispatchQueuePriority;
 
 @end

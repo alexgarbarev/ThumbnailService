@@ -26,7 +26,7 @@
     int completionCalled;
     int calledFromBlock;
     
-    TSOperationThreadPriority threadPriority;
+    TSOperationDispatchQueuePriority dispatchQueuePriority;
 }
 
 @synthesize completionBlocks = _completionBlocks;
@@ -68,7 +68,7 @@
     self.started = YES;
     if (![self isCancelled]) {
         self.executing = YES;
-        dispatch_async(dispatch_get_global_queue([self queuePriorityFromThreadPriority:self.threadPriority], 0), ^{
+        dispatch_async(dispatch_get_global_queue(GlobalQueuePriorityFromDispatchQueuePriority(self.dispatchQueuePriority), 0), ^{
             [self main];
             self.executing = NO;
             self.finished = YES;
@@ -93,32 +93,16 @@
     [super cancel];
 }
 
-- (dispatch_queue_priority_t)queuePriorityFromThreadPriority:(TSOperationThreadPriority)priority
-{
-    switch (priority) {
-        case TSOperationThreadPriorityBackground:
-            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
-        default:
-        case TSOperationThreadPriorityLow:
-            return DISPATCH_QUEUE_PRIORITY_LOW;
-        case TSOperationThreadPriorityNormal:
-            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
-        case TSOperationThreadPriorityHight:
-            return DISPATCH_QUEUE_PRIORITY_HIGH;
-    }
-}
-
-
 #pragma mark - Thread priority
 
-- (void) setThreadPriority:(TSOperationThreadPriority)priority
+- (void) setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority
 {
-    threadPriority = priority;
+    dispatchQueuePriority = priority;
 }
 
-- (TSOperationThreadPriority) threadPriority
+- (TSOperationDispatchQueuePriority) dispatchQueuePriority
 {
-    return threadPriority;
+    return dispatchQueuePriority;
 }
 
 #pragma mark - Operation termination
@@ -201,6 +185,21 @@
             complete(self);
         }
     });
+}
+
+dispatch_queue_priority_t GlobalQueuePriorityFromDispatchQueuePriority(TSOperationDispatchQueuePriority priority)
+{
+    switch (priority) {
+        case TSOperationDispatchQueuePriorityBackground:
+            return DISPATCH_QUEUE_PRIORITY_BACKGROUND;
+        default:
+        case TSOperationDispatchQueuePriorityLow:
+            return DISPATCH_QUEUE_PRIORITY_LOW;
+        case TSOperationDispatchQueuePriorityNormal:
+            return DISPATCH_QUEUE_PRIORITY_DEFAULT;
+        case TSOperationDispatchQueuePriorityHight:
+            return DISPATCH_QUEUE_PRIORITY_HIGH;
+    }
 }
 
 @end
