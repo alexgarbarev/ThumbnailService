@@ -11,7 +11,6 @@
 @interface TSSourcePDFPage : TSSource
 
 @property (nonatomic, strong) UIColor *pageBackgroundColor; /* Default: white */
-@property (nonatomic) UIViewContentMode contentMode;        /* åDefault: UIViewContentModeScaleAspectFit */
 
 - (id) initWithPdfPage:(CGPDFPageRef)page documentName:(NSString *)documentName;
 

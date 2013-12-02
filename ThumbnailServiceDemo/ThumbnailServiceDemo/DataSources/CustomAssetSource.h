@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Aleksey Garbarev. All rights reserved.
 //
 
-#import "TSSourceALAsset.h"
+#import <ThumbnailService/TSSourceALAsset.h>
 
 @interface CustomAssetSource : TSSourceALAsset
 

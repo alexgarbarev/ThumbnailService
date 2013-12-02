@@ -21,7 +21,6 @@
         page = CGPDFPageRetain(_page);
         documentName = _documentName;
         self.pageBackgroundColor = [UIColor whiteColor];
-        self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
 }
@@ -41,7 +40,8 @@
     static UIImage *placeholder = nil;
     if (!placeholder) {
         CGRect boundingRect = (CGRect){CGPointZero, CGSizeMake(140, 140)};
-        CGRect placeholderFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:self.contentMode];
+        CGRect placeholderFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+        placeholderFrame.origin = CGPointZero;
         
         UIGraphicsBeginImageContextWithOptions(placeholderFrame.size, NO, 1.0);
         
@@ -59,17 +59,18 @@
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
-    UIGraphicsBeginImageContext(size);
+    CGRect boundingRect = (CGRect){CGPointZero, size};
+    
+    CGRect pageFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+    CGPoint pageScales = [UIImageView imageScalesForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+    pageFrame.origin = CGPointZero;
+    
+    UIGraphicsBeginImageContext(pageFrame.size);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
     CGContextSetRenderingIntent(context, kCGRenderingIntentDefault);
-
-    CGRect boundingRect = (CGRect){CGPointZero, size};
-    
-    CGRect pageFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:self.contentMode];
-    CGPoint pageScales = [UIImageView imageScalesForImageSize:[self actualSize] boundingRect:boundingRect contentMode:self.contentMode];
     
     if (self.pageBackgroundColor) {
         [self.pageBackgroundColor set];
@@ -87,7 +88,7 @@
 
     CGContextDrawPDFPage(context, page);
 
-
+    
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
     
     UIGraphicsEndImageContext();
@@ -99,7 +100,7 @@
     return result;
 }
 
-- (CGSize)actualSize
+- (CGSize) actualSize
 {
     CGRect cropBoxRect = CGPDFPageGetBoxRect(page, kCGPDFCropBox);
     CGRect mediaBoxRect = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
@@ -119,7 +120,7 @@
     return actualSize;
 }
 
-BOOL IsLandscapeAngel(NSInteger degrees)
+static BOOL IsLandscapeAngel(NSInteger degrees)
 {
     return degrees == 90 || degrees == 270;
 }

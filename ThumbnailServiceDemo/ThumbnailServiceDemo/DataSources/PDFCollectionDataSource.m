@@ -112,7 +112,7 @@
     TSRequest *smallThumbRequest = [TSRequest new];
     smallThumbRequest.source = pageSource;
     smallThumbRequest.size = kSmallThumbnailSize;
-    smallThumbRequest.queuePriority = NSOperationQueuePriorityVeryHigh;
+    smallThumbRequest.queuePriority = TSRequestQueuePriorityVeryHigh;
     [smallThumbRequest setPlaceholderCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
     }];
@@ -126,7 +126,7 @@
     TSRequest *bigThumbRequest = [TSRequest new];
     bigThumbRequest.source = pageSource;
     bigThumbRequest.size = kBigThumbSize;
-    bigThumbRequest.queuePriority = NSOperationQueuePriorityHigh;
+    bigThumbRequest.queuePriority = TSRequestQueuePriorityHigh;
     
     [bigThumbRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
         viewCell.imageView.image = result;
