@@ -23,8 +23,9 @@ static NSString *kCacheExtensionObject = @"object";
     if (self) {
         fileManager = [NSFileManager defaultManager];
         [self createCacheDirectory];
-        fileCacheQueue = dispatch_queue_create("fileCacheQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+        
+        fileCacheQueue = dispatch_queue_create("TSFileCacheQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
         
         self.imageWriteMode = TSFileCacheImageWriteModePNG;
         self.imageWriteCompressionQuality = 0.6;
@@ -43,22 +44,19 @@ static NSString *kCacheExtensionObject = @"object";
 {
     __block id object = nil;
     
-    dispatch_sync(fileCacheQueue, ^{
+    if (![self objectExistsForKey:key]) {
+        return nil;
+    }
     
-        if (![self objectExistsForKey:key]) {
-            return;
-        }
-        
-        NSString *extension = [self pathExtensionForKey:key];
-        NSString *path = [self filePathForKey:key extension:extension];
-        
-        if ([extension isEqualToString:kCacheExtensionImage]) {
-            object = [[UIImage alloc] initWithContentsOfFile:path];
-        } else if ([extension isEqualToString:kCacheExtensionObject]){
-            object = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-        }
-        
-    });
+    NSString *extension = [self pathExtensionForKey:key];
+    NSString *path = [self filePathForKey:key extension:extension];
+    
+    if ([extension isEqualToString:kCacheExtensionImage]) {
+        object = [[UIImage alloc] initWithContentsOfFile:path];
+    } else if ([extension isEqualToString:kCacheExtensionObject]){
+        object = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    }
+
     return object;
 }
 
@@ -88,33 +86,27 @@ static NSString *kCacheExtensionObject = @"object";
     if (self.shouldWriteAsynchronically) {
         dispatch_async(fileCacheQueue, writeBlock);
     } else {
-        dispatch_sync(fileCacheQueue, writeBlock);
+        writeBlock();
     }
 }
 
 - (void)removeObjectForKey:(id)key
 {
-    dispatch_sync(fileCacheQueue, ^{
-        NSString *path = [self pathForKey:key];
-        [fileManager removeItemAtPath:path error:nil];
-    });
+    NSString *path = [self pathForKey:key];
+    [fileManager removeItemAtPath:path error:nil];
 }
 
 - (void)removeAllObjects
 {
-    dispatch_sync(fileCacheQueue, ^{
-        [fileManager removeItemAtPath:[self cacheDirectory] error:nil];
-        [self createCacheDirectory];
-    });
+    [fileManager removeItemAtPath:[self cacheDirectory] error:nil];
+    [self createCacheDirectory];
 }
 
 - (void) setName:(NSString *)n
 {
-    dispatch_sync(fileCacheQueue, ^{
-        [super setName:n];
-        [self updateCacheDirectory];
-        [self createCacheDirectory];
-    });
+    [super setName:n];
+    [self updateCacheDirectory];
+    [self createCacheDirectory];
 }
 
 - (NSString *) name
