@@ -12,4 +12,7 @@
 
 @property (nonatomic) dispatch_queue_t operationQueue;
 
+- (void) onComplete;
+- (void) onCancel;
+
 @end

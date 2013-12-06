@@ -25,11 +25,11 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 @property (nonatomic, strong) id result;
 @property (nonatomic, strong) NSError *error;
 
-/* Completion block is unavailable, since addCompletionBlock method available */
+/** Completion block is unavailable, since addCompletionBlock method available */
 - (void (^)(void))completionBlock NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 - (void)setCompletionBlock:(void (^)(void))block NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 
-/* threadPriority is unavailable, since we using dispatch_queue inside and you can control priority by dispatchQueuePrioriy */
+/** threadPriority is unavailable, since we using dispatch_queue inside and you can control priority by dispatchQueuePrioriy */
 - (double) threadPriority NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 - (void) setThreadPriority:(double)p NS_AVAILABLE(10_6, 4_0) UNAVAILABLE_ATTRIBUTE;
 
@@ -40,5 +40,11 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 /* Thread priority */
 - (void) setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority;
 - (TSOperationDispatchQueuePriority) dispatchQueuePriority;
+
+- (BOOL) isStarted;
+- (BOOL) isExecuting;
+- (BOOL) isFinished;
+- (BOOL) isCancelled;
+
 
 @end

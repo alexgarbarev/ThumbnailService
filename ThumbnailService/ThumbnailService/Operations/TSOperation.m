@@ -42,7 +42,7 @@
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
        
-        self.operationQueue = dispatch_queue_create("TSOperationQueue", DISPATCH_QUEUE_SERIAL);
+        self.operationQueue = dispatch_queue_create("TSOperationSyncQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(self.operationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -83,6 +83,11 @@
     return YES;
 }
 
+- (BOOL) isCancelled
+{
+    return [super isCancelled];
+}
+
 - (void) cancel
 {
     if (self.started && !self.finished) {
@@ -121,14 +126,14 @@
 
 #pragma mark - KVO notifications
 
-- (void)setExecuting:(BOOL)isExecuting
+- (void) setExecuting:(BOOL)isExecuting
 {
     [self willChangeValueForKey:@"isExecuting"];
     _executing = isExecuting;
     [self didChangeValueForKey:@"isExecuting"];
 }
 
-- (void)setFinished:(BOOL)isFinished
+- (void) setFinished:(BOOL)isFinished
 {
     [self willChangeValueForKey:@"isFinished"];
     _finished = isFinished;
@@ -200,6 +205,11 @@ dispatch_queue_priority_t GlobalQueuePriorityFromDispatchQueuePriority(TSOperati
         case TSOperationDispatchQueuePriorityHight:
             return DISPATCH_QUEUE_PRIORITY_HIGH;
     }
+}
+
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"<%@ %p. Cancelled=%d, Finished=%d, Started=%d, Executing=%d>",[self class], self,[self isCancelled], [self isFinished], [self isStarted], [self isExecuting]];
 }
 
 @end

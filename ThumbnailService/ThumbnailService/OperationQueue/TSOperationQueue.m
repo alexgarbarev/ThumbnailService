@@ -21,7 +21,7 @@
 {
     self = [super init];
     if (self) {
-        syncQueue = dispatch_queue_create("syncQueue", DISPATCH_QUEUE_SERIAL);
+        syncQueue = dispatch_queue_create("TSOperationQueueSyncQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(syncQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         dictionary = [NSMutableDictionary new];
@@ -36,18 +36,19 @@
 
 - (void) addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
 {
-    dispatch_sync(syncQueue, ^{
-        [super addOperation:operation];
+    [super addOperation:operation];
+    
+    dispatch_async(syncQueue, ^{
         dictionary[identifier] = operation;
-        
-        __weak typeof (self) weakSelf = self;
-        [operation addCancelBlock:^(TSOperation *operation) {
-            [weakSelf operationDidFinishForIdentifier:identifier];
-        }];
-        [operation addCompleteBlock:^(TSOperation *operation) {
-            [weakSelf operationDidFinishForIdentifier:identifier];
-        }];
     });
+
+    __weak typeof (self) weakSelf = self;
+    [operation addCancelBlock:^(TSOperation *operation) {
+        [weakSelf operationDidFinishForIdentifier:identifier];
+    }];
+    [operation addCompleteBlock:^(TSOperation *operation) {
+        [weakSelf operationDidFinishForIdentifier:identifier];
+    }];
 }
 
 - (TSOperation *) operationWithIdentifier:(NSString *)identifier
@@ -61,7 +62,7 @@
 
 - (void) operationDidFinishForIdentifier:(NSString *)identifier
 {
-    dispatch_sync(syncQueue, ^{
+    dispatch_async(syncQueue, ^{
         [dictionary removeObjectForKey:identifier];
     });
 }
