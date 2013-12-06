@@ -148,6 +148,8 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     [self setOperation:nil andWait:wait];
     
     self.state |= TSRequestStateCancelled;
+    
+    self.group = nil;
 }
 
 #pragma mark - Request State
