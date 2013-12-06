@@ -176,8 +176,6 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
                 [self.group didFinishRequest:self];
             }
         }
-
-
     });
 }
 
@@ -256,14 +254,13 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 - (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock
 {
-    NSAssert(![self isStarted], @"Can't change thumbnailBlock, cause request already started");
     self.thumbnailBlock = thumbnailBlock;
 }
 
 - (void) performCompletion:(TSRequestCompletion)completion withResult:(UIImage *)image error:(NSError *)error
 {
     if (completion) {
-        if (self.shouldCastCompletionsToMainThread) {
+        if (self.shouldCastCompletionsToMainThread && ![NSThread isMainThread]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(image, error);
             });
