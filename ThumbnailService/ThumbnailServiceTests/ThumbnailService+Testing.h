@@ -10,7 +10,7 @@
 
 @interface ThumbnailService (Testing)
 
-- (void) performRequest:(TSRequest *)request andWait:(BOOL)wait;
-- (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait;
+- (void) enqueueRequest:(TSRequest *)request andWait:(BOOL)wait;
+- (void) enqueueRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait;
 
 @end

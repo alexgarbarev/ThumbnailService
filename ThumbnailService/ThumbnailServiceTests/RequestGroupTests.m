@@ -80,7 +80,7 @@
     [group addRequest:request2];
     [group addRequest:request3];
     
-    [thumbnailService performRequestGroup:group];
+    [thumbnailService enqueueRequestGroup:group];
     
     WaitAndCallInBackground(0.2, ^{
         [source fire];
@@ -138,7 +138,7 @@
     [group addRequest:request2];
     [group addRequest:request3];
     
-    [thumbnailService performRequestGroup:group];
+    [thumbnailService enqueueRequestGroup:group];
     
     WaitAndCallInBackground(0.2, ^{
         [source fire];

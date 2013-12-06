@@ -11,6 +11,7 @@
 
 #import "TSLoadOperation.h"
 #import "TSGenerateOperation.h"
+#import "TSOperation+Private.h"
 
 #import "TSOperationQueue.h"
 
@@ -38,6 +39,7 @@
 {
     self = [super init];
     if (self) {
+        
         queue = [[TSOperationQueue alloc] init];
         queue.maxConcurrentOperationCount = 1;
         
@@ -100,6 +102,16 @@
     [thumbnailsCache removeAllObjectsForMode:cacheModeFile];
 }
 
+- (BOOL) hasDiskCacheForRequest:(TSRequest *)request
+{
+    return [thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeFile];
+}
+
+- (BOOL) hasMemoryCacheForRequest:(TSRequest *)request
+{
+    return [thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeMemory];
+}
+
 #pragma mark - Placeholder methods
 
 - (UIImage *) placeholderFromCacheForSource:(TSSource *)source
@@ -132,12 +144,12 @@
 
 #pragma mark - Public methods
 
-- (void) performRequestGroup:(TSRequestGroup *)group
+- (void) enqueueRequestGroup:(TSRequestGroup *)group
 {
-    return [self performRequestGroup:group andWait:NO];
+    return [self enqueueRequestGroup:group andWait:NO];
 }
 
-- (void) performRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait
+- (void) enqueueRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait
 {
     dispatch_block_t work = ^{
         
@@ -148,7 +160,9 @@
         NSArray *requests = [group pullPendingRequests];
         
         for (TSRequest *request in requests) {
-            [self _performRequest:request];
+            if (![request isFinished]) {
+                [self _enqueueRequest:request];
+            }
         }
     };
     
@@ -159,12 +173,12 @@
     }
 }
 
-- (void) performRequest:(TSRequest *)request
+- (void) enqueueRequest:(TSRequest *)request
 {
-    [self performRequest:request andWait:NO];
+    [self enqueueRequest:request andWait:NO];
 }
 
-- (void) performRequest:(TSRequest *)request andWait:(BOOL)wait
+- (void) enqueueRequest:(TSRequest *)request andWait:(BOOL)wait
 {
     if ([request isFinished]) {
         [self handleWarning:[NSString stringWithFormat:@"Request %@ already finished. Skipping", request]];
@@ -177,7 +191,7 @@
     }
     
     dispatch_block_t work = ^{
-        [self _performRequest:request];
+        [self _enqueueRequest:request];
     };
     
     if (wait) {
@@ -187,15 +201,32 @@
     }
 }
 
-#pragma mark - Peform request logic
-
-- (void) _performRequest:(TSRequest *)request
+- (void) executeRequest:(TSRequest *)request
 {
-    [self performPlaceholderRequest:request];
-    [self performThumbnailRequest:request];
+    if ([request isFinished]) {
+        [self handleWarning:[NSString stringWithFormat:@"Request %@ already finished. Skipping", request]];
+        return;
+    }
+    
+    if (request.group) {
+        [self handleWarning:[NSString stringWithFormat:@"You trying to perform request %@, which owned by group %@. Skipping", request, request.group]];
+        return;
+    }
+    
+    [self executePlaceholderRequest:request];
+    [self executeThumbnailRequest:request];
 }
 
-- (void) performPlaceholderRequest:(TSRequest *)request
+
+#pragma mark - Peform request logic
+
+- (void) _enqueueRequest:(TSRequest *)request
+{
+    [self executePlaceholderRequest:request];
+    [self enqueueThumbnailRequest:request];
+}
+
+- (void) executePlaceholderRequest:(TSRequest *)request
 {
     if ([request needPlaceholder]) {
         UIImage *placeholder = [self placeholderFromSource:request.source];
@@ -203,16 +234,26 @@
     }
 }
 
-- (void) performThumbnailRequest:(TSRequest *)request
+- (void) enqueueThumbnailRequest:(TSRequest *)request
 {
     if ([request needThumbnail]) {
         UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
-        
-        if (!thumbnail) {
+        if (thumbnail) {
+            [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
+        } else {
             [self enqueueOperationForRequest:request];
         }
-        else {
+    }
+}
+
+- (void) executeThumbnailRequest:(TSRequest *)request
+{
+    if ([request needThumbnail]) {
+        UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
+        if (thumbnail) {
             [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
+        } else {
+            [self executeOperationForRequest:request];
         }
     }
 }
@@ -230,6 +271,29 @@
     } else {
         [request setOperation:operation andWait:YES];
     }
+}
+
+- (void) executeOperationForRequest:(TSRequest *)request
+{
+    TSRequestedOperation *operation = [self newOperationForRequest:request];
+
+    [operation main];
+    
+    [request takeThumbnail:operation.result error:operation.error];
+    request.operation = nil;
+    
+    dispatch_async(serviceQueue, ^{
+    
+        TSRequestedOperation *existingOperation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
+        
+        if (!existingOperation.isCancelled && !existingOperation.isFinished) {
+            [existingOperation enumerationRequests:^(TSRequest *anRequest) {
+                anRequest.operation = operation;
+            } onQueue:serviceQueue];
+        }
+        
+        [operation onComplete];
+    });
 }
 
 #pragma mark - Operations creation
@@ -314,7 +378,7 @@
 - (void) takeThumbnailInRequest:(TSRequest *)request withImage:(UIImage *)image error:(NSError *)error
 {
     [request takeThumbnail:image error:error];
-    [self performRequestGroup:request.group];
+    [self enqueueRequestGroup:request.group];
 }
 
 #pragma mark - Class configuration

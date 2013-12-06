@@ -56,7 +56,7 @@
         thumbnailCalled = YES;
     }];
     
-    [thumbnailService performRequest:request];
+    [thumbnailService enqueueRequest:request];
     
     WaitAndCallInBackground(0.3, ^{
         [source fire];
@@ -106,18 +106,18 @@
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
     
-    [thumbnailService performRequest:request1];
+    [thumbnailService enqueueRequest:request1];
     XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2 andWait:YES];
+        [thumbnailService enqueueRequest:request2 andWait:YES];
         XCTAssert(request1.operation == request2.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
     
     WaitAndCallInBackground(0.6, ^{
-        [thumbnailService performRequest:request3 andWait:YES];
+        [thumbnailService enqueueRequest:request3 andWait:YES];
         XCTAssert(request2.operation == request3.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
@@ -173,12 +173,12 @@
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
     
-    [thumbnailService performRequest:request1 andWait:YES];
+    [thumbnailService enqueueRequest:request1 andWait:YES];
     XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2 andWait:YES];
+        [thumbnailService enqueueRequest:request2 andWait:YES];
         XCTAssert(request1.operation == request2.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
@@ -189,7 +189,7 @@
     });
     
     WaitAndCallInBackground(0.8, ^{
-        [thumbnailService performRequest:request3 andWait:YES];
+        [thumbnailService enqueueRequest:request3 andWait:YES];
         XCTAssert(request1.operation == request3.operation, @"");
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"%d",request1.operation.queuePriority);
     });
@@ -245,19 +245,19 @@
     [request3 setPlaceholderCompletion:placeholderCompletion];
     [request3 setThumbnailCompletion:thumbnailCompletion];
 
-    [thumbnailService performRequest:request1 andWait:YES];
+    [thumbnailService enqueueRequest:request1 andWait:YES];
 
     TSOperation *operation = request1.operation;
     XCTAssert(operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     
     WaitAndCallInBackground(0.3, ^{
-        [thumbnailService performRequest:request2 andWait:YES];
+        [thumbnailService enqueueRequest:request2 andWait:YES];
         XCTAssert(operation == request2.operation, @"");
         XCTAssert(operation.queuePriority == NSOperationQueuePriorityHigh, @"");
     });
     
     WaitAndCallInBackground(0.5, ^{
-        [thumbnailService performRequest:request3 andWait:YES];
+        [thumbnailService enqueueRequest:request3 andWait:YES];
         [request2 cancelAndWait:YES];
         XCTAssert(operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     });

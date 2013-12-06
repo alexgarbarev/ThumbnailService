@@ -18,8 +18,17 @@
 @property (nonatomic) BOOL useFileCache;   /* Default: YES */
 @property (nonatomic) NSUInteger cacheMemoryLimitInBytes; /* Default: 3MB. 0 - unlimited */
 
-- (void) performRequest:(TSRequest *)request;
-- (void) performRequestGroup:(TSRequestGroup *)group;
+/** Add request to internal queue and executes asynchronously */
+- (void) enqueueRequest:(TSRequest *)request;
+
+/** Add group of requests to internal queue and executes asynchronously */
+- (void) enqueueRequestGroup:(TSRequestGroup *)group;
+
+/** Executes request synchronously on calling thread */
+- (void) executeRequest:(TSRequest *)request;
+
+- (BOOL) hasDiskCacheForRequest:(TSRequest *)request;
+- (BOOL) hasMemoryCacheForRequest:(TSRequest *)request;
 
 - (void) clearFileCache;
 
