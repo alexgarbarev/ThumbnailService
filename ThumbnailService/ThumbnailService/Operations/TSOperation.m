@@ -21,8 +21,6 @@
 @end
 
 @implementation TSOperation {
-    dispatch_queue_t callbackQueue;
-    
     int completionCalled;
     int calledFromBlock;
     
@@ -41,11 +39,8 @@
         
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
-       
-        self.operationQueue = dispatch_queue_create("TSOperationSyncQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(self.operationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-        
-        callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+               
+        self.callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         __weak typeof (self) weakSelf = self;
         [super setCompletionBlock:^{
@@ -57,8 +52,14 @@
 
 - (void) dealloc
 {
-    dispatch_release(self.operationQueue);
-    dispatch_release(callbackQueue);
+
+}
+
+- (void) synchronize:(dispatch_block_t)block
+{
+    @synchronized(self){
+        block();
+    }
 }
 
 #pragma mark - NSOperation cuncurrent support
@@ -144,39 +145,39 @@
 
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock
 {
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         [_completionBlocks addObject:completionBlock];
-    });
+    }];
 }
 
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock
 {
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         [_cancelBlocks addObject:cancelBlock];
-    });
+    }];
 }
 
 - (NSMutableSet *) completionBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         set = _completionBlocks;
-    });
+    }];
     return set;
 }
 
 - (NSMutableSet *) cancelBlocks
 {
     __block NSMutableSet *set;
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         set = _cancelBlocks;
-    });
+    }];
     return set;
 }
 
 - (void) callCancelBlocks
 {
-    dispatch_async(callbackQueue, ^{
+    dispatch_async(self.callbackQueue, ^{
         for (TSOperationCompletion cancel in self.cancelBlocks) {
             cancel(self);
         }
@@ -185,7 +186,7 @@
 
 - (void) callCompleteBlocks
 {
-    dispatch_async(callbackQueue, ^{
+    dispatch_async(self.callbackQueue, ^{
         for (TSOperationCompletion complete in self.completionBlocks) {
             complete(self);
         }

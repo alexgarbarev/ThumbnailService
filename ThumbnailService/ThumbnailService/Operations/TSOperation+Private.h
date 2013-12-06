@@ -10,9 +10,9 @@
 
 @interface TSOperation ()
 
-@property (nonatomic) dispatch_queue_t operationQueue;
-
 - (void) onComplete;
 - (void) onCancel;
+
+- (void) synchronize:(dispatch_block_t)block;
 
 @end

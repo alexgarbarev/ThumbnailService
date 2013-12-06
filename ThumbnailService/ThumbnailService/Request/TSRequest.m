@@ -33,8 +33,6 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 @implementation TSRequest {
     BOOL needUpdateIdentifier;
     NSString *_cachedIdentifier;
-    
-    dispatch_queue_t requestSyncQueue;
 }
 
 @synthesize finishWaitSemaphore = _finishWaitSemaphore;
@@ -44,9 +42,6 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 {
     self = [super init];
     if (self) {
-        requestSyncQueue = dispatch_queue_create("TSRequestQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(requestSyncQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-        
         self.shouldCastCompletionsToMainThread = YES;
         self.shouldAdjustSizeToScreenScale = YES;
         self.shouldCacheOnDisk = YES;
@@ -159,7 +154,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 - (void) setState:(TSRequestState)newState
 {
-    dispatch_sync(requestSyncQueue, ^{
+    @synchronized(self) {
         TSRequestState oldState = _state;
         _state = newState;
         
@@ -176,7 +171,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
                 [self.group didFinishRequest:self];
             }
         }
-    });
+    };
 }
 
 - (BOOL) isFinished

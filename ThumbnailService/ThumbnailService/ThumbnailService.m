@@ -54,7 +54,6 @@
         self.cacheMemoryLimitInBytes = 3 * 1024 * 1024;
         
         serviceQueue = dispatch_queue_create("ThumbnailServiceQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(serviceQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
     }
     return self;
 }
@@ -71,6 +70,7 @@
 
 - (void) dealloc
 {
+    [queue cancelAllOperations];
     dispatch_release(serviceQueue);
 }
 
@@ -289,7 +289,7 @@
         if (!existingOperation.isCancelled && !existingOperation.isFinished) {
             [existingOperation enumerationRequests:^(TSRequest *anRequest) {
                 anRequest.operation = operation;
-            } onQueue:serviceQueue];
+            }];
         }
         
         [operation onComplete];
@@ -365,7 +365,7 @@
 {
     [operation enumerationRequests:^(TSRequest *request) {
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
-    } onQueue:serviceQueue];
+    }];
 }
 
 - (void) takeThumbnailInRequests:(NSSet *)requests withImage:(UIImage *)image error:(NSError *)error

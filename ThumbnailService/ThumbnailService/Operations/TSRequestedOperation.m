@@ -35,11 +35,7 @@
         [self _updatePriority];
     };
     
-    if (wait) {
-        dispatch_sync(self.operationQueue, work);
-    } else {
-        dispatch_async(self.operationQueue, work);
-    }
+    [self synchronize:work];
 }
 
 - (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait
@@ -54,65 +50,57 @@
         }
     };
     
-    if (wait) {
-        dispatch_sync(self.operationQueue, work);
-    } else {
-        dispatch_async(self.operationQueue, work);
-    }
+    [self synchronize:work];
 }
 
 
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock
 {
     if (!enumerationBlock) {
         return;
     }
     
-    NSParameterAssert(queue);
-    
-    dispatch_sync(self.operationQueue, ^{
-        dispatch_sync(queue, ^{
-            for (TSRequest *request in self.requests) {
-                enumerationBlock(request);
-            };
-        });
-    });
+    [self synchronize:^{
+        for (TSRequest *request in self.requests) {
+            enumerationBlock(request);
+        };
+    }];
 }
 
 - (BOOL) shouldCacheOnDisk
 {
     __block BOOL shouldCache = NO;
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         for (TSRequest *requst in self.requests) {
             if (requst.shouldCacheOnDisk) {
                 shouldCache = YES;
                 break;
             }
         }
-    });
+    }];
     return shouldCache;
 }
 
 - (BOOL) shouldCacheInMemory
 {
     __block BOOL shouldCache = NO;
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         for (TSRequest *requst in self.requests) {
             if (requst.shouldCacheInMemory) {
                 shouldCache = YES;
                 break;
             }
         }
-    });
+    }];
     return shouldCache;
 }
 
 
 - (void) updatePriority
 {
-    dispatch_sync(self.operationQueue, ^{
+    [self synchronize:^{
         [self _updatePriority];
-    });
+    }];
 }
 
 - (void) _updatePriority

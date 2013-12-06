@@ -13,7 +13,7 @@
 - (void) addRequest:(TSRequest *)request andWait:(BOOL)wait;
 - (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait;
 
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock onQueue:(dispatch_queue_t)queue;
+- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock;
 - (BOOL) shouldCacheOnDisk;
 - (BOOL) shouldCacheInMemory;
 

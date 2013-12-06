@@ -22,7 +22,6 @@
     self = [super init];
     if (self) {
         syncQueue = dispatch_queue_create("TSOperationQueueSyncQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(syncQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
         
         dictionary = [NSMutableDictionary new];
     }

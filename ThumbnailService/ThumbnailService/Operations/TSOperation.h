@@ -37,6 +37,10 @@ typedef void(^TSOperationCompletion)(TSOperation *operation);
 - (void) addCompleteBlock:(TSOperationCompletion)completionBlock;
 - (void) addCancelBlock:(TSOperationCompletion)cancelBlock;
 
+/** dispatch_queue on which callback being called.
+ *  Default: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) */
+@property (nonatomic, assign) dispatch_queue_t callbackQueue;
+
 /* Thread priority */
 - (void) setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority;
 - (TSOperationDispatchQueuePriority) dispatchQueuePriority;

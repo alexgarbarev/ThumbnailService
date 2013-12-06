@@ -25,7 +25,7 @@ static NSString *kCacheExtensionObject = @"object";
         [self createCacheDirectory];
         
         fileCacheQueue = dispatch_queue_create("TSFileCacheQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+        dispatch_set_target_queue(fileCacheQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
         
         self.imageWriteMode = TSFileCacheImageWriteModePNG;
         self.imageWriteCompressionQuality = 0.6;
