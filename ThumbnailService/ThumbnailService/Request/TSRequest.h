@@ -34,7 +34,7 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 /* Priorities */
 @property (nonatomic) TSRequestQueuePriority queuePriority;   /* Default: TSRequestQueuePriorityNormal */
-@property (nonatomic) TSRequestThreadPriority threadPriority; /* Default: TSRequestThreadPriorityLow */
+@property (nonatomic) TSRequestThreadPriority threadPriority; /* Default: TSRequestThreadPriorityBackground */
 
 /* Thumbnail Size */
 @property (nonatomic) BOOL shouldAdjustSizeToScreenScale;     /* Default: YES */

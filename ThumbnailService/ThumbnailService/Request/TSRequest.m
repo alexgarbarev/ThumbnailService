@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
         self.placeholderWaitSemaphore = dispatch_semaphore_create(0);
         
         self.state = TSRequestStateNotStarted;
-        self.threadPriority = TSRequestThreadPriorityLow;
+        self.threadPriority = TSRequestThreadPriorityBackground;
     }
     return self;
 }
