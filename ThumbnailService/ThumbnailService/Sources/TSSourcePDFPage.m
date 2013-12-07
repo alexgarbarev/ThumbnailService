@@ -25,7 +25,7 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     CGPDFPageRelease(page);
 }
