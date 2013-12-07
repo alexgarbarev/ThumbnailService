@@ -1,0 +1,225 @@
+//
+//  PageViewController.m
+//  PDFReader
+//
+//  Created by Sovelu on 26.11.13.
+//  Copyright (c) 2013 Sovelu. All rights reserved.
+//
+
+#import "PageViewController.h"
+#import "PageView.h"
+
+#import <ThumbnailService/ThumbnailService.h>
+
+
+@interface PageViewController () <UIScrollViewDelegate>
+@property (nonatomic, strong) UIScrollView *view;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) PageView *pageView;
+
+@property (nonatomic, getter = isPreviewLoaded) BOOL previewLoaded;
+@property (nonatomic, getter = isSmallPreviewLoaded) BOOL smallPreviewLoaded;
+
+@property (nonatomic, strong) TSRequest *currentLowRequest;
+@property (nonatomic, strong) TSRequest *currentHiRequest;
+@end
+
+@implementation PageViewController {
+    CGPDFPageRef page;
+    NSString *documentName;
+    UIView *contentView;
+}
+
+- (id) initWithPDFPage:(CGPDFPageRef)pdfPageRef documentName:(NSString *)_documentName
+{
+    self = [super init];
+    if (self) {
+        page = CGPDFPageRetain(pdfPageRef);
+        documentName = _documentName;
+    }
+    return self;
+}
+
+- (void) dealloc
+{
+    [self.currentLowRequest cancel];
+    [self.currentHiRequest cancel];
+    CGPDFPageRelease(page);
+}
+
+- (void) loadView
+{
+    self.view = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    self.view.backgroundColor = [UIColor blackColor];
+    self.view.delegate = self;
+    self.imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.clipsToBounds = YES;
+    contentView = [[UIView alloc] initWithFrame:self.view.bounds];
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [contentView addSubview:self.imageView];
+    [self.view addSubview:contentView];
+    self.view.minimumZoomScale = 1;
+    self.view.maximumZoomScale = 10;
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleZoom2x:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:doubleTap];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.currentLowRequest cancel];
+    [self.currentHiRequest cancel];
+    
+    self.currentLowRequest = nil;
+    self.currentHiRequest = nil;
+    
+    self.imageView.image = nil;
+    self.previewLoaded = NO;
+    self.smallPreviewLoaded = NO;
+    
+    [self.pageView removeFromSuperview];
+    self.pageView = nil;
+    
+    [self resetZoom];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self loadPreview];
+}
+
+- (void) loadPreview
+{
+    __weak typeof(self) weakSelf = self;
+    
+    TSSourcePDFPage *pdfPageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
+    
+    TSRequest *lowRequest = nil;
+    TSRequest *hiRequest = nil;
+    
+    BOOL hasDiskCacheForLowRequest = NO;
+    
+    BOOL needLoadLowPreview = !self.currentLowRequest && ![self isSmallPreviewLoaded];
+    BOOL needLoadHiPreview = !self.currentHiRequest && ![self isPreviewLoaded];
+    
+    if (needLoadLowPreview) {
+        lowRequest = [TSRequest new];
+        lowRequest.source = pdfPageSource;
+        lowRequest.size = self.previewLowQualitylSize;
+        lowRequest.queuePriority = TSRequestQueuePriorityHigh;
+        [lowRequest setPlaceholderCompletion:^(UIImage *result, NSError *error) {
+            weakSelf.imageView.image = result;
+        }];
+        
+        hasDiskCacheForLowRequest = [self.thumbnailService hasDiskCacheForRequest:lowRequest];
+        
+        if (!hasDiskCacheForLowRequest) {
+            [self.thumbnailService executeRequest:lowRequest];
+        }
+        
+        [lowRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
+            weakSelf.imageView.image = result;
+            weakSelf.smallPreviewLoaded = YES;
+            weakSelf.currentLowRequest = nil;
+        }];
+    }
+    
+
+    if (needLoadHiPreview) {
+        hiRequest = [TSRequest new];
+        hiRequest.source = pdfPageSource;
+        hiRequest.size = self.previewHighQualitySize;
+        hiRequest.queuePriority = TSRequestQueuePriorityNormal;
+
+        [hiRequest setThumbnailCompletion:^(UIImage *result, NSError *error) {
+            weakSelf.imageView.image = result;
+            weakSelf.previewLoaded = YES;
+            weakSelf.currentHiRequest = nil;
+        }];
+    }
+    
+    if (needLoadHiPreview && needLoadLowPreview)
+    {
+        if (hasDiskCacheForLowRequest) {
+            [self.thumbnailService executeRequest:lowRequest];
+            [self.thumbnailService enqueueRequest:hiRequest];
+        } else {
+            TSRequestGroupSequence *group = [TSRequestGroupSequence new];
+            [group addRequest:lowRequest];
+            [group addRequest:hiRequest];
+            [self.thumbnailService enqueueRequestGroup:group];
+        }
+    }
+    else if (needLoadHiPreview)
+    {
+        [self.thumbnailService enqueueRequest:hiRequest];
+    }
+    else if (needLoadLowPreview)
+    {
+        if (hasDiskCacheForLowRequest) {
+            [self.thumbnailService executeRequest:lowRequest];
+        } else {
+            [self.thumbnailService enqueueRequest:lowRequest];
+        }
+    }
+    
+    self.currentLowRequest = lowRequest;
+    self.currentHiRequest = hiRequest;
+}
+
+- (UIView *) viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return contentView;
+}
+
+- (void) scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    BOOL pageViewShouldBeVisible = scrollView.zoomScale > 1;
+    
+    if (pageViewShouldBeVisible) {
+        [self createPageViewIfNeeded];
+    }
+    
+    self.pageView.hidden = !pageViewShouldBeVisible;
+}
+
+- (void) createPageViewIfNeeded
+{
+    if (!self.pageView) {
+        self.pageView = [[PageView alloc] initPDFPage:page];
+        self.pageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.pageView.frame = self.imageView.bounds;
+        [contentView addSubview:self.pageView];
+    }
+}
+
+- (void) resetZoom
+{
+    self.view.contentOffset = CGPointZero;
+    self.view.zoomScale = 1;
+}
+
+- (void) toggleZoom2x:(UITapGestureRecognizer *)doubleTap
+{
+    [self createPageViewIfNeeded];
+    
+    CGFloat targetZoom = self.view.zoomScale > 1 ? 1 : self.view.zoomScale * 2;
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        self.view.zoomScale = targetZoom;
+    }];
+}
+
+@end
