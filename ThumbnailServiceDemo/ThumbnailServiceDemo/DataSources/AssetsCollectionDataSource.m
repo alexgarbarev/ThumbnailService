@@ -81,7 +81,7 @@
                 NSLog(@"all precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
             }
         }];
-        [thumbnailService performRequest:request];
+        [thumbnailService enqueueRequest:request];
     }
 }
 
@@ -125,7 +125,7 @@
 
     }];
     
-    [thumbnailService performRequest:request];
+    [thumbnailService enqueueRequest:request];
     
     [request waitPlaceholder];
 

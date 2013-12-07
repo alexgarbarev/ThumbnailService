@@ -81,7 +81,7 @@
         
     }];
     
-    [thumbnailService performRequest:request];
+    [thumbnailService enqueueRequest:request];
     
     [request waitPlaceholder];
     

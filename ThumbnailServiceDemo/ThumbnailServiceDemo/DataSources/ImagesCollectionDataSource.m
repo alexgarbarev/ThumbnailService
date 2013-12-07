@@ -100,7 +100,7 @@
     [group addRequest:smallThumbRequest];
     [group addRequest:bigThumbRequest];
     
-    [thumbnailService performRequestGroup:group];
+    [thumbnailService enqueueRequestGroup:group];
     
     
     //    [bigThumbRequest waitUntilFinished];

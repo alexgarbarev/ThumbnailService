@@ -81,7 +81,11 @@
         [request setThumbnailCompletion:^(UIImage *result, NSError *error) {
             [self precachePagesFromIndex:i+1];
         }];
-        [thumbnailService performRequest:request];
+        if (![thumbnailService hasDiskCacheForRequest:request]) {
+            [thumbnailService enqueueRequest:request];
+        } else {
+            [self precachePagesFromIndex:i+1];
+        }
     } else {
         NSLog(@"all pdf pages precached for %g sec",CFAbsoluteTimeGetCurrent()-timeBeforePrecache);
     }
@@ -98,7 +102,7 @@
     PreviewCollectionCell *viewCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PreviewCollectionCell" forIndexPath:indexPath];
     
     if (viewCell.context) {
-        TSRequestGroupSequence *group = viewCell.context;
+        TSRequest *group = viewCell.context;
         [group cancel];
         viewCell.imageView.image = nil;
     }
@@ -107,7 +111,6 @@
     
     TSSourcePDFPage *pageSource = [[TSSourcePDFPage alloc] initWithPdfPage:page documentName:documentName];
     
-    TSRequestGroupSequence *group = [TSRequestGroupSequence new];
     
     TSRequest *smallThumbRequest = [TSRequest new];
     smallThumbRequest.source = pageSource;
@@ -136,18 +139,17 @@
 
     }];
     
-    [group addRequest:smallThumbRequest];
-    [group addRequest:bigThumbRequest];
-    
-    [thumbnailService performRequestGroup:group];
-    
-    
-//    [bigThumbRequest waitUntilFinished];
-    
-//    [smallThumbRequest waitPlaceholder];
-//    [smallThumbRequest waitUntilFinished];
-
-    viewCell.context = group;
+    if ([thumbnailService hasDiskCacheForRequest:smallThumbRequest]) {
+        [thumbnailService executeRequest:smallThumbRequest];
+        [thumbnailService enqueueRequest:bigThumbRequest];
+        viewCell.context = bigThumbRequest;
+    } else {
+        TSRequestGroupSequence *group = [TSRequestGroupSequence new];
+        [group addRequest:smallThumbRequest];
+        [group addRequest:bigThumbRequest];
+        [thumbnailService enqueueRequestGroup:group];
+        viewCell.context = group;
+    }
     
     return viewCell;
 }
