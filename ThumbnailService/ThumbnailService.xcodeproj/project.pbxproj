@@ -30,8 +30,6 @@
 		FA2677801807AFB900F5B02B /* TSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2677781807AFB900F5B02B /* TSSource.m */; };
 		FA2677811807AFB900F5B02B /* ThumbnailService.m in Sources */ = {isa = PBXBuildFile; fileRef = FA26777A1807AFB900F5B02B /* ThumbnailService.m */; };
 		FA26778A1807B1F500F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2677891807B1F500F5B02B /* UIKit.framework */; };
-		FA27B00C18536D0C0060BB65 /* TSSourcePDFPageLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = FA27B00B18536D0C0060BB65 /* TSSourcePDFPageLazy.m */; };
-		FA27B00E18536F000060BB65 /* TSSourcePDFPageLazy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA27B00A18536D0C0060BB65 /* TSSourcePDFPageLazy.h */; };
 		FA540529180A74CE0092752B /* TSRequestGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = FA540528180A74CE0092752B /* TSRequestGroup.m */; };
 		FA54052F180A76220092752B /* TSRequestGroupSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54052E180A76220092752B /* TSRequestGroupSequence.m */; };
 		FA54054B180AC88E0092752B /* TestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA54054A180AC88E0092752B /* TestUtils.m */; };
@@ -73,7 +71,6 @@
 				5B1565971815299700C41368 /* TSSources.h in CopyFiles */,
 				5B1565981815299900C41368 /* TSSource.h in CopyFiles */,
 				5B1565991815299B00C41368 /* TSSourceALAsset.h in CopyFiles */,
-				FA27B00E18536F000060BB65 /* TSSourcePDFPageLazy.h in CopyFiles */,
 				5B15659A1815299E00C41368 /* TSSourcePDFPage.h in CopyFiles */,
 				5B15659C181529A300C41368 /* TSSourceVideo.h in CopyFiles */,
 				5B15659B181529A100C41368 /* TSSourceImage.h in CopyFiles */,
@@ -109,8 +106,6 @@
 		FA2677791807AFB900F5B02B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
 		FA26777A1807AFB900F5B02B /* ThumbnailService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailService.m; sourceTree = "<group>"; };
 		FA2677891807B1F500F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		FA27B00A18536D0C0060BB65 /* TSSourcePDFPageLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourcePDFPageLazy.h; sourceTree = "<group>"; };
-		FA27B00B18536D0C0060BB65 /* TSSourcePDFPageLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourcePDFPageLazy.m; sourceTree = "<group>"; };
 		FA540527180A74CE0092752B /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
 		FA540528180A74CE0092752B /* TSRequestGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroup.m; sourceTree = "<group>"; };
 		FA54052D180A76220092752B /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
@@ -292,8 +287,6 @@
 				FAF9C730180EF6D10091CE94 /* TSSourceALAsset.m */,
 				FAF9C731180EF6D10091CE94 /* TSSourcePDFPage.h */,
 				FAF9C732180EF6D10091CE94 /* TSSourcePDFPage.m */,
-				FA27B00A18536D0C0060BB65 /* TSSourcePDFPageLazy.h */,
-				FA27B00B18536D0C0060BB65 /* TSSourcePDFPageLazy.m */,
 				FAF9C749180EFEE90091CE94 /* TSSourceImage.h */,
 				FAF9C74A180EFEE90091CE94 /* TSSourceImage.m */,
 				FA6A86DF181195090063C6F9 /* TSSourceVideo.h */,
@@ -415,7 +408,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA27B00C18536D0C0060BB65 /* TSSourcePDFPageLazy.m in Sources */,
 				FA26777F1807AFB900F5B02B /* TSRequest.m in Sources */,
 				FAF9C733180EF6D10091CE94 /* TSSourceALAsset.m in Sources */,
 				FA67E4A318085FBD00B64944 /* TSCacheManager.m in Sources */,

@@ -10,37 +10,67 @@
 #import "UIImageView+ImageFrame.h"
 
 @implementation TSSourcePDFPage {
-    CGPDFPageRef page;
+    size_t pageNumber;
     NSString *documentName;
+    
+    /* Lazy loading */
+    TSSourcePDFPageLazyLoadingBlock loadingBlock;
+    TSSourcePDFPageLazyUnloadingBlock unloadingBlock;
+    
+    /* Not Lazy loading */
+    CGPDFPageRef thePage;
 }
 
 - (id) initWithPdfPage:(CGPDFPageRef)_page documentName:(NSString *)_documentName
 {
     self = [super init];
     if (self) {
-        page = CGPDFPageRetain(_page);
+        NSParameterAssert(_documentName);
+        NSParameterAssert(_page);
+        thePage = CGPDFPageRetain(_page);
+        pageNumber = CGPDFPageGetPageNumber(_page);
         documentName = _documentName;
         self.pageBackgroundColor = [UIColor whiteColor];
     }
     return self;
 }
 
+- (id)initWithDocumentName:(NSString *)_documentName pageNumber:(NSInteger)_pageNumber loadingBlock:(TSSourcePDFPageLazyLoadingBlock)_loadingBlock unloadingBlock:(TSSourcePDFPageLazyUnloadingBlock)_unloadingBlock
+{
+    self = [super init];
+    if (self) {
+        NSParameterAssert(_documentName);
+        NSParameterAssert(_loadingBlock);
+        NSParameterAssert(_unloadingBlock);
+        documentName = _documentName;
+        pageNumber = _pageNumber;
+        loadingBlock = [_loadingBlock copy];
+        unloadingBlock = [_unloadingBlock copy];
+        self.pageBackgroundColor = [UIColor whiteColor];
+        thePage = NULL;
+    }
+    return self;
+}
+
 - (void) dealloc
 {
-    CGPDFPageRelease(page);
+    if (![self isLazyLoading]) {
+        CGPDFPageRelease(thePage);
+    }
 }
 
 - (NSString *) identifier
 {
-    return [NSString stringWithFormat:@"%@_%lu",documentName, CGPDFPageGetPageNumber(page)];
+    return [NSString stringWithFormat:@"%@_%lu",documentName, pageNumber];
 }
 
 - (UIImage *) placeholder
 {
     static UIImage *placeholder = nil;
     if (!placeholder) {
+        CGPDFPageRef page = [self loadPage];
         CGRect boundingRect = (CGRect){CGPointZero, CGSizeMake(140, 140)};
-        CGRect placeholderFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+        CGRect placeholderFrame = [UIImageView imageFrameForImageSize:[self actualSizeForPage:page] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
         placeholderFrame.origin = CGPointZero;
         
         UIGraphicsBeginImageContextWithOptions(placeholderFrame.size, NO, 1.0);
@@ -52,6 +82,7 @@
         
         placeholder = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
+        [self unloadPage:page];
     }
     
     return placeholder;
@@ -59,10 +90,18 @@
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
+    CGPDFPageRef page = [self loadPage];
+    UIImage *thumbnail = [self thumbnailWithSize:size forPage:page isCancelled:isCancelled error:error];
+    [self unloadPage:page];
+    return thumbnail;
+}
+
+- (UIImage *) thumbnailWithSize:(CGSize)size forPage:(CGPDFPageRef)page isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+{
     CGRect boundingRect = (CGRect){CGPointZero, size};
     
-    CGRect pageFrame = [UIImageView imageFrameForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
-    CGPoint pageScales = [UIImageView imageScalesForImageSize:[self actualSize] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+    CGRect pageFrame = [UIImageView imageFrameForImageSize:[self actualSizeForPage:page] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
+    CGPoint pageScales = [UIImageView imageScalesForImageSize:[self actualSizeForPage:page] boundingRect:boundingRect contentMode:UIViewContentModeScaleAspectFit];
     pageFrame.origin = CGPointZero;
     
     UIGraphicsBeginImageContext(pageFrame.size);
@@ -76,7 +115,7 @@
         [self.pageBackgroundColor set];
         CGContextFillRect(context, pageFrame);
     }
-        
+    
     CGContextTranslateCTM(context, pageFrame.origin.x, pageFrame.size.height + pageFrame.origin.y);
     CGContextScaleCTM(context, pageScales.x, -pageScales.y);
     
@@ -85,9 +124,9 @@
         return nil;
     }
     
-
+    
     CGContextDrawPDFPage(context, page);
-
+    
     
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
     
@@ -100,7 +139,7 @@
     return result;
 }
 
-- (CGSize) actualSize
+- (CGSize) actualSizeForPage:(CGPDFPageRef)page
 {
     CGRect cropBoxRect = CGPDFPageGetBoxRect(page, kCGPDFCropBox);
     CGRect mediaBoxRect = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
@@ -124,5 +163,31 @@ static BOOL IsLandscapeAngel(NSInteger degrees)
 {
     return degrees == 90 || degrees == 270;
 }
+
+#pragma mark - Page Lazy loading 
+
+- (BOOL) isLazyLoading
+{
+    return loadingBlock && unloadingBlock && thePage == NULL;
+}
+
+- (CGPDFPageRef) loadPage
+{
+    CGPDFPageRef page = NULL;
+    if ([self isLazyLoading]) {
+        page = loadingBlock(documentName, pageNumber);
+    } else {
+        page = thePage;
+    }
+    return page;
+}
+
+- (void) unloadPage:(CGPDFPageRef)page
+{
+    if ([self isLazyLoading]) {
+        unloadingBlock(page);
+    }
+}
+
 
 @end
