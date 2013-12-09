@@ -69,19 +69,17 @@
 
 - (void) requestThubmnailForCell:(UITableViewCell *)cell withPdfPath:(NSString *)path
 {
-    TSSourcePDFPageLazy *source = [[TSSourcePDFPageLazy alloc] initWithDocumentName:[path lastPathComponent] pageNumber:1];
+    NSString *documentName = [path lastPathComponent];
     
-    [source setPageLoadingBlock:^CGPDFPageRef(NSString *name, NSInteger pageNumber) {
+    TSSourcePDFPage *source = [[TSSourcePDFPage alloc] initWithDocumentName:documentName pageNumber:1 loadingBlock:^CGPDFPageRef(NSString *name, NSInteger pageNumber) {
         CGPDFDocumentRef doc = CGPDFDocumentCreateWithURL((__bridge CFURLRef)[[NSURL alloc] initFileURLWithPath:path]);
         CGPDFPageRef page = CGPDFDocumentGetPage(doc, pageNumber);
         return page;
-    }];
-    
-    [source setPageUnloadingBlock:^(CGPDFPageRef page) {
+    } unloadingBlock:^(CGPDFPageRef page) {
         CGPDFDocumentRef document = CGPDFPageGetDocument(page);
         CGPDFDocumentRelease(document);
     }];
-
+    
     NSUInteger requestTag = cell.tag;
     
     TSRequest *request = [TSRequest new];
