@@ -14,7 +14,7 @@
 @interface ScrollViewController : UIViewController
 
 @property (nonatomic) NSInteger currentIndex;
-@property (nonatomic) NSUInteger numberOfPagesInMemory; /* Default: 3 (previous, current, next)*/
+@property (nonatomic) NSUInteger numberOfPagesInMemory; /* Default: 3 (previous, current, next). Should be odd and more than 0. Can be 1, 3, 5, etc.. */
 
 @property (nonatomic, weak) id<ScrollingViewControllerDataSource>dataSource;
 @property (nonatomic, weak) id<ScrollingViewControllerDelegate>delegate;

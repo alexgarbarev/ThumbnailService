@@ -10,35 +10,27 @@
 
 @interface ScrollViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIScrollView *view;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 @end
 
 @implementation ScrollViewController {
-    NSMutableIndexSet *visibleIndecies;
-    NSMutableDictionary *visiblePages;
+    NSMutableIndexSet *indeciesInScene;
+    NSMutableDictionary *pagesInScene;
     
     NSInteger lastLeftIndex;
     NSInteger lastRightIndex;
-    
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _currentIndex = -1;
         self.numberOfPagesInMemory = 3;
-        visiblePages = [[NSMutableDictionary alloc] initWithCapacity:self.numberOfPagesInMemory];
+        pagesInScene = [[NSMutableDictionary alloc] initWithCapacity:self.numberOfPagesInMemory];
     }
     return self;
-}
-
-- (void) loadView
-{
-    self.view = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.view.delegate = self;
-    self.view.pagingEnabled = YES;
 }
 
 - (void) setNumberOfPagesInMemory:(NSUInteger)numberOfPagesInMemory
@@ -55,9 +47,15 @@
 {
     [super viewDidLoad];
     
+    self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    self.scrollView.delegate = self;
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:self.scrollView];
+
     [self setupContentSize];
     
-    visibleIndecies = [NSMutableIndexSet new];
+    indeciesInScene = [NSMutableIndexSet new];
     
     self.currentIndex = 0;
 }
@@ -66,17 +64,19 @@
 {
     [self setupContentSize];
     [self layoutViewControllers];
+    [super viewDidLayoutSubviews];
 }
 
 - (void) layoutViewControllers
 {
-    [[visibleIndecies copy] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        UIViewController *controller = [self visibleViewControllerAtIndex:idx];
+    [[indeciesInScene copy] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        UIViewController *controller = pagesInScene[@(idx)];
         if (controller) {
             CGPoint origin = CGPointMake(idx * [self pageWidth], 0);
-            controller.view.frame = (CGRect){origin, self.view.bounds.size};
+            controller.view.frame = (CGRect){origin, self.scrollView.bounds.size};
         }
     }];
+    self.scrollView.contentOffset = CGPointMake(self.currentIndex * [self pageWidth], 0);
 }
 
 - (void) setCurrentIndex:(NSInteger)currentIndex
@@ -96,28 +96,28 @@
 - (void) setupContentSize
 {
     NSInteger count = [self numberOfViewControllers];
-    self.view.contentSize = CGSizeMake(count * [self pageWidth], self.view.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(count * [self pageWidth], self.scrollView.frame.size.height);
 }
 
 - (void) scrollToViewControllerAtIndex:(NSInteger)index
 {
-    self.view.contentOffset = CGPointMake(index * [self pageWidth], 0);
+    self.scrollView.contentOffset = CGPointMake(index * [self pageWidth], 0);
 }
 
 - (void) setViewControllersAtIndecies:(NSIndexSet *)indecies
 {
-    NSIndexSet *indeciesToRemove = [visibleIndecies indexesPassingTest:^BOOL(NSUInteger idx, BOOL *stop) {
+    NSIndexSet *indeciesToRemove = [indeciesInScene indexesPassingTest:^BOOL(NSUInteger idx, BOOL *stop) {
         return ![indecies containsIndex:idx];
     }];
     
     NSIndexSet *indexToAdd = [indecies indexesPassingTest:^BOOL(NSUInteger idx, BOOL *stop) {
-        return ![visibleIndecies containsIndex:idx];
+        return ![indeciesInScene containsIndex:idx];
     }];
     
     [self addViewControllersAtIndexes:indexToAdd];
     [self removeViewControllersAtIndexes:indeciesToRemove];
     
-    visibleIndecies = [indecies mutableCopy];
+    indeciesInScene = [indecies mutableCopy];
 }
 
 - (void) addViewControllersAtIndexes:(NSIndexSet *)indexes
@@ -131,14 +131,14 @@
 - (void) removeViewControllersAtIndexes:(NSIndexSet *)indexes
 {
     [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        UIViewController *controller = [self visibleViewControllerAtIndex:idx];
+        UIViewController *controller = pagesInScene[@(idx)];
         [self removeViewController:controller atIndex:idx];
     }];
 }
 
 - (CGFloat) pageWidth
 {
-    return self.view.bounds.size.width;
+    return self.scrollView.bounds.size.width;
 }
 
 - (void) addViewController:(UIViewController *)controller atIndex:(NSInteger)index
@@ -152,12 +152,12 @@
     [self addChildViewController:controller];
 
     CGPoint origin = CGPointMake(index * [self pageWidth], 0);
-    controller.view.frame = (CGRect){origin, self.view.bounds.size};
-    [self.view addSubview:controller.view];
+    controller.view.frame = (CGRect){origin, self.scrollView.bounds.size};
+    [self.scrollView addSubview:controller.view];
     
     [controller didMoveToParentViewController:self];
     
-    visiblePages[@(index)] = controller;
+    pagesInScene[@(index)] = controller;
 }
 
 - (void) removeViewController:(UIViewController *)controller atIndex:(NSInteger)index
@@ -169,24 +169,19 @@
     [controller willMoveToParentViewController:nil];
     [controller removeFromParentViewController];
     
-    controller.view.frame = (CGRect){CGPointZero, self.view.bounds.size};
+    controller.view.frame = (CGRect){CGPointZero, self.scrollView.bounds.size};
     [controller.view removeFromSuperview];
     
     [controller didMoveToParentViewController:nil];
     
-    [visiblePages removeObjectForKey:@(index)];
+    [pagesInScene removeObjectForKey:@(index)];
 }
 
-#pragma mark -
+#pragma mark - DataSource requests
 
 - (NSInteger) numberOfViewControllers
 {
     return [self.dataSource numberOfViewControllersForScrollingController:self];
-}
-
-- (UIViewController *) visibleViewControllerAtIndex:(NSInteger)index
-{
-    return visiblePages[@(index)];
 }
 
 - (UIViewController *) viewControllerAtIndex:(NSInteger)index
@@ -199,6 +194,8 @@
     
     return controller;
 }
+
+#pragma mark - Delegate notifications
 
 - (void) willChangeCurrentIndexTo:(NSInteger)newIndex
 {
@@ -216,14 +213,14 @@
 
 - (void) updateVisiblePages
 {
-    NSInteger leftIndex = self.view.contentOffset.x / (int)[self pageWidth];
-    NSInteger rightIndex = (self.view.contentOffset.x + [self pageWidth] - 1) / (int)[self pageWidth];
-    if (lastLeftIndex != leftIndex || lastRightIndex != rightIndex) {
-        lastLeftIndex = leftIndex;
-        lastRightIndex = rightIndex;
+    NSInteger leftVisibleIndex = self.scrollView.contentOffset.x / (int)[self pageWidth];
+    NSInteger rightVisibleIndex = (self.scrollView.contentOffset.x + [self pageWidth] - 1) / (int)[self pageWidth];
+    if (lastLeftIndex != leftVisibleIndex || lastRightIndex != rightVisibleIndex) {
+        lastLeftIndex = leftVisibleIndex;
+        lastRightIndex = rightVisibleIndex;
         
         if ([self.delegate respondsToSelector:@selector(scrollingController:didChangeVisiblePagesIndecies:)]) {
-            NSIndexSet *set  = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(leftIndex, rightIndex - leftIndex + 1)];
+            NSIndexSet *set  = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(leftVisibleIndex, rightVisibleIndex - leftVisibleIndex + 1)];
             [self.delegate scrollingController:self didChangeVisiblePagesIndecies:set];
         }
     }
