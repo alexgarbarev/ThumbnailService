@@ -282,6 +282,8 @@
 {
     CGRect contentFrame = [UIImageView imageFrameForImageSize:self.imageView.image.size boundingRect:self.scrollView.bounds contentMode:UIViewContentModeScaleAspectFit];
     contentFrame.origin = CGPointZero;
+    contentFrame.size.width *= self.scrollView.zoomScale;
+    contentFrame.size.height *= self.scrollView.zoomScale;
     contentView.frame = contentFrame;
 }
 
