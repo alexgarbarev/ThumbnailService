@@ -8,12 +8,43 @@
 
 #import "PageViewController.h"
 #import "PageView.h"
+#import "UIImageView+ImageFrame.h"
 
 #import <ThumbnailService/ThumbnailService.h>
 
+@interface ScrollViewCenteredContent : UIScrollView
+
+@end
+
+@implementation ScrollViewCenteredContent
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    
+    UIView *contentView = [self.delegate viewForZoomingInScrollView:self];
+    
+    CGSize containerSize = self.bounds.size;
+    CGRect frame = contentView.frame;
+
+    frame.origin = CGPointZero;
+    if (frame.size.width < containerSize.width) {
+        frame.origin.x = (containerSize.width - frame.size.width)*0.5f + self.contentOffset.x;
+    }
+    if (frame.size.height < containerSize.height) {
+        frame.origin.y = (containerSize.height - frame.size.height)*0.5f + self.contentOffset.y;
+    }
+    
+    contentView.frame = frame;
+}
+
+@end
+
+
+@class ScrollViewCenteredContent;
 
 @interface PageViewController () <UIScrollViewDelegate>
-@property (nonatomic, strong) UIScrollView *view;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) PageView *pageView;
 
@@ -47,11 +78,10 @@
     CGPDFPageRelease(page);
 }
 
-- (void) loadView
+- (void) viewDidLoad
 {
-    self.view = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    self.view.backgroundColor = [UIColor blackColor];
-    self.view.delegate = self;
+    [super viewDidLoad];
+    
     self.imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -59,18 +89,20 @@
     contentView = [[UIView alloc] initWithFrame:self.view.bounds];
     contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [contentView addSubview:self.imageView];
-    [self.view addSubview:contentView];
-    self.view.minimumZoomScale = 1;
-    self.view.maximumZoomScale = 10;
-}
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
+    self.scrollView = [[ScrollViewCenteredContent alloc] initWithFrame:self.view.bounds];
+    self.scrollView.backgroundColor = [UIColor blackColor];
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.scrollView.delegate = self;
+    [self.scrollView addSubview:contentView];
+    self.scrollView.minimumZoomScale = 1;
+    self.scrollView.maximumZoomScale = 10;
+    
+    [self.view addSubview:self.scrollView];
     
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleZoom2x:)];
     doubleTap.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:doubleTap];
+    [self.scrollView addGestureRecognizer:doubleTap];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -98,6 +130,22 @@
     [super viewWillAppear:animated];
     
     [self loadPreview];
+}
+
+- (void) setSmallPreviewLoaded:(BOOL)smallPreviewLoaded
+{
+    if (smallPreviewLoaded && self.imageView.image) {
+        [self lowPreviewDidLoaded];
+    }
+    _smallPreviewLoaded = smallPreviewLoaded;
+}
+
+- (void) setPreviewLoaded:(BOOL)previewLoaded
+{
+    if (previewLoaded && self.imageView.image) {
+        [self hiPreviewDidLoaded];
+    }
+    _previewLoaded = previewLoaded;
 }
 
 - (void) loadPreview
@@ -195,6 +243,14 @@
     self.pageView.hidden = !pageViewShouldBeVisible;
 }
 
+- (void) updateScrollViewInsets
+{
+    CGRect imageFrame = [self.imageView imageFrame];
+    contentView.frame = imageFrame;
+    
+    self.scrollView.contentSize = contentView.bounds.size;
+}
+
 - (void) createPageViewIfNeeded
 {
     if (!self.pageView) {
@@ -207,19 +263,45 @@
 
 - (void) resetZoom
 {
-    self.view.contentOffset = CGPointZero;
-    self.view.zoomScale = 1;
+    self.scrollView.contentOffset = CGPointZero;
+    self.scrollView.zoomScale = 1;
 }
 
 - (void) toggleZoom2x:(UITapGestureRecognizer *)doubleTap
 {
     [self createPageViewIfNeeded];
     
-    CGFloat targetZoom = self.view.zoomScale > 1 ? 1 : self.view.zoomScale * 2;
+    CGFloat targetZoom = self.scrollView.zoomScale > 1 ? 1 : self.scrollView.zoomScale * 2;
     
     [UIView animateWithDuration:0.3f animations:^{
-        self.view.zoomScale = targetZoom;
+        self.scrollView.zoomScale = targetZoom;
     }];
 }
 
+- (void) updateContentViewSize
+{
+    CGRect contentFrame = [UIImageView imageFrameForImageSize:self.imageView.image.size boundingRect:self.scrollView.bounds contentMode:UIViewContentModeScaleAspectFit];
+    contentFrame.origin = CGPointZero;
+    contentView.frame = contentFrame;
+}
+
+- (void) viewDidLayoutSubviews
+{
+    [self resetZoom];
+    [self updateContentViewSize];
+}
+
+- (void) lowPreviewDidLoaded
+{
+    [self updateContentViewSize];
+}
+
+- (void) hiPreviewDidLoaded
+{
+    [self updateContentViewSize];
+}
+
+
 @end
+
+
