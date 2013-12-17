@@ -28,29 +28,25 @@
 
 #pragma mark - Managing requests
 
-- (void) addRequest:(TSRequest *)request andWait:(BOOL)wait
+- (void) addRequest:(TSRequest *)request
 {
-    dispatch_block_t work = ^{
+    [self synchronize:^{
         [self.requests addObject:request];
         [self _updatePriority];
-    };
-    
-    [self synchronize:work];
+    }];
 }
 
-- (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait
+- (void) removeRequest:(TSRequest *)request
 {
-    dispatch_block_t work = ^{
+    [self synchronize:^{
         [self.requests removeObject:request];
         
         if ([self.requests count] > 0) {
             [self _updatePriority];
-        } else {
+        } else if (![self isCancelled]){
             [self cancel];
         }
-    };
-    
-    [self synchronize:work];
+    }];
 }
 
 

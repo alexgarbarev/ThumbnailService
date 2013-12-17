@@ -99,19 +99,14 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 - (void) setOperation:(TSRequestedOperation *)operation
 {
-    [self setOperation:operation andWait:NO];
-}
-
-- (void) setOperation:(TSRequestedOperation *)operation andWait:(BOOL)wait
-{
     if (_operation) {
-        [_operation removeRequest:self andWait:wait];
+        [_operation removeRequest:self];
     }
     
     _operation = operation;
     
     if (_operation) {
-        [_operation addRequest:self andWait:wait];
+        [_operation addRequest:self];
     }
     
     if (operation) {
@@ -137,15 +132,10 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 - (void) cancel
 {
-    [self cancelAndWait:NO];
-}
-
-- (void) cancelAndWait:(BOOL)wait
-{
     self.thumbnailBlock = nil;
     self.placeholderBlock = nil;
     
-    [self setOperation:nil andWait:wait];
+    self.operation = nil;
     
     self.state |= TSRequestStateCancelled;
     

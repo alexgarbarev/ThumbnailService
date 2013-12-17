@@ -262,14 +262,14 @@
 {
     TSRequestedOperation *operation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
 
-    if (!operation) {
+    if (!operation || operation.isCancelled) {
         operation = [self newOperationForRequest:request];
-        [request setOperation:operation andWait:YES];
+        request.operation = operation;
         [queue addOperation:operation forIdentifider:request.identifier];
     } else if (operation.isFinished){
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
     } else {
-        [request setOperation:operation andWait:YES];
+        request.operation = operation;
     }
 }
 

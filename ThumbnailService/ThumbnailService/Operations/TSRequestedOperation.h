@@ -10,8 +10,8 @@
 
 @interface TSRequestedOperation : TSOperation
 
-- (void) addRequest:(TSRequest *)request andWait:(BOOL)wait;
-- (void) removeRequest:(TSRequest *)request andWait:(BOOL)wait;
+- (void) addRequest:(TSRequest *)request;
+- (void) removeRequest:(TSRequest *)request;
 
 - (void) enumerateRequests:(void(^)(TSRequest *anRequest))enumerationBlock;
 - (BOOL) shouldCacheOnDisk;

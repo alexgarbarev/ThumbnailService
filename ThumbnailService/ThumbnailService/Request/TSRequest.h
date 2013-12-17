@@ -18,11 +18,11 @@ typedef NS_ENUM(NSInteger, TSRequestThreadPriority)
 };
 
 typedef NS_ENUM(NSInteger, TSRequestQueuePriority) {
-	TSRequestQueuePriorityVeryLow = -8L,
-	TSRequestQueuePriorityLow = -4L,
-	TSRequestQueuePriorityNormal = 0,
-	TSRequestQueuePriorityHigh = 4,
-	TSRequestQueuePriorityVeryHigh = 8
+	TSRequestQueuePriorityVeryLow  = NSOperationQueuePriorityVeryLow,
+	TSRequestQueuePriorityLow      = NSOperationQueuePriorityLow,
+	TSRequestQueuePriorityNormal   = NSOperationQueuePriorityNormal,
+	TSRequestQueuePriorityHigh     = NSOperationQueuePriorityHigh,
+	TSRequestQueuePriorityVeryHigh = NSOperationQueuePriorityVeryHigh
 };
 
 typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
@@ -55,7 +55,6 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 /* Waiting for completions */
 - (void) waitUntilFinished;
 - (void) waitPlaceholder;
-
 
 - (BOOL) isFinished;
 
