@@ -54,7 +54,7 @@
 }
 
 
-- (void) enumerationRequests:(void(^)(TSRequest *anRequest))enumerationBlock
+- (void) enumerateRequests:(void(^)(TSRequest *anRequest))enumerationBlock
 {
     if (!enumerationBlock) {
         return;

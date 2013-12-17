@@ -21,9 +21,6 @@
 @end
 
 @implementation TSOperation {
-    int completionCalled;
-    int calledFromBlock;
-    
     TSOperationDispatchQueuePriority dispatchQueuePriority;
 }
 
@@ -34,9 +31,6 @@
 {
     self = [super init];
     if (self) {
-        completionCalled = 0;
-        calledFromBlock = 0;
-        
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
                

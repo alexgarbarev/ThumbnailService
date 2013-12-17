@@ -123,7 +123,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 #pragma mark - Modifying request reqirements
 
-- (void)setQueuePriority:(TSRequestQueuePriority)priority
+- (void) setQueuePriority:(TSRequestQueuePriority)priority
 {
     _queuePriority = priority;
     [self.operation updatePriority];

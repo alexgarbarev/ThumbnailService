@@ -287,7 +287,7 @@
         TSRequestedOperation *existingOperation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
         
         if (!existingOperation.isCancelled && !existingOperation.isFinished) {
-            [existingOperation enumerationRequests:^(TSRequest *anRequest) {
+            [existingOperation enumerateRequests:^(TSRequest *anRequest) {
                 anRequest.operation = operation;
             }];
         }
@@ -363,7 +363,7 @@
 
 - (void) takeThumnbailsForRequestsInOperation:(TSRequestedOperation *)operation
 {
-    [operation enumerationRequests:^(TSRequest *request) {
+    [operation enumerateRequests:^(TSRequest *request) {
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
     }];
 }

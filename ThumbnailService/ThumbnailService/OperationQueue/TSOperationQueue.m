@@ -10,10 +10,6 @@
 
 @implementation TSOperationQueue {
     NSMutableDictionary *dictionary;
-    
-    NSMutableSet *cancelBlocks;
-    NSMutableSet *completeBlock;
-    
     dispatch_queue_t syncQueue;
 }
 
