@@ -15,7 +15,7 @@
     NSString *key;
 }
 
-- (id) initWithKey:(NSString *)_key andCacheManager:(TSCacheManager *)_cacheManager;
+- (id) initWithKey:(NSString *)_key andCacheManager:(TSCacheManager *)_cacheManager
 {
     self = [super init];
     if (self) {

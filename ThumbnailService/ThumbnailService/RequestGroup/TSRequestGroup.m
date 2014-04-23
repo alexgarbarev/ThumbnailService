@@ -15,17 +15,17 @@
     return nil;
 }
 
-- (void) didFinishRequest:(TSRequest *)request
+- (void) didFinishRequest:(TSRequest *)__unused request
 {
     
 }
 
-- (void) didCancelRequest:(TSRequest *)request
+- (void) didCancelRequest:(TSRequest *)__unused request
 {
     
 }
 
-- (BOOL) shouldPerformOnMainQueueRequest:(TSRequest *)request
+- (BOOL) shouldPerformOnMainQueueRequest:(TSRequest *)__unused request
 {
     return NO;
 }

@@ -112,7 +112,7 @@ typedef enum {
 
 - (UIImage *) imageThumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
-    NSUInteger thumbSize = MAX(size.width, size.height);
+    NSUInteger thumbSize = (NSUInteger)fmaxf(size.width, size.height);
     ALAssetRepresentation *representation = [asset defaultRepresentation];
     
     CGDataProviderDirectCallbacks callbacks = {

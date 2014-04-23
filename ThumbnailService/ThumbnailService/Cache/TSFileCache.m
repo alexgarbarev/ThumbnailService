@@ -65,7 +65,7 @@ static NSString *kCacheExtensionObject = @"object";
     [self setObject:obj forKey:key cost:0];
 }
 
-- (void)setObject:(id)object forKey:(id)key cost:(NSUInteger)g
+- (void)setObject:(id)object forKey:(id)key cost:(NSUInteger)__unused g
 {
     dispatch_block_t writeBlock = ^{
         @autoreleasepool {

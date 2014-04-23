@@ -37,11 +37,11 @@
         dictionary[identifier] = operation;
     });
 
-    __weak typeof (self) weakSelf = self;
-    [operation addCancelBlock:^(TSOperation *operation) {
+    __weak __typeof (self) weakSelf = self;
+    [operation addCancelBlock:^(__unused TSOperation *operation) {
         [weakSelf operationDidFinishForIdentifier:identifier];
     }];
-    [operation addCompleteBlock:^(TSOperation *operation) {
+    [operation addCompleteBlock:^(__unused TSOperation *operation) {
         [weakSelf operationDidFinishForIdentifier:identifier];
     }];
 }

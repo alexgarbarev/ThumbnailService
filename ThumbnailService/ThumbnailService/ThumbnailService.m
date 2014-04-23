@@ -146,7 +146,7 @@
 
 - (void) enqueueRequestGroup:(TSRequestGroup *)group
 {
-    return [self enqueueRequestGroup:group andWait:NO];
+    [self enqueueRequestGroup:group andWait:NO];
 }
 
 - (void) enqueueRequestGroup:(TSRequestGroup *)group andWait:(BOOL)wait
@@ -316,7 +316,7 @@
 {
     TSRequestedOperation *operation = [[TSGenerateOperation alloc] initWithSource:request.source size:[request sizeToRender]];
 
-    __weak typeof (self) weakSelf = self;
+    __weak __typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
         [weakSelf didGenerateThumbnailForIdentifier:request.identifier fromOperation:(TSRequestedOperation *)operation];
     }];
@@ -328,7 +328,7 @@
 {
     TSRequestedOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:thumbnailsCache];
 
-    __weak typeof (self) weakSelf = self;
+    __weak __typeof (self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *operation) {
         [weakSelf didLoadThumbnailForIdentifier:request.identifier fromOperation:(TSRequestedOperation *)operation];
     }];

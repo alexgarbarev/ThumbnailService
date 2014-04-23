@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 @interface TSSourceWebView ()<UIWebViewDelegate>
-@property BOOL loading;
+@property (atomic) BOOL loading;
 @end
 
 @implementation TSSourceWebView {
@@ -97,13 +97,13 @@
 
 #pragma mark - WebView delegate
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webViewDidFinishLoad:(UIWebView *)__unused webView
 {
     dispatch_group_leave(webViewLoadingGroup);
     self.loading = NO;
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(UIWebView *)__unused webView didFailLoadWithError:(NSError *)error
 {
     dispatch_group_leave(webViewLoadingGroup);
     loadingError = error;

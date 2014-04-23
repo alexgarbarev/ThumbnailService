@@ -113,7 +113,7 @@
         }
     }
     
-    self.queuePriority = priority;
+    self.queuePriority = (NSOperationQueuePriority)priority;
     
     if (![self isExecuting]) {
         self.dispatchQueuePriority = OperationDispatchQueuePriorityFromRequestThreadPriority(tPriority);

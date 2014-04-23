@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         imageURL = _imageURL;
-        identifier = [NSString stringWithFormat:@"%d",[[imageURL absoluteString] hash]];
+        identifier = [NSString stringWithFormat:@"%d",(unsigned int)[[imageURL absoluteString] hash]];
     }
     return self;
 }
@@ -43,7 +43,7 @@
 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
 {
-    NSUInteger thumbSize = MAX(size.width, size.height);
+    NSUInteger thumbSize = (NSUInteger)fmaxf(size.width, size.height);
     
     CGDataProviderRef provider = CGDataProviderCreateWithURL((__bridge CFURLRef)imageURL);
     

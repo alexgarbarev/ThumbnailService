@@ -96,7 +96,7 @@
     return thumbnail;
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)size forPage:(CGPDFPageRef)page isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error
+- (UIImage *) thumbnailWithSize:(CGSize)size forPage:(CGPDFPageRef)page isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)__unused error
 {
     CGRect boundingRect = (CGRect){CGPointZero, size};
     

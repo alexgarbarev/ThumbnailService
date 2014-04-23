@@ -36,7 +36,7 @@
                
         self.callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
-        __weak typeof (self) weakSelf = self;
+        __weak __typeof (self) weakSelf = self;
         [super setCompletionBlock:^{
             [weakSelf onComplete];
         }];

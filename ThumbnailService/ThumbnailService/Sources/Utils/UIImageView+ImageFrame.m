@@ -91,12 +91,12 @@
     
 	switch (contentMode) {
         case UIViewContentModeScaleAspectFit: {
-            CGFloat scale = MIN(scales.x, scales.y);
+            CGFloat scale = fminf(scales.x, scales.y);
             resultScales = CGPointMake(scale, scale);
             break;
         }
         case UIViewContentModeScaleAspectFill: {
-            CGFloat scale = MAX(scales.x, scales.y);
+            CGFloat scale = fmaxf(scales.x, scales.y);
             resultScales = CGPointMake(scale, scale);
             break;
         }

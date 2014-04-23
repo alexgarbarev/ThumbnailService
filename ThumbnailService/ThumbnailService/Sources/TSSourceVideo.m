@@ -28,7 +28,7 @@
     if (self) {
         thumbnailSecond = second;
         videoURL = url;
-        identifier = [NSString stringWithFormat:@"%d-%g",[[videoURL absoluteString] hash],second];
+        identifier = [NSString stringWithFormat:@"%d-%g",(unsigned int)[[videoURL absoluteString] hash], second];
     }
     return self;
 }

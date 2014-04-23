@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
     });
 }
 
-- (void) didCancelRequest:(TSRequest *)request
+- (void) didCancelRequest:(TSRequest *)__unused request
 {
 
 }
