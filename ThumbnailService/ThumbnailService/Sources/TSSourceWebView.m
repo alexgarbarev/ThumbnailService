@@ -15,6 +15,7 @@
 
 @implementation TSSourceWebView {
     NSURL *resourceURL;
+    NSString *identifier;
     
     UIWebView *webView;
     dispatch_group_t webViewLoadingGroup;
@@ -28,6 +29,8 @@
         resourceURL = _resourceURL;
         webViewLoadingGroup = dispatch_group_create();
         loadingError = nil;
+        
+        identifier = [NSString stringWithFormat:@"%d",(unsigned int)[[resourceURL absoluteString] hash]];
     }
     return self;
 }
@@ -39,7 +42,7 @@
 
 - (NSString *) identifier
 {
-    return [resourceURL absoluteString];
+    return identifier;
 }
 
 - (UIImage *) placeholder
@@ -57,8 +60,12 @@
     
     self.loading = YES;
     
+    CGSize webViewSize;
+    webViewSize.width = fmaxf(300, size.width); /* Limit minimum width to 300, since UIWebView will not scaleToFit to smaller width */
+    webViewSize.height = (webViewSize.width / size.width) * size.height;
+    
     dispatch_sync(dispatch_get_main_queue(), ^{
-        webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+        webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, webViewSize.width, webViewSize.height)];
         webView.scalesPageToFit = YES;
         NSURLRequest *request = [NSURLRequest requestWithURL:resourceURL];
         webView.delegate = self;
@@ -83,8 +90,11 @@
     }
 
     dispatch_sync(dispatch_get_main_queue(), ^{
+        CGFloat scale = size.width / webViewSize.width;
+        
         UIGraphicsBeginImageContextWithOptions(size, NO, 1.0f);
-
+        CGContextScaleCTM(UIGraphicsGetCurrentContext(), scale, scale);
+        
         [webView.layer renderInContext:UIGraphicsGetCurrentContext()];
 
         result = UIGraphicsGetImageFromCurrentImageContext();

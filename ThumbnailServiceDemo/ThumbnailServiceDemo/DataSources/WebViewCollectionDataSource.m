@@ -59,7 +59,7 @@
     
     TSRequest *request = [TSRequest new];
     request.source = [[TSSourceWebView alloc] initWithUrl:[[NSURL alloc] initWithString:@"https://github.com/"]];
-    request.size = kBigThumbSize;
+    request.size = kSmallThumbnailSize;
     request.queuePriority = NSOperationQueuePriorityVeryHigh;
     
     
