@@ -131,6 +131,15 @@ reusableImageView.currentThumbnailRequest = newRequest;
 ```
 This way will guarantee that visible items will be filled by thumbnail with minimum possible time.
 
+Installation
+====
+Prefered way is using cocoapods
+
+```
+pod 'ThumbnailService'
+```
+But you also can import sources or use as static library
+
 Extanding
 ====
 
