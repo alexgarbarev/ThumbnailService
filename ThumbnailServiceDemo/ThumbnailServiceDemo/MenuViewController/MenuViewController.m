@@ -12,6 +12,7 @@
 #import "PDFCollectionDataSource.h"
 #import "ImagesCollectionDataSource.h"
 #import "VideosCollectionDataSource.h"
+#import "WebViewCollectionDataSource.h"
 
 #import <ThumbnailService/ThumbnailService.h>
 #import "PreviewDataSource.h"
@@ -34,6 +35,8 @@
             return [ImagesCollectionDataSource class];
         case 3:
             return [VideosCollectionDataSource class];
+        case 4:
+            return [WebViewCollectionDataSource class];
     }
     return nil;
 }

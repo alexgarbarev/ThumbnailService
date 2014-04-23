@@ -253,6 +253,9 @@
         if (thumbnail) {
             [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
         } else {
+            if ([request.source requiredMainThread] && [NSThread isMainThread]) {
+                [NSException raise:NSInternalInconsistencyException format:@"You trying to execute request with source %@ on main thread, but this source required main thread to operate.",request.source];
+            }
             [self executeOperationForRequest:request];
         }
     }

@@ -28,4 +28,9 @@
     return nil;
 }
 
+- (BOOL) requiredMainThread
+{
+    return NO;
+}
+
 @end

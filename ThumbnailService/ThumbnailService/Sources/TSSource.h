@@ -16,4 +16,7 @@
 - (UIImage *) placeholder; 
 - (UIImage *) thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError **)error;
 
+/* Default: NO */
+- (BOOL) requiredMainThread;
+
 @end

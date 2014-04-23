@@ -195,6 +195,10 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 - (void) waitUntilFinished
 {
+    if ([self.source requiredMainThread] && [NSThread isMainThread]) {
+        [NSException raise:NSInternalInconsistencyException format:@"You trying to lock main thread (for result waiting), but source %@ required main thread to operate.",self.source];
+    }
+    
     if ([self needThumbnail] || [self needPlaceholder]) {
         dispatch_semaphore_wait(self.finishWaitSemaphore, DISPATCH_TIME_FOREVER);
     }

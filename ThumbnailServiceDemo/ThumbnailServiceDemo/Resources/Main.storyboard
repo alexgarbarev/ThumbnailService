@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qbx-0i-qPA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qbx-0i-qPA">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -43,13 +43,17 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Oct-oF-2Wy">
-                                <rect key="frame" x="17" y="222" width="287" height="29"/>
+                                <rect key="frame" x="12" y="226" width="297" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="297" id="yjT-br-eV8"/>
+                                </constraints>
                                 <segments>
                                     <segment title="ALAssets"/>
                                     <segment title="PDF"/>
                                     <segment title="Images"/>
                                     <segment title="Video"/>
+                                    <segment title="WebView"/>
                                 </segments>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZi-QR-QJb">
@@ -70,7 +74,7 @@
                             <constraint firstItem="uve-di-DEx" firstAttribute="top" secondItem="QfE-7O-0qI" secondAttribute="bottom" constant="159" id="b9u-Qf-wKa"/>
                             <constraint firstItem="uve-di-DEx" firstAttribute="top" secondItem="nZi-QR-QJb" secondAttribute="bottom" constant="35" id="cel-zT-zMe"/>
                             <constraint firstItem="nZi-QR-QJb" firstAttribute="centerX" secondItem="QfE-7O-0qI" secondAttribute="centerX" id="qCy-PG-NUw"/>
-                            <constraint firstItem="Oct-oF-2Wy" firstAttribute="top" secondItem="eqg-70-SFW" secondAttribute="bottom" constant="158" id="tkx-yG-hM2"/>
+                            <constraint firstItem="Oct-oF-2Wy" firstAttribute="top" secondItem="eqg-70-SFW" secondAttribute="bottom" constant="162" id="tkx-yG-hM2"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="D2m-M7-0zx"/>

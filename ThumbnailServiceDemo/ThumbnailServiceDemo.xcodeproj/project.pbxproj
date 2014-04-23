@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B0855EC1907B2ED00192DD3 /* WebViewCollectionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0855EB1907B2ED00192DD3 /* WebViewCollectionDataSource.m */; };
 		FA2676031806F75E00F5B02B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676021806F75E00F5B02B /* Foundation.framework */; };
 		FA2676051806F75E00F5B02B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676041806F75E00F5B02B /* CoreGraphics.framework */; };
 		FA2676071806F75E00F5B02B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2676061806F75E00F5B02B /* UIKit.framework */; };
@@ -59,6 +60,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5B0855EA1907B2ED00192DD3 /* WebViewCollectionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewCollectionDataSource.h; sourceTree = "<group>"; };
+		5B0855EB1907B2ED00192DD3 /* WebViewCollectionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewCollectionDataSource.m; sourceTree = "<group>"; };
 		FA2675FF1806F75E00F5B02B /* ThumbnailServiceDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThumbnailServiceDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2676021806F75E00F5B02B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA2676041806F75E00F5B02B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -259,6 +262,8 @@
 				FA6A86E6181198C30063C6F9 /* VideosCollectionDataSource.m */,
 				FA6A86EA1811A03A0063C6F9 /* CustomAssetSource.h */,
 				FA6A86EB1811A03A0063C6F9 /* CustomAssetSource.m */,
+				5B0855EA1907B2ED00192DD3 /* WebViewCollectionDataSource.h */,
+				5B0855EB1907B2ED00192DD3 /* WebViewCollectionDataSource.m */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 				FA26769F18071FBB00F5B02B /* AppDelegate.m in Sources */,
 				FA540535180A82910092752B /* PDFCollectionDataSource.m in Sources */,
 				FA26768518071D5D00F5B02B /* UIImage+Decompress.m in Sources */,
+				5B0855EC1907B2ED00192DD3 /* WebViewCollectionDataSource.m in Sources */,
 				FA2676A418071FFE00F5B02B /* AssetsCollectionDataSource.m in Sources */,
 				FA6A86EC1811A03A0063C6F9 /* CustomAssetSource.m in Sources */,
 				FA26768418071D5D00F5B02B /* NSArray+RangeCheck.m in Sources */,
