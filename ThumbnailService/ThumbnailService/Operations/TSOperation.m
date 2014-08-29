@@ -26,6 +26,9 @@
 
 @synthesize completionBlocks = _completionBlocks;
 @synthesize cancelBlocks = _cancelBlocks;
+@synthesize finished = _finished;
+@synthesize executing = _executing;
+@synthesize started = _started;
 
 - (id) init
 {
