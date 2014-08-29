@@ -14,8 +14,8 @@
 @property (nonatomic, strong) NSMutableSet *completionBlocks;
 @property (nonatomic, strong) NSMutableSet *cancelBlocks;
 
-@property (nonatomic, getter = isFinished)  BOOL finished;
-@property (nonatomic, getter = isExecuting) BOOL executing;
+@property (nonatomic)  BOOL isFinished;
+@property (nonatomic) BOOL isExecuting;
 @property (nonatomic, getter = isStarted)   BOOL started;
 
 @end
@@ -36,7 +36,7 @@
     if (self) {
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
-               
+        
         self.callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         __weak __typeof (self) weakSelf = self;
@@ -49,7 +49,7 @@
 
 - (void) dealloc
 {
-
+    
 }
 
 - (void) synchronize:(dispatch_block_t)block
@@ -91,7 +91,7 @@
     if (self.started && !self.finished) {
         self.finished = YES;
     }
-
+    
     [self onCancel];
     [super cancel];
 }
@@ -127,14 +127,14 @@
 - (void) setExecuting:(BOOL)isExecuting
 {
     [self willChangeValueForKey:@"isExecuting"];
-    _executing = isExecuting;
+    _isExecuting = isExecuting;
     [self didChangeValueForKey:@"isExecuting"];
 }
 
 - (void) setFinished:(BOOL)isFinished
 {
     [self willChangeValueForKey:@"isFinished"];
-    _finished = isFinished;
+    _isFinished = isFinished;
     [self didChangeValueForKey:@"isFinished"];
 }
 
