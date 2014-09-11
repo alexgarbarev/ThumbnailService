@@ -184,7 +184,7 @@
     });
     
     WaitAndCallInBackground(0.5, ^{
-        [request2 cancelAndWait:YES];
+        [request2 cancel];
         XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     });
     
@@ -258,13 +258,13 @@
     
     WaitAndCallInBackground(0.5, ^{
         [thumbnailService enqueueRequest:request3 andWait:YES];
-        [request2 cancelAndWait:YES];
+        [request2 cancel];
         XCTAssert(operation.queuePriority == NSOperationQueuePriorityNormal, @"");
     });
     
     WaitAndCallInBackground(0.8, ^{
-        [request1 cancelAndWait:YES];
-        [request3 cancelAndWait:YES];
+        [request1 cancel];
+        [request3 cancel];
     });
     
     WaitAndCallInBackground(0.9, ^{

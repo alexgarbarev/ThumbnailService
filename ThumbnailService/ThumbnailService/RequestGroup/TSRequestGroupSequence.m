@@ -96,26 +96,15 @@ typedef NS_ENUM(NSInteger, TSRequestGroupSequenceState) {
 
 }
 
-- (void) cancelAndWait:(BOOL)wait
+- (void) cancel
 {
-    dispatch_block_t work = ^{
+    dispatch_sync(groupSyncQueue, ^{
         self.state = TSRequestGroupSequenceCanceled;
         for (TSRequest *request in sequence) {
             [request cancel];
         }
         sequence = nil;
-    };
-    
-    if (wait) {
-        dispatch_sync(groupSyncQueue, work);
-    } else {
-        dispatch_async(groupSyncQueue, work);
-    }
-}
-
-- (void) cancel
-{
-    [self cancelAndWait:YES];
+    });
 }
 
 - (BOOL) isFinished
