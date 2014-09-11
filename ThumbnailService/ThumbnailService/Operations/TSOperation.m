@@ -30,16 +30,16 @@
 @synthesize executing = _executing;
 @synthesize started = _started;
 
-- (id) init
+- (id)init
 {
     self = [super init];
     if (self) {
         self.completionBlocks = [NSMutableSet new];
         self.cancelBlocks = [NSMutableSet new];
-               
+
         self.callbackQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        
-        __weak __typeof (self) weakSelf = self;
+
+        __weak __typeof(self) weakSelf = self;
         [super setCompletionBlock:^{
             [weakSelf onComplete];
         }];
@@ -47,21 +47,21 @@
     return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 
 }
 
-- (void) synchronize:(dispatch_block_t)block
+- (void)synchronize:(dispatch_block_t)block
 {
-    @synchronized(self){
+    @synchronized (self) {
         block();
     }
 }
 
 #pragma mark - NSOperation cuncurrent support
 
-- (void) start
+- (void)start
 {
     self.started = YES;
     if (![self isCancelled]) {
@@ -76,17 +76,17 @@
     }
 }
 
-- (BOOL) isConcurrent
+- (BOOL)isConcurrent
 {
     return YES;
 }
 
-- (BOOL) isCancelled
+- (BOOL)isCancelled
 {
     return [super isCancelled];
 }
 
-- (void) cancel
+- (void)cancel
 {
     if (self.started && !self.finished) {
         self.finished = YES;
@@ -98,40 +98,40 @@
 
 #pragma mark - Thread priority
 
-- (void) setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority
+- (void)setDispatchQueuePriority:(TSOperationDispatchQueuePriority)priority
 {
     dispatchQueuePriority = priority;
 }
 
-- (TSOperationDispatchQueuePriority) dispatchQueuePriority
+- (TSOperationDispatchQueuePriority)dispatchQueuePriority
 {
     return dispatchQueuePriority;
 }
 
 #pragma mark - Operation termination
 
-- (void) onComplete
+- (void)onComplete
 {
     if (![self isCancelled]) {
         [self callCompleteBlocks];
     }
 }
 
-- (void) onCancel
+- (void)onCancel
 {
     [self callCancelBlocks];
 }
 
 #pragma mark - KVO notifications
 
-- (void) setExecuting:(BOOL)isExecuting
+- (void)setExecuting:(BOOL)isExecuting
 {
     [self willChangeValueForKey:@"isExecuting"];
     _executing = isExecuting;
     [self didChangeValueForKey:@"isExecuting"];
 }
 
-- (void) setFinished:(BOOL)isFinished
+- (void)setFinished:(BOOL)isFinished
 {
     [self willChangeValueForKey:@"isFinished"];
     _finished = isFinished;
@@ -140,21 +140,21 @@
 
 #pragma mark - Callbacks
 
-- (void) addCompleteBlock:(TSOperationCompletion)completionBlock
+- (void)addCompleteBlock:(TSOperationCompletion)completionBlock
 {
     [self synchronize:^{
         [_completionBlocks addObject:completionBlock];
     }];
 }
 
-- (void) addCancelBlock:(TSOperationCompletion)cancelBlock
+- (void)addCancelBlock:(TSOperationCompletion)cancelBlock
 {
     [self synchronize:^{
         [_cancelBlocks addObject:cancelBlock];
     }];
 }
 
-- (NSMutableSet *) completionBlocks
+- (NSMutableSet *)completionBlocks
 {
     __block NSMutableSet *set;
     [self synchronize:^{
@@ -163,7 +163,7 @@
     return set;
 }
 
-- (NSMutableSet *) cancelBlocks
+- (NSMutableSet *)cancelBlocks
 {
     __block NSMutableSet *set;
     [self synchronize:^{
@@ -172,7 +172,7 @@
     return set;
 }
 
-- (void) callCancelBlocks
+- (void)callCancelBlocks
 {
     dispatch_async(self.callbackQueue, ^{
         for (TSOperationCompletion cancel in self.cancelBlocks) {
@@ -181,7 +181,7 @@
     });
 }
 
-- (void) callCompleteBlocks
+- (void)callCompleteBlocks
 {
     dispatch_async(self.callbackQueue, ^{
         for (TSOperationCompletion complete in self.completionBlocks) {
@@ -205,9 +205,9 @@ dispatch_queue_priority_t GlobalQueuePriorityFromDispatchQueuePriority(TSOperati
     }
 }
 
-- (NSString *) description
+- (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p. Cancelled=%d, Finished=%d, Started=%d, Executing=%d>",[self class], self,[self isCancelled], [self isFinished], [self isStarted], [self isExecuting]];
+    return [NSString stringWithFormat:@"<%@ %p. Cancelled=%d, Finished=%d, Started=%d, Executing=%d>", [self class], self, [self isCancelled], [self isFinished], [self isStarted], [self isExecuting]];
 }
 
 @end

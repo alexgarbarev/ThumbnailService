@@ -12,6 +12,6 @@
 
 @interface TSLoadOperation : TSRequestedOperation
 
-- (id) initWithKey:(NSString *)key andCacheManager:(TSCacheManager *)cacheManager;
+- (id)initWithKey:(NSString *)key andCacheManager:(TSCacheManager *)cacheManager;
 
 @end

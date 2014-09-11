@@ -10,11 +10,11 @@
 
 @interface UIImageView (ImageFrame)
 
-- (CGRect) imageFrame;
+- (CGRect)imageFrame;
 
-- (CGPoint) imageScales;
+- (CGPoint)imageScales;
 
-+ (CGRect) imageFrameForImageSize:(CGSize)imageSize boundingRect:(CGRect)boundingRect contentMode:(UIViewContentMode)contentMode;
-+ (CGPoint) imageScalesForImageSize:(CGSize)imageSize boundingRect:(CGRect)boundingRect contentMode:(UIViewContentMode)contentMode;
++ (CGRect)imageFrameForImageSize:(CGSize)imageSize boundingRect:(CGRect)boundingRect contentMode:(UIViewContentMode)contentMode;
++ (CGPoint)imageScalesForImageSize:(CGSize)imageSize boundingRect:(CGRect)boundingRect contentMode:(UIViewContentMode)contentMode;
 
 @end

@@ -13,15 +13,17 @@ typedef void(^TSSourcePDFPageLazyUnloadingBlock)(CGPDFPageRef page);
 
 @interface TSSourcePDFPage : TSSource
 
-@property (nonatomic, strong) UIColor *pageBackgroundColor; /* Default: white */
+@property (nonatomic, strong) UIColor *pageBackgroundColor;
 
-- (id) initWithPdfPage:(CGPDFPageRef)page documentName:(NSString *)documentName;
+/* Default: white */
 
-- (id) initWithDocumentName:(NSString *)documentName pageNumber:(NSInteger)pageNumber
-               loadingBlock:(TSSourcePDFPageLazyLoadingBlock)loadingBlock unloadingBlock:(TSSourcePDFPageLazyUnloadingBlock)unloadingBlock;
+- (id)initWithPdfPage:(CGPDFPageRef)page documentName:(NSString *)documentName;
+
+- (id)initWithDocumentName:(NSString *)documentName pageNumber:(NSInteger)pageNumber
+              loadingBlock:(TSSourcePDFPageLazyLoadingBlock)loadingBlock unloadingBlock:(TSSourcePDFPageLazyUnloadingBlock)unloadingBlock;
 
 
 /* Override in subclasses */
-- (UIImage *) thumbnailWithSize:(CGSize)size forPage:(CGPDFPageRef)page isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error;
+- (UIImage *)thumbnailWithSize:(CGSize)size forPage:(CGPDFPageRef)page isCancelled:(const BOOL *)isCancelled error:(NSError *__autoreleasing *)error;
 
 @end

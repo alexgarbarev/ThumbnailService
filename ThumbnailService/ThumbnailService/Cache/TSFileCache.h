@@ -20,15 +20,15 @@ typedef NS_ENUM(NSInteger, TSFileCacheImageWriteMode)
 
 @interface TSFileCache : NSCache
 
-@property (nonatomic) BOOL shouldWriteAsynchronically;
+@property(nonatomic) BOOL shouldWriteAsynchronically;
 
-@property (nonatomic) TSFileCacheImageWriteMode imageWriteMode; /* Default: PNG */
-@property (nonatomic) CGFloat imageWriteCompressionQuality; /* Default: 0.6. Used only in TSFileCacheImageWriteModeJPG */
+@property(nonatomic) TSFileCacheImageWriteMode imageWriteMode; /* Default: PNG */
+@property(nonatomic) CGFloat imageWriteCompressionQuality; /* Default: 0.6. Used only in TSFileCacheImageWriteModeJPG */
 
 - (void)setName:(NSString *)n;
 - (NSString *)name;
 
-- (BOOL) objectExistsForKey:(id)key;
+- (BOOL)objectExistsForKey:(id)key;
 
 - (id)objectForKey:(id)key;
 - (void)setObject:(id)obj forKey:(id)key; // 0 cost

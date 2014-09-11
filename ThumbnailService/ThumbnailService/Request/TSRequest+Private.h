@@ -18,12 +18,12 @@
 
 @property (nonatomic, strong) TSRequestGroup *group;
 
-- (void) takeThumbnail:(UIImage *)image error:(NSError *)error;
-- (void) takePlaceholder:(UIImage *)image error:(NSError *)error;
+- (void)takeThumbnail:(UIImage *)image error:(NSError *)error;
+- (void)takePlaceholder:(UIImage *)image error:(NSError *)error;
 
-- (BOOL) needPlaceholder;
-- (BOOL) needThumbnail;
+- (BOOL)needPlaceholder;
+- (BOOL)needThumbnail;
 
-- (CGSize) sizeToRender;
+- (CGSize)sizeToRender;
 
 @end

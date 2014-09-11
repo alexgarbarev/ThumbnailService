@@ -10,14 +10,14 @@
 
 @interface TSRequestedOperation : TSOperation
 
-- (void) addRequest:(TSRequest *)request;
-- (void) removeRequest:(TSRequest *)request;
+- (void)addRequest:(TSRequest *)request;
+- (void)removeRequest:(TSRequest *)request;
 
-- (void) enumerateRequests:(void(^)(TSRequest *anRequest))enumerationBlock;
-- (BOOL) shouldCacheOnDisk;
-- (BOOL) shouldCacheInMemory;
+- (void)enumerateRequests:(void (^)(TSRequest *anRequest))enumerationBlock;
+- (BOOL)shouldCacheOnDisk;
+- (BOOL)shouldCacheInMemory;
 
-- (void) updatePriority;
+- (void)updatePriority;
 
 @end
 

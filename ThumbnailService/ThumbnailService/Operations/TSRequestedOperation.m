@@ -9,6 +9,8 @@
 #import "TSRequestedOperation.h"
 #import "TSOperation+Private.h"
 
+TSOperationDispatchQueuePriority OperationDispatchQueuePriorityFromRequestThreadPriority(TSRequestThreadPriority requestPriority);
+
 @interface TSRequestedOperation ()
 
 @property (nonatomic, strong) NSMutableSet *requests;
@@ -28,7 +30,7 @@
 
 #pragma mark - Managing requests
 
-- (void) addRequest:(TSRequest *)request
+- (void)addRequest:(TSRequest *)request
 {
     [self synchronize:^{
         [self.requests addObject:request];
@@ -36,26 +38,25 @@
     }];
 }
 
-- (void) removeRequest:(TSRequest *)request
+- (void)removeRequest:(TSRequest *)request
 {
     [self synchronize:^{
         [self.requests removeObject:request];
-        
+
         if ([self.requests count] > 0) {
             [self _updatePriority];
-        } else if (![self isCancelled]){
+        } else if (![self isCancelled]) {
             [self cancel];
         }
     }];
 }
 
-
-- (void) enumerateRequests:(void(^)(TSRequest *anRequest))enumerationBlock
+- (void)enumerateRequests:(void (^)(TSRequest *anRequest))enumerationBlock
 {
     if (!enumerationBlock) {
         return;
     }
-    
+
     [self synchronize:^{
         for (TSRequest *request in self.requests) {
             enumerationBlock(request);
@@ -63,7 +64,7 @@
     }];
 }
 
-- (BOOL) shouldCacheOnDisk
+- (BOOL)shouldCacheOnDisk
 {
     __block BOOL shouldCache = NO;
     [self synchronize:^{
@@ -77,7 +78,7 @@
     return shouldCache;
 }
 
-- (BOOL) shouldCacheInMemory
+- (BOOL)shouldCacheInMemory
 {
     __block BOOL shouldCache = NO;
     [self synchronize:^{
@@ -91,19 +92,18 @@
     return shouldCache;
 }
 
-
-- (void) updatePriority
+- (void)updatePriority
 {
     [self synchronize:^{
         [self _updatePriority];
     }];
 }
 
-- (void) _updatePriority
+- (void)_updatePriority
 {
     TSRequestThreadPriority tPriority = TSRequestThreadPriorityBackground;
     TSRequestQueuePriority priority = TSRequestQueuePriorityVeryLow;
-    
+
     for (TSRequest *request in self.requests) {
         if (request.queuePriority > priority) {
             priority = request.queuePriority;
@@ -112,9 +112,9 @@
             tPriority = request.threadPriority;
         }
     }
-    
+
     self.queuePriority = (NSOperationQueuePriority)priority;
-    
+
     if (![self isExecuting]) {
         self.dispatchQueuePriority = OperationDispatchQueuePriorityFromRequestThreadPriority(tPriority);
     }

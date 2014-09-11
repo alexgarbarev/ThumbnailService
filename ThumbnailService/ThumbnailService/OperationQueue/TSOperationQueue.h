@@ -11,8 +11,8 @@
 
 @interface TSOperationQueue : NSOperationQueue
 
-- (void) addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier;
-- (TSOperation *) operationWithIdentifier:(NSString *)identifier;
+- (void)addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier;
+- (TSOperation *)operationWithIdentifier:(NSString *)identifier;
 
 /* Use addOperation:forIdentifider: instead */
 - (void)addOperation:(NSOperation *)op UNAVAILABLE_ATTRIBUTE;

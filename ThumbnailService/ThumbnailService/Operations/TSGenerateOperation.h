@@ -12,6 +12,6 @@
 
 @interface TSGenerateOperation : TSRequestedOperation
 
-- (id) initWithSource:(TSSource *)source size:(CGSize)size;
+- (id)initWithSource:(TSSource *)source size:(CGSize)size;
 
 @end

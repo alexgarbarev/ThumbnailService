@@ -7,6 +7,7 @@
 //
 
 #import "TSOperationQueue.h"
+#import "DispatchReleaseMacro.h"
 
 @implementation TSOperationQueue {
     NSMutableDictionary *dictionary;
@@ -18,7 +19,6 @@
     self = [super init];
     if (self) {
         syncQueue = dispatch_queue_create("TSOperationQueueSyncQueue", DISPATCH_QUEUE_SERIAL);
-        
         dictionary = [NSMutableDictionary new];
     }
     return self;
@@ -26,18 +26,18 @@
 
 - (void)dealloc
 {
-    dispatch_release(syncQueue);
+    TSDispatchRelease(syncQueue);
 }
 
-- (void) addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
+- (void)addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
 {
     [super addOperation:operation];
-    
+
     dispatch_async(syncQueue, ^{
         dictionary[identifier] = operation;
     });
 
-    __weak __typeof (self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     [operation addCancelBlock:^(__unused TSOperation *operation) {
         [weakSelf operationDidFinishForIdentifier:identifier];
     }];
@@ -46,7 +46,7 @@
     }];
 }
 
-- (TSOperation *) operationWithIdentifier:(NSString *)identifier
+- (TSOperation *)operationWithIdentifier:(NSString *)identifier
 {
     __block TSOperation *operation = nil;
     dispatch_sync(syncQueue, ^{
@@ -55,7 +55,7 @@
     return operation;
 }
 
-- (void) operationDidFinishForIdentifier:(NSString *)identifier
+- (void)operationDidFinishForIdentifier:(NSString *)identifier
 {
     dispatch_async(syncQueue, ^{
         [dictionary removeObjectForKey:identifier];

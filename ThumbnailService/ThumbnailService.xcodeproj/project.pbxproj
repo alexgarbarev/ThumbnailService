@@ -86,6 +86,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2DBA118A4B4B32BE247205B5 /* DispatchReleaseMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchReleaseMacro.h; sourceTree = "<group>"; };
+		2DBA1B142ADA6E451CDDB7E1 /* BitmaskMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmaskMacro.h; sourceTree = "<group>"; };
 		5B5A35501907CBC300241322 /* TSSourceWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSourceWebView.h; sourceTree = "<group>"; };
 		5B5A35511907CBC300241322 /* TSSourceWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSourceWebView.m; sourceTree = "<group>"; };
 		FA26773F1807AF7F00F5B02B /* libThumbnailService.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libThumbnailService.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,6 +175,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2DBA1FF13596B3F43B4A3941 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2DBA118A4B4B32BE247205B5 /* DispatchReleaseMacro.h */,
+				2DBA1B142ADA6E451CDDB7E1 /* BitmaskMacro.h */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		FA2677361807AF7F00F5B02B = {
 			isa = PBXGroup;
 			children = (
@@ -217,6 +228,7 @@
 				FA2677761807AFB900F5B02B /* Sources */,
 				FA2677791807AFB900F5B02B /* ThumbnailService.h */,
 				FA26777A1807AFB900F5B02B /* ThumbnailService.m */,
+				2DBA1FF13596B3F43B4A3941 /* Utils */,
 			);
 			path = ThumbnailService;
 			sourceTree = "<group>";

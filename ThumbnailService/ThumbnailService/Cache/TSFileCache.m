@@ -7,6 +7,7 @@
 //
 
 #import "TSFileCache.h"
+#import "DispatchReleaseMacro.h"
 
 static NSString *kCacheExtensionImage  = @"image";
 static NSString *kCacheExtensionObject = @"object";
@@ -35,7 +36,7 @@ static NSString *kCacheExtensionObject = @"object";
 
 - (void)dealloc
 {
-    dispatch_release(fileCacheQueue);
+    TSDispatchRelease(fileCacheQueue);
 }
 
 #pragma mark - NSCache overrides
@@ -102,14 +103,14 @@ static NSString *kCacheExtensionObject = @"object";
     [self createCacheDirectory];
 }
 
-- (void) setName:(NSString *)n
+- (void)setName:(NSString *)n
 {
     [super setName:n];
     [self updateCacheDirectory];
     [self createCacheDirectory];
 }
 
-- (NSString *) name
+- (NSString *)name
 {
     return [super name];
 }
@@ -131,34 +132,34 @@ static NSString *kCacheExtensionObject = @"object";
 
 #pragma mark - Paths
 
-- (NSString *) filePathForKey:(NSString *)key extension:(NSString *)extension
+- (NSString *)filePathForKey:(NSString *)key extension:(NSString *)extension
 {
     return [[[self cacheDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:extension];
 }
 
-- (NSString *) pathForKey:(NSString *)key
+- (NSString *)pathForKey:(NSString *)key
 {
     NSString *extension = [self pathExtensionForKey:key];
     return [self filePathForKey:key extension:extension];
 }
 
-- (BOOL) objectExistsForKey:(NSString *)key
+- (BOOL)objectExistsForKey:(NSString *)key
 {
     return [self pathExtensionForKey:key] != nil;
 }
 
-- (NSString *) pathExtensionForKey:(NSString *)key
+- (NSString *)pathExtensionForKey:(NSString *)key
 {
     NSString *extension = nil;
     if ([self objectExistsForKey:key andExtension:kCacheExtensionImage]) {
         extension = kCacheExtensionImage;
-    } else if ([self objectExistsForKey:key andExtension:kCacheExtensionObject]){
+    } else if ([self objectExistsForKey:key andExtension:kCacheExtensionObject]) {
         extension = kCacheExtensionObject;
     }
     return extension;
 }
 
-- (BOOL) objectExistsForKey:(NSString *)key andExtension:(NSString *)extension
+- (BOOL)objectExistsForKey:(NSString *)key andExtension:(NSString *)extension
 {
     NSString *path = [[[self cacheDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:extension];
     return [fileManager fileExistsAtPath:path];
@@ -166,25 +167,25 @@ static NSString *kCacheExtensionObject = @"object";
 
 #pragma mark - Cache Directory
 
-- (void) updateCacheDirectory
+- (void)updateCacheDirectory
 {
     NSString *rootCacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     _cacheDirectory = [rootCacheDirectory stringByAppendingPathComponent:[self name]];
 }
 
-- (NSString *) cacheDirectory
+- (NSString *)cacheDirectory
 {
     return _cacheDirectory;
 }
 
-- (void) createCacheDirectory
+- (void)createCacheDirectory
 {
     [fileManager createDirectoryAtPath:[self cacheDirectory] withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 #pragma mark - Image Compression
 
-- (NSData *) dataFromImage:(UIImage *)image
+- (NSData *)dataFromImage:(UIImage *)image
 {
     NSData *imageData = nil;
     if (self.imageWriteMode == TSFileCacheImageWriteModeJPG) {
@@ -197,7 +198,7 @@ static NSString *kCacheExtensionObject = @"object";
     return imageData;
 }
 
-- (NSString *) imageExtension
+- (NSString *)imageExtension
 {
     NSString *imageExtension;
     if (self.imageWriteMode == TSFileCacheImageWriteModeBase64) {

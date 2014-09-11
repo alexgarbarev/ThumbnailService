@@ -10,6 +10,6 @@
 
 @interface TSRequestGroupSequence : TSRequestGroup
 
-- (void) addRequest:(TSRequest *)request;
+- (void)addRequest:(TSRequest *)request;
 
 @end

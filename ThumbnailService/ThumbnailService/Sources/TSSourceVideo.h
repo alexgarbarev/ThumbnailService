@@ -10,9 +10,9 @@
 
 @interface TSSourceVideo : TSSource
 
-- (id) initWithVideoFilePath:(NSString *)filePath thumbnailSecond:(CGFloat)second;
-- (id) initWithVideoURL:(NSURL *)url thumbnailSecond:(CGFloat)second;
+- (id)initWithVideoFilePath:(NSString *)filePath thumbnailSecond:(CGFloat)second;
+- (id)initWithVideoURL:(NSURL *)url thumbnailSecond:(CGFloat)second;
 
-- (double) videoDuration;
+- (double)videoDuration;
 
 @end

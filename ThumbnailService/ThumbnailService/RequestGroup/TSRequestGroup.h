@@ -13,15 +13,15 @@
 
 /* Calls each time when request from this group has finished. 
    It's a normal to return nil, if you want to wait until more tasks finished  */
-- (NSArray *) pullPendingRequests;
+- (NSArray *)pullPendingRequests;
 
-- (void) didFinishRequest:(TSRequest *)request;
-- (void) didCancelRequest:(TSRequest *)request;
+- (void)didFinishRequest:(TSRequest *)request;
+- (void)didCancelRequest:(TSRequest *)request;
 
-- (void) cancel;
+- (void)cancel;
 
-- (void) waitUntilFinished;
+- (void)waitUntilFinished;
 
-- (BOOL) isFinished;
+- (BOOL)isFinished;
 
 @end

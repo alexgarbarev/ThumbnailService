@@ -9,13 +9,15 @@
 #import "TSRequest.h"
 #import "TSRequest+Private.h"
 #import "TSRequestedOperation.h"
+#import "DispatchReleaseMacro.h"
 
-typedef NS_ENUM(NSInteger, TSRequestState) {
-    TSRequestStateNotStarted       = 0,
-    TSRequestStateEnqueued         = 1 << 1,
-    TSRequestStateGotPlaceholder   = 1 << 2,
-    TSRequestStateGotThumbnail     = 1 << 3,
-    TSRequestStateCancelled        = 1 << 4
+typedef NS_ENUM(NSInteger, TSRequestState)
+{
+    TSRequestStateNotStarted = 0,
+    TSRequestStateEnqueued = 1 << 1,
+    TSRequestStateGotPlaceholder = 1 << 2,
+    TSRequestStateGotThumbnail = 1 << 3,
+    TSRequestStateCancelled = 1 << 4
 };
 
 @interface TSRequest ()
@@ -30,7 +32,8 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 @end
 
-@implementation TSRequest {
+@implementation TSRequest
+{
     BOOL needUpdateIdentifier;
     NSString *_cachedIdentifier;
 }
@@ -38,7 +41,7 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 @synthesize finishWaitSemaphore = _finishWaitSemaphore;
 @synthesize placeholderWaitSemaphore = _placeholderWaitSemaphore;
 
-- (id) init
+- (id)init
 {
     self = [super init];
     if (self) {
@@ -46,40 +49,40 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
         self.shouldAdjustSizeToScreenScale = YES;
         self.shouldCacheOnDisk = YES;
         self.shouldCacheInMemory = YES;
-        
+
         self.finishWaitSemaphore = dispatch_semaphore_create(0);
         self.placeholderWaitSemaphore = dispatch_semaphore_create(0);
-        
+
         self.state = TSRequestStateNotStarted;
         self.threadPriority = TSRequestThreadPriorityBackground;
     }
     return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
-    dispatch_release(self.finishWaitSemaphore);
-    dispatch_release(self.placeholderWaitSemaphore);
+    TSDispatchRelease(self.finishWaitSemaphore);
+    TSDispatchRelease(self.placeholderWaitSemaphore);
 }
 
-- (NSString *) identifier
+- (NSString *)identifier
 {
     if (needUpdateIdentifier || !_cachedIdentifier) {
         CGSize size = [self sizeToRender];
-        _cachedIdentifier = [[NSString alloc] initWithFormat:@"%@_%gx%g",[self.source identifier], size.width, size.height];
+        _cachedIdentifier = [[NSString alloc] initWithFormat:@"%@_%gx%g", [self.source identifier], size.width, size.height];
         needUpdateIdentifier = NO;
     }
 
     return _cachedIdentifier;
 }
 
-- (void) setSource:(TSSource *)source
+- (void)setSource:(TSSource *)source
 {
     _source = source;
     needUpdateIdentifier = YES;
 }
 
-- (void) setSize:(CGSize)size
+- (void)setSize:(CGSize)size
 {
     _size = size;
     needUpdateIdentifier = YES;
@@ -91,24 +94,24 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     needUpdateIdentifier = YES;
 }
 
-- (CGSize) sizeToRender
+- (CGSize)sizeToRender
 {
     CGFloat scale = [[UIScreen mainScreen] scale];
     return CGSizeMake(_size.width * scale, _size.height * scale);
 }
 
-- (void) setOperation:(TSRequestedOperation *)operation
+- (void)setOperation:(TSRequestedOperation *)operation
 {
     if (_operation) {
         [_operation removeRequest:self];
     }
-    
+
     _operation = operation;
-    
+
     if (_operation) {
         [_operation addRequest:self];
     }
-    
+
     if (operation) {
         self.state |= TSRequestStateEnqueued;
     } else {
@@ -116,47 +119,47 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     }
 }
 
-#pragma mark - Modifying request reqirements
+#pragma mark - Modifying request requirement
 
-- (void) setQueuePriority:(TSRequestQueuePriority)priority
+- (void)setQueuePriority:(TSRequestQueuePriority)priority
 {
     _queuePriority = priority;
     [self.operation updatePriority];
 }
 
-- (void) setThreadPriority:(TSRequestThreadPriority)threadPriority
+- (void)setThreadPriority:(TSRequestThreadPriority)threadPriority
 {
     _threadPriority = threadPriority;
     [self.operation updatePriority];
 }
 
-- (void) cancel
+- (void)cancel
 {
     self.thumbnailBlock = nil;
     self.placeholderBlock = nil;
-    
+
     self.operation = nil;
-    
+
     self.state |= TSRequestStateCancelled;
-    
+
     self.group = nil;
 }
 
 #pragma mark - Request State
 
-- (void) setState:(TSRequestState)newState
+- (void)setState:(TSRequestState)newState
 {
-    @synchronized(self) {
+    @synchronized (self) {
         TSRequestState oldState = _state;
         _state = newState;
-        
+
         if (newState & TSRequestStateGotPlaceholder && !(oldState & TSRequestStateGotPlaceholder)) {
             dispatch_semaphore_signal(self.placeholderWaitSemaphore);
         }
-        
+
         if ([self isFinished]) {
             dispatch_semaphore_signal(self.finishWaitSemaphore);
-            
+
             if (newState & TSRequestStateCancelled) {
                 [self.group didCancelRequest:self];
             } else {
@@ -166,45 +169,45 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
     };
 }
 
-- (BOOL) isFinished
+- (BOOL)isFinished
 {
     TSRequestState state = self.state;
-    
+
     BOOL isFinished = (state != TSRequestStateNotStarted);
-    
+
     if ([self needPlaceholder]) {
         isFinished &= (state & TSRequestStateGotPlaceholder) > 0;
     }
-    
+
     if ([self needThumbnail]) {
         isFinished &= (state & TSRequestStateGotThumbnail) > 0;
     }
-    
+
     isFinished |= state & TSRequestStateCancelled;
-    
-    
+
+
     return isFinished;
 }
 
-- (BOOL) isStarted
+- (BOOL)isStarted
 {
     return self.state != TSRequestStateNotStarted;
 }
 
 #pragma mark -
 
-- (void) waitUntilFinished
+- (void)waitUntilFinished
 {
     if ([self.source requiredMainThread] && [NSThread isMainThread]) {
-        [NSException raise:NSInternalInconsistencyException format:@"You trying to lock main thread (for result waiting), but source %@ required main thread to operate.",self.source];
+        [NSException raise:NSInternalInconsistencyException format:@"You trying to lock main thread (for result waiting), but source %@ required main thread to operate.", self.source];
     }
-    
+
     if ([self needThumbnail] || [self needPlaceholder]) {
         dispatch_semaphore_wait(self.finishWaitSemaphore, DISPATCH_TIME_FOREVER);
     }
 }
 
-- (void) waitPlaceholder
+- (void)waitPlaceholder
 {
     if ([self needPlaceholder]) {
         dispatch_semaphore_wait(self.placeholderWaitSemaphore, DISPATCH_TIME_FOREVER);
@@ -213,23 +216,23 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 #pragma mark -
 
-- (BOOL) needPlaceholder
+- (BOOL)needPlaceholder
 {
     return self.placeholderBlock != nil;
 }
 
-- (BOOL) needThumbnail
+- (BOOL)needThumbnail
 {
     return self.thumbnailBlock != nil;
 }
 
-- (void) takePlaceholder:(UIImage *)image error:(NSError *)error
+- (void)takePlaceholder:(UIImage *)image error:(NSError *)error
 {
     [self performCompletion:self.placeholderBlock withResult:image error:error];
     self.state |= TSRequestStateGotPlaceholder;
 }
 
-- (void) takeThumbnail:(UIImage *)image error:(NSError *)error
+- (void)takeThumbnail:(UIImage *)image error:(NSError *)error
 {
     [self performCompletion:self.thumbnailBlock withResult:image error:error];
     self.state |= TSRequestStateGotThumbnail;
@@ -237,18 +240,18 @@ typedef NS_ENUM(NSInteger, TSRequestState) {
 
 #pragma mark - Completions
 
-- (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock
+- (void)setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock
 {
     NSAssert(![self isStarted], @"Can't change placeholderBlock, cause request already started");
     self.placeholderBlock = placeholderBlock;
 }
 
-- (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock
+- (void)setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock
 {
     self.thumbnailBlock = thumbnailBlock;
 }
 
-- (void) performCompletion:(TSRequestCompletion)completion withResult:(UIImage *)image error:(NSError *)error
+- (void)performCompletion:(TSRequestCompletion)completion withResult:(UIImage *)image error:(NSError *)error
 {
     if (completion) {
         if (self.shouldCastCompletionsToMainThread && ![NSThread isMainThread]) {

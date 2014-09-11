@@ -11,12 +11,12 @@
 
 @implementation ALAsset (Identifier)
 
-- (void) storeIdentifier:(NSString *)identifier
+- (void)storeIdentifier:(NSString *)identifier
 {
     objc_setAssociatedObject(self, "identifier", identifier, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSString *) storedIdentifier
+- (NSString *)storedIdentifier
 {
     return objc_getAssociatedObject(self, "identifier");
 }
@@ -24,7 +24,7 @@
 - (NSString *)identifier
 {
     NSString *identifier = [self storedIdentifier];
-    if (!identifier) {        
+    if (!identifier) {
         NSURL *url = [[self defaultRepresentation] url];
         identifier = [url absoluteString];
         identifier = [identifier stringByReplacingOccurrencesOfString:@"/" withString:@""];

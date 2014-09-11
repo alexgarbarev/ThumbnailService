@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, TSRequestThreadPriority)
     TSRequestThreadPriorityBackground,
     TSRequestThreadPriorityLow,
     TSRequestThreadPriorityNormal,
-    TSRequestThreadPriorityHight
+    TSRequestThreadPriorityHigh
 };
 
 typedef NS_ENUM(NSInteger, TSRequestQueuePriority) {
@@ -46,16 +46,16 @@ typedef void(^TSRequestCompletion)(UIImage *result, NSError *error);
 
 /* Completions */
 @property (nonatomic) BOOL shouldCastCompletionsToMainThread; /* Default: YES */
-- (void) setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
-- (void) setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
+- (void)setPlaceholderCompletion:(TSRequestCompletion)placeholderBlock;
+- (void)setThumbnailCompletion:(TSRequestCompletion)thumbnailBlock;
 
 /* Canceling request */
-- (void) cancel;
+- (void)cancel;
 
 /* Waiting for completions */
-- (void) waitUntilFinished;
-- (void) waitPlaceholder;
+- (void)waitUntilFinished;
+- (void)waitPlaceholder;
 
-- (BOOL) isFinished;
+- (BOOL)isFinished;
 
 @end

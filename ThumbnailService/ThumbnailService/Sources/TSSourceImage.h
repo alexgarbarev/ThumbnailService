@@ -11,7 +11,7 @@
 
 @interface TSSourceImage : TSSource
 
-- (id) initWithImagePath:(NSString *)imagePath;
-- (id) initWithImageLocalURL:(NSURL *)imageURL;
+- (id)initWithImagePath:(NSString *)imagePath;
+- (id)initWithImageLocalURL:(NSURL *)imageURL;
 
 @end

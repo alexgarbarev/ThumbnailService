@@ -10,9 +10,9 @@
 
 @interface TSOperation ()
 
-- (void) onComplete;
-- (void) onCancel;
+- (void)onComplete;
+- (void)onCancel;
 
-- (void) synchronize:(dispatch_block_t)block;
+- (void)synchronize:(dispatch_block_t)block;
 
 @end

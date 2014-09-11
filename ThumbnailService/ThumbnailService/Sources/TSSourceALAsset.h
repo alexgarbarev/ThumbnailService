@@ -14,11 +14,12 @@
 
 @interface TSSourceALAsset : TSSource
 
-- (id) initWithAsset:(ALAsset *)asset;
+- (id)initWithAsset:(ALAsset *)asset;
 
-- (BOOL) isPhoto;
+- (BOOL)isPhoto;
 
-- (BOOL) isVideo;
-- (double) videoDuration;
+- (BOOL)isVideo;
+
+- (double)videoDuration;
 
 @end

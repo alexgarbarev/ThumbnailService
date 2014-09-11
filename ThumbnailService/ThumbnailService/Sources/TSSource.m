@@ -10,25 +10,25 @@
 
 @implementation TSSource
 
-- (NSString *) identifier
+- (NSString *)identifier
 {
     NSAssert(NO, @"Must override");
     return nil;
 }
 
-- (UIImage *) placeholder
+- (UIImage *)placeholder
 {
     NSAssert(NO, @"Must override");
     return nil;
 }
 
-- (UIImage *) thumbnailWithSize:(CGSize)__unused size isCancelled:(const BOOL *)__unused isCancelled error:(NSError *__autoreleasing *)__unused error
+- (UIImage *)thumbnailWithSize:(CGSize)__unused size isCancelled:(const BOOL *)__unused isCancelled error:(NSError *__autoreleasing *)__unused error
 {
     NSAssert(NO, @"Must override");
     return nil;
 }
 
-- (BOOL) requiredMainThread
+- (BOOL)requiredMainThread
 {
     return NO;
 }

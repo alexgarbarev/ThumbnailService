@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+    TSCacheManagerModeNone   = 0,
     TSCacheManagerModeMemory = 1 << 0,
     TSCacheManagerModeFile   = 1 << 1,
 } TSCacheManagerMode;
@@ -22,7 +23,7 @@ static const TSCacheManagerMode TSCacheManagerModeFileAndMemory = TSCacheManager
 - (void)setName:(NSString *)name;
 - (NSString *)name;
 
-- (BOOL) objectExistsForKey:(id)key mode:(TSCacheManagerMode)mode;
+- (BOOL)objectExistsForKey:(id)key mode:(TSCacheManagerMode)mode;
 
 - (id)objectForKey:(id)key mode:(TSCacheManagerMode)mode;
 - (void)setObject:(id)obj forKey:(id)key mode:(TSCacheManagerMode)mode;
