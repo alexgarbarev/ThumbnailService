@@ -94,6 +94,12 @@
     return GET_BITMASK(cacheModeFile, TSCacheManagerModeFile);
 }
 
+- (void)setCachesName:(NSString *)cachesName
+{
+    placeholderCache.name = [NSString stringWithFormat:@"Placeholders_%@",cachesName];
+    thumbnailsCache.name = [NSString stringWithFormat:@"Thumbnails_%@",cachesName];;
+}
+
 - (void)clearFileCache
 {
     [placeholderCache removeAllObjectsForMode:cacheModeFile];

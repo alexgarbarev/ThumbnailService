@@ -30,6 +30,8 @@
 - (BOOL)hasDiskCacheForRequest:(TSRequest *)request;
 - (BOOL)hasMemoryCacheForRequest:(TSRequest *)request;
 
+/** Caches name affect to file caches directory. Use context-based name to have ability to clean caches separately per context */
+- (void)setCachesName:(NSString *)cachesName;
 - (void)clearFileCache;
 
 @end
