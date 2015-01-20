@@ -39,4 +39,13 @@
     return [object.identifier isEqualToString:self.identifier];
 }
 
+- (NSUInteger)hash
+{
+    NSUInteger prime = 31;
+    NSUInteger result = 1;
+    result = prime * result + self.identifier.hash;
+    return result;
+}
+
+
 @end
