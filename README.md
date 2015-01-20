@@ -140,7 +140,7 @@ pod 'ThumbnailService'
 ```
 But you also can import sources or use as static library
 
-Extanding
+Extending
 ====
 
 You can add your own thumbnail source by subclassing TSSource or other source. See ThumbnailServiceDemo for more information.
