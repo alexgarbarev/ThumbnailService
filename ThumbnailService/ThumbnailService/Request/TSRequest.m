@@ -96,9 +96,10 @@ typedef NS_ENUM(NSInteger, TSRequestState)
 
 - (CGSize)sizeToRender
 {
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = _shouldAdjustSizeToScreenScale ? [[UIScreen mainScreen] scale] : 1.0f;
     return CGSizeMake(_size.width * scale, _size.height * scale);
 }
+
 
 - (void)setOperation:(TSRequestedOperation *)operation
 {
