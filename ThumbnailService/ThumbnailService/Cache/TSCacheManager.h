@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSFileCache.h"
 
 typedef enum {
     TSCacheManagerModeNone   = 0,
@@ -19,6 +20,9 @@ static const TSCacheManagerMode TSCacheManagerModeFileAndMemory = TSCacheManager
 @interface TSCacheManager : NSObject
 
 @property (nonatomic) NSUInteger memoryLimitInBytes;
+@property (nonatomic) BOOL shouldWriteAsynchronically;
+@property (nonatomic) TSFileCacheImageWriteMode imageWriteMode; /* Default: PNG */
+@property (nonatomic) CGFloat imageWriteCompressionQuality; /* Default: 0.6. Used only in TSFileCacheImageWriteModeJPG */
 
 - (void)setName:(NSString *)name;
 - (NSString *)name;

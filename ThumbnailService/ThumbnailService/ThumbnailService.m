@@ -395,3 +395,18 @@
 }
 
 @end
+
+
+@implementation ThumbnailService (ExtendedApi)
+
+- (TSCacheManager *)placeholderCache
+{
+    return placeholderCache;
+}
+
+- (TSCacheManager *)thumbnailsCache
+{
+    return thumbnailsCache;
+}
+
+@end

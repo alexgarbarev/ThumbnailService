@@ -148,11 +148,11 @@
         [source fire];
     });
     
-    WaitAndCallInBackground(0.6, ^{
+    WaitAndCallInBackground(0.8, ^{
         [source fire];
     });
     
-    WaitAndCallInBackground(0.41, ^{
+    WaitAndCallInBackground(0.6, ^{
         [group cancel];
     });
     

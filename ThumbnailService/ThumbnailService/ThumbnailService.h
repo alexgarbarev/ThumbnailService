@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSCacheManager.h"
 #import "TSRequest.h"
 #import "TSRequestGroupSequence.h"
 
@@ -33,5 +34,12 @@
 /** Caches name affect to file caches directory. Use context-based name to have ability to clean caches separately per context */
 - (void)setCachesName:(NSString *)cachesName;
 - (void)clearFileCache;
+
+@end
+
+@interface ThumbnailService (ExtendedApi)
+
+@property (nonatomic, readonly) TSCacheManager *placeholderCache;
+@property (nonatomic, readonly) TSCacheManager *thumbnailsCache;
 
 @end

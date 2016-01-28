@@ -25,6 +25,36 @@
     return self;
 }
 
+- (void)setShouldWriteAsynchronically:(BOOL)shouldWriteAsynchronically
+{
+    fileCache.shouldWriteAsynchronically = shouldWriteAsynchronically;
+}
+
+- (BOOL)shouldWriteAsynchronically
+{
+    return fileCache.shouldWriteAsynchronically;
+}
+
+- (void)setImageWriteMode:(TSFileCacheImageWriteMode)imageWriteMode
+{
+    fileCache.imageWriteMode = imageWriteMode;
+}
+
+- (TSFileCacheImageWriteMode)imageWriteMode
+{
+    return fileCache.imageWriteMode;
+}
+
+- (void)setImageWriteCompressionQuality:(CGFloat)imageWriteCompressionQuality
+{
+    fileCache.imageWriteCompressionQuality = imageWriteCompressionQuality;
+}
+
+- (CGFloat)imageWriteCompressionQuality
+{
+    return fileCache.imageWriteCompressionQuality;
+}
+
 - (void)setMemoryLimitInBytes:(NSUInteger)memoryLimitInBytes
 {
     memoryCache.totalCostLimit = memoryLimitInBytes;
