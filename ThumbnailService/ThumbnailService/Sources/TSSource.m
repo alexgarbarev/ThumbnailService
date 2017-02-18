@@ -10,12 +10,6 @@
 
 @implementation TSSource
 
-- (NSString *)identifier
-{
-    NSAssert(NO, @"Must override");
-    return nil;
-}
-
 - (UIImage *)placeholder
 {
     NSAssert(NO, @"Must override");
@@ -28,7 +22,7 @@
     return nil;
 }
 
-- (BOOL)requiredMainThread
+- (BOOL)requiresMainThread
 {
     return NO;
 }

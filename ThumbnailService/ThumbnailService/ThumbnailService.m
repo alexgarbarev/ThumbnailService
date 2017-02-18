@@ -21,16 +21,16 @@
 
 @implementation ThumbnailService {
 
-    TSCacheManager *placeholderCache;
-    TSCacheManager *thumbnailsCache;
+    TSCacheManager *_placeholderCache;
+    TSCacheManager *_thumbnailsCache;
 
-    TSOperationQueue *queue;
+    TSOperationQueue *_queue;
 
-    TSCacheManagerMode cacheModeFile;
-    TSCacheManagerMode cacheModeMemory;
-    TSCacheManagerMode cacheModeFileAndMemory;
+    TSCacheManagerMode _cacheModeFile;
+    TSCacheManagerMode _cacheModeMemory;
+    TSCacheManagerMode _cacheModeFileAndMemory;
 
-    dispatch_queue_t serviceQueue;
+    dispatch_queue_t _serviceQueue;
 }
 
 - (id)init
@@ -38,82 +38,101 @@
     self = [super init];
     if (self) {
 
-        queue = [[TSOperationQueue alloc] init];
-        queue.maxConcurrentOperationCount = 1;
+        _queue = [[TSOperationQueue alloc] init];
+        _queue.maxConcurrentOperationCount = 1;
 
-        placeholderCache = [TSCacheManager new];
-        placeholderCache.name = @"Placeholders";
+        _placeholderCache = [TSCacheManager new];
+        _placeholderCache.name = @"Placeholders";
 
-        thumbnailsCache = [TSCacheManager new];
-        thumbnailsCache.name = @"Thumbnails";
+        _thumbnailsCache = [TSCacheManager new];
+        _thumbnailsCache.name = @"Thumbnails";
 
         self.useMemoryCache = YES;
         self.useFileCache = YES;
         self.cacheMemoryLimitInBytes = 3 * 1024 * 1024;
 
-        serviceQueue = dispatch_queue_create("ThumbnailServiceQueue", DISPATCH_QUEUE_SERIAL);
+        _serviceQueue = dispatch_queue_create("ThumbnailServiceQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
 
+- (void)setMaxConcurrentOperationCount:(NSInteger)maxConcurrentOperationCount
+{
+    _queue.maxConcurrentOperationCount = maxConcurrentOperationCount;
+}
+
+- (NSInteger)maxConcurrentOperationCount
+{
+    return _queue.maxConcurrentOperationCount;
+}
+
 - (void)setCacheMemoryLimitInBytes:(NSUInteger)cacheMemoryLimitInBytes
 {
-    thumbnailsCache.memoryLimitInBytes = cacheMemoryLimitInBytes;
+    _thumbnailsCache.memoryLimitInBytes = cacheMemoryLimitInBytes;
 }
 
 - (NSUInteger)cacheMemoryLimitInBytes
 {
-    return thumbnailsCache.memoryLimitInBytes;
+    return _thumbnailsCache.memoryLimitInBytes;
 }
 
 - (void)dealloc
 {
-    [queue cancelAllOperations];
-    TSDispatchRelease(serviceQueue);
+    [_queue cancelAllOperations];
+    TSDispatchRelease(_serviceQueue);
 }
 
 - (void)setUseFileCache:(BOOL)useFileCache
 {
-    SET_BITMASK(cacheModeFile, TSCacheManagerModeFile, useFileCache);
-    SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeFile, useFileCache);
+    SET_BITMASK(_cacheModeFile, TSCacheManagerModeFile, useFileCache);
+    SET_BITMASK(_cacheModeFileAndMemory, TSCacheManagerModeFile, useFileCache);
 }
 
 - (void)setUseMemoryCache:(BOOL)useMemoryCache
 {
-    SET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory, useMemoryCache);
-    SET_BITMASK(cacheModeFileAndMemory, TSCacheManagerModeMemory, useMemoryCache);
+    SET_BITMASK(_cacheModeMemory, TSCacheManagerModeMemory, useMemoryCache);
+    SET_BITMASK(_cacheModeFileAndMemory, TSCacheManagerModeMemory, useMemoryCache);
 }
 
 - (BOOL)useMemoryCache
 {
-    return GET_BITMASK(cacheModeMemory, TSCacheManagerModeMemory);
+    return GET_BITMASK(_cacheModeMemory, TSCacheManagerModeMemory);
 }
 
 - (BOOL)useFileCache
 {
-    return GET_BITMASK(cacheModeFile, TSCacheManagerModeFile);
+    return GET_BITMASK(_cacheModeFile, TSCacheManagerModeFile);
 }
 
 - (void)setCachesName:(NSString *)cachesName
 {
-    placeholderCache.name = [NSString stringWithFormat:@"Placeholders_%@",cachesName];
-    thumbnailsCache.name = [NSString stringWithFormat:@"Thumbnails_%@",cachesName];;
+    _placeholderCache.name = [NSString stringWithFormat:@"Placeholders_%@",cachesName];
+    _thumbnailsCache.name = [NSString stringWithFormat:@"Thumbnails_%@",cachesName];;
 }
 
 - (void)clearFileCache
 {
-    [placeholderCache removeAllObjectsForMode:cacheModeFile];
-    [thumbnailsCache removeAllObjectsForMode:cacheModeFile];
+    [_placeholderCache removeAllObjectsForMode:_cacheModeFile];
+    [_thumbnailsCache removeAllObjectsForMode:_cacheModeFile];
 }
 
 - (BOOL)hasDiskCacheForRequest:(TSRequest *)request
 {
-    return [thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeFile];
+    return [_thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeFile];
 }
 
 - (BOOL)hasMemoryCacheForRequest:(TSRequest *)request
 {
-    return [thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeMemory];
+    return [_thumbnailsCache objectExistsForKey:request.identifier mode:TSCacheManagerModeMemory];
+}
+
+- (void)executeIfHasDiskCacheOrEnqueue:(TSRequest *)request
+{
+    if ([self hasDiskCacheForRequest:request]) {
+        [self executeRequest:request];
+    } else {
+        [self enqueueRequest:request];
+    }
 }
 
 #pragma mark - Placeholder methods
@@ -123,11 +142,11 @@
     NSString *identifier = [source identifier];
     UIImage *placeholder = nil;
 
-    placeholder = [placeholderCache objectForKey:identifier mode:TSCacheManagerModeFileAndMemory];
+    placeholder = [_placeholderCache objectForKey:identifier mode:TSCacheManagerModeFileAndMemory];
 
     if (!placeholder) {
         placeholder = [source placeholder];
-        [placeholderCache setObject:placeholder forKey:identifier mode:TSCacheManagerModeFileAndMemory];
+        [_placeholderCache setObject:placeholder forKey:identifier mode:TSCacheManagerModeFileAndMemory];
     }
 
     return placeholder;
@@ -171,9 +190,9 @@
     };
 
     if (wait) {
-        dispatch_sync(serviceQueue, work);
+        dispatch_sync(_serviceQueue, work);
     } else {
-        dispatch_async(serviceQueue, work);
+        dispatch_async(_serviceQueue, work);
     }
 }
 
@@ -199,9 +218,9 @@
     };
 
     if (wait) {
-        dispatch_sync(serviceQueue, work);
+        dispatch_sync(_serviceQueue, work);
     } else {
-        dispatch_async(serviceQueue, work);
+        dispatch_async(_serviceQueue, work);
     }
 }
 
@@ -241,7 +260,7 @@
 - (void)enqueueThumbnailRequest:(TSRequest *)request
 {
     if ([request needThumbnail]) {
-        UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
+        UIImage *thumbnail = [_thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
         if (thumbnail) {
             [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
         } else {
@@ -253,11 +272,11 @@
 - (void)executeThumbnailRequest:(TSRequest *)request
 {
     if ([request needThumbnail]) {
-        UIImage *thumbnail = [thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
+        UIImage *thumbnail = [_thumbnailsCache objectForKey:request.identifier mode:TSCacheManagerModeMemory];
         if (thumbnail) {
             [self takeThumbnailInRequest:request withImage:thumbnail error:nil];
         } else {
-            if ([request.source requiredMainThread] && [NSThread isMainThread]) {
+            if ([request.source requiresMainThread] && [NSThread isMainThread]) {
                 [NSException raise:NSInternalInconsistencyException format:@"You trying to execute request with source %@ on main thread, but this source required main thread to operate. Enqueue or execute from background thraed instead", request.source];
             }
             [self executeOperationForRequest:request];
@@ -267,12 +286,12 @@
 
 - (void)enqueueOperationForRequest:(TSRequest *)request
 {
-    TSRequestedOperation *operation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
+    TSRequestedOperation *operation = (TSRequestedOperation *)[_queue operationWithIdentifier:request.identifier];
 
     if (!operation || operation.isCancelled) {
         operation = [self newOperationForRequest:request];
         request.operation = operation;
-        [queue addOperation:operation forIdentifider:request.identifier];
+        [_queue addOperation:operation forIdentifier:request.identifier];
     } else if (operation.isFinished) {
         [self takeThumbnailInRequest:request withImage:operation.result error:operation.error];
     } else {
@@ -289,9 +308,9 @@
     [request takeThumbnail:operation.result error:operation.error];
     request.operation = nil;
 
-    dispatch_async(serviceQueue, ^{
+    dispatch_async(_serviceQueue, ^{
 
-        TSRequestedOperation *existingOperation = (TSRequestedOperation *)[queue operationWithIdentifier:request.identifier];
+        TSRequestedOperation *existingOperation = (TSRequestedOperation *)[_queue operationWithIdentifier:request.identifier];
 
         if (!existingOperation.isCancelled && !existingOperation.isFinished) {
             [existingOperation enumerateRequests:^(TSRequest *anRequest) {
@@ -308,7 +327,7 @@
 - (TSRequestedOperation *)newOperationForRequest:(TSRequest *)request
 {
     TSRequestedOperation *operation;
-    if (cacheModeFile && [thumbnailsCache objectExistsForKey:request.identifier mode:cacheModeFile]) {
+    if (_cacheModeFile && [_thumbnailsCache objectExistsForKey:request.identifier mode:_cacheModeFile]) {
         operation = [self newOperationToLoadThumbnailForRequest:request];
     } else {
         operation = [self newOperationToGenerateThumbnailForRequest:request];
@@ -330,7 +349,7 @@
 
 - (TSRequestedOperation *)newOperationToLoadThumbnailForRequest:(TSRequest *)request
 {
-    TSRequestedOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:thumbnailsCache];
+    TSRequestedOperation *operation = [[TSLoadOperation alloc] initWithKey:request.identifier andCacheManager:_thumbnailsCache];
 
     __weak __typeof(self) weakSelf = self;
     [operation addCompleteBlock:^(TSOperation *completeOperation) {
@@ -347,12 +366,12 @@
     if (operation.result && !operation.error) {
         TSCacheManagerMode mode = TSCacheManagerModeNone;
         if ([operation shouldCacheInMemory]) {
-            mode |= cacheModeMemory;
+            mode |= _cacheModeMemory;
         }
         if ([operation shouldCacheOnDisk]) {
-            mode |= cacheModeFile;
+            mode |= _cacheModeFile;
         }
-        [thumbnailsCache setObject:operation.result forKey:identifier mode:mode];
+        [_thumbnailsCache setObject:operation.result forKey:identifier mode:mode];
     }
 
     [self takeThumbnailsForRequestsInOperation:operation];
@@ -361,7 +380,7 @@
 - (void)didLoadThumbnailForIdentifier:(NSString *)identifier fromOperation:(TSRequestedOperation *)operation
 {
     if (operation.result && !operation.error && operation.shouldCacheInMemory) {
-        [thumbnailsCache setObject:operation.result forKey:identifier mode:cacheModeMemory];
+        [_thumbnailsCache setObject:operation.result forKey:identifier mode:_cacheModeMemory];
     }
 
     [self takeThumbnailsForRequestsInOperation:operation];
@@ -401,12 +420,12 @@
 
 - (TSCacheManager *)placeholderCache
 {
-    return placeholderCache;
+    return _placeholderCache;
 }
 
 - (TSCacheManager *)thumbnailsCache
 {
-    return thumbnailsCache;
+    return _thumbnailsCache;
 }
 
 @end

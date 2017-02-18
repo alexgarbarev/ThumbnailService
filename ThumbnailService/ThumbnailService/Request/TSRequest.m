@@ -69,6 +69,7 @@ typedef NS_ENUM(NSInteger, TSRequestState)
 {
     if (needUpdateIdentifier || !_cachedIdentifier) {
         CGSize size = [self sizeToRender];
+        NSAssert([self.source identifier], @"Identifier can't be nil. Please override `identifier` method or set identifier");
         _cachedIdentifier = [[NSString alloc] initWithFormat:@"%@_%gx%g", [self.source identifier], size.width, size.height];
         needUpdateIdentifier = NO;
     }
@@ -199,7 +200,7 @@ typedef NS_ENUM(NSInteger, TSRequestState)
 
 - (void)waitUntilFinished
 {
-    if ([self.source requiredMainThread] && [NSThread isMainThread]) {
+    if ([self.source requiresMainThread] && [NSThread isMainThread]) {
         [NSException raise:NSInternalInconsistencyException format:@"You trying to lock main thread (for result waiting), but source %@ required main thread to operate.", self.source];
     }
 

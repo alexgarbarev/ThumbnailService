@@ -29,7 +29,7 @@
     TSDispatchRelease(syncQueue);
 }
 
-- (void)addOperation:(TSOperation *)operation forIdentifider:(NSString *)identifier
+- (void)addOperation:(TSOperation *)operation forIdentifier:(NSString *)identifier
 {
     [super addOperation:operation];
 

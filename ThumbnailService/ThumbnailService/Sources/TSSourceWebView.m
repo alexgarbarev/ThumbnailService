@@ -36,14 +36,14 @@
     return self;
 }
 
-- (BOOL)requiredMainThread
+- (BOOL)requiresMainThread
 {
     return YES;
 }
 
 - (NSString *)identifier
 {
-    return identifier;
+    return [super identifier] ? [super identifier] : identifier;
 }
 
 - (UIImage *)placeholder

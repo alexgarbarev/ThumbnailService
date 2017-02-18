@@ -11,12 +11,12 @@
 
 @interface TSSource : NSObject
 
-- (NSString *)identifier;
+@property (nonatomic) NSString *identifier;
 
 - (UIImage *)placeholder;
 - (UIImage *)thumbnailWithSize:(CGSize)size isCancelled:(const BOOL *)isCancelled error:(NSError **)error;
 
 /* Default: NO */
-- (BOOL)requiredMainThread;
+- (BOOL)requiresMainThread;
 
 @end

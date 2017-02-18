@@ -18,6 +18,7 @@
 @property (nonatomic) BOOL useMemoryCache; /* Default: YES */
 @property (nonatomic) BOOL useFileCache;   /* Default: YES */
 @property (nonatomic) NSUInteger cacheMemoryLimitInBytes; /* Default: 3MB. 0 - unlimited */
+@property (nonatomic) NSInteger maxConcurrentOperationCount; /* Default: 1. Useful to handle big images - less memory usage */
 
 /** Add request to internal queue and executes asynchronously */
 - (void)enqueueRequest:(TSRequest *)request;
@@ -30,6 +31,12 @@
 
 - (BOOL)hasDiskCacheForRequest:(TSRequest *)request;
 - (BOOL)hasMemoryCacheForRequest:(TSRequest *)request;
+
+/**
+ * Executes request on current thread, if disk cache available. Otherwise enqueues to operationQueue.
+ * Useful when images are small
+ * */
+- (void)executeIfHasDiskCacheOrEnqueue:(TSRequest *)request;
 
 /** Caches name affect to file caches directory. Use context-based name to have ability to clean caches separately per context */
 - (void)setCachesName:(NSString *)cachesName;

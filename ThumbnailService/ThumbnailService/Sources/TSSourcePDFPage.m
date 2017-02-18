@@ -64,7 +64,7 @@ static BOOL IsLandscapeAngel(NSInteger degrees);
 
 - (NSString *)identifier
 {
-    return [NSString stringWithFormat:@"%@_%lu", documentName, pageNumber];
+    return [super identifier] ? [super identifier] : [NSString stringWithFormat:@"%@_%lu", documentName, pageNumber];
 }
 
 - (UIImage *)placeholder

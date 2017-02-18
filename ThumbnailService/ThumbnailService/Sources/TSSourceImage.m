@@ -9,31 +9,32 @@
 #import "TSSourceImage.h"
 
 @implementation TSSourceImage {
-    NSString *identifier;
-    
-    NSURL *imageURL;
+    NSURL *_imageURL;
 }
 
-- (id)initWithImagePath:(NSString *)_imagePath
+- (id)initWithImagePath:(NSString *)imagePath
 {
-    NSURL *url = [[NSURL alloc] initFileURLWithPath:_imagePath];
+    NSURL *url = [[NSURL alloc] initFileURLWithPath:imagePath];
     return [self initWithImageLocalURL:url];
 }
 
-- (id)initWithImageLocalURL:(NSURL *)_imageURL
+- (id)initWithImageLocalURL:(NSURL *)imageURL
 {
     NSParameterAssert([_imageURL isFileURL]);
     self = [super init];
     if (self) {
-        imageURL = _imageURL;
-        identifier = [NSString stringWithFormat:@"%d", (unsigned int)[[imageURL absoluteString] hash]];
+        _imageURL = imageURL;
     }
     return self;
 }
 
 - (NSString *)identifier
 {
-    return identifier;
+    if (![super identifier]) {
+        self.identifier = [NSString stringWithFormat:@"%d", (unsigned int)[[_imageURL absoluteString] hash]];
+    }
+
+    return [super identifier];
 }
 
 - (UIImage *)placeholder
@@ -45,7 +46,7 @@
 {
     NSUInteger thumbSize = (NSUInteger)fmaxf(size.width, size.height);
 
-    CGDataProviderRef provider = CGDataProviderCreateWithURL((__bridge CFURLRef)imageURL);
+    CGDataProviderRef provider = CGDataProviderCreateWithURL((__bridge CFURLRef)_imageURL);
 
     if (!provider) {
         if (error) {

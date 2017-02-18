@@ -207,7 +207,7 @@ dispatch_queue_priority_t GlobalQueuePriorityFromDispatchQueuePriority(TSOperati
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p. Cancelled=%d, Finished=%d, Started=%d, Executing=%d>", [self class], self, [self isCancelled], [self isFinished], [self isStarted], [self isExecuting]];
+    return [NSString stringWithFormat:@"<%@ %p. Cancelled=%d, Finished=%d, Started=%d, Executing=%d>", [self class], (__bridge void *)self, [self isCancelled], [self isFinished], [self isStarted], [self isExecuting]];
 }
 
 @end

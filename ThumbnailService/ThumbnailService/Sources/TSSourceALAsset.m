@@ -73,7 +73,7 @@ typedef enum {
 
 - (NSString *)identifier
 {
-    return asset.identifier;
+    return [super identifier] ? [super identifier] : asset.identifier;
 }
 
 - (UIImage *)placeholder

@@ -35,7 +35,7 @@
 
 - (NSString *)identifier
 {
-    return identifier;
+    return [super identifier] ? [super identifier] : identifier;
 }
 
 - (UIImage *)placeholder
