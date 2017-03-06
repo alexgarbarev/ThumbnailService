@@ -20,7 +20,7 @@
 
 - (id)initWithImageLocalURL:(NSURL *)imageURL
 {
-    NSParameterAssert([_imageURL isFileURL]);
+    NSParameterAssert([imageURL isFileURL]);
     self = [super init];
     if (self) {
         _imageURL = imageURL;
