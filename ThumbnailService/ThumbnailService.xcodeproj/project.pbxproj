@@ -113,6 +113,7 @@
 		FA2677791807AFB900F5B02B /* ThumbnailService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailService.h; sourceTree = "<group>"; };
 		FA26777A1807AFB900F5B02B /* ThumbnailService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailService.m; sourceTree = "<group>"; };
 		FA2677891807B1F500F5B02B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FA5174461F18FAE0009F9F11 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
 		FA540527180A74CE0092752B /* TSRequestGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroup.h; sourceTree = "<group>"; };
 		FA540528180A74CE0092752B /* TSRequestGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSRequestGroup.m; sourceTree = "<group>"; };
 		FA54052D180A76220092752B /* TSRequestGroupSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRequestGroupSequence.h; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 		FA2677361807AF7F00F5B02B = {
 			isa = PBXGroup;
 			children = (
+				FA5174461F18FAE0009F9F11 /* .travis.yml */,
 				FA2677441807AF7F00F5B02B /* ThumbnailService */,
 				FA2677581807AF7F00F5B02B /* ThumbnailServiceTests */,
 				FA2677411807AF7F00F5B02B /* Frameworks */,

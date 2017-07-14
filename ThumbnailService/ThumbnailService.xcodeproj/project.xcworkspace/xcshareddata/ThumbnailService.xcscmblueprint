@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++81BF818",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++7628AAE" : 9223372036854775807,
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++F00951B" : 9223372036854775807,
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++81BF818" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "BBC720E9-7874-431A-99FA-8D4E2AEF1CF7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++7628AAE" : "archive\/ThumbnailService\/",
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++F00951B" : "archive\/ThumbnailService\/",
+    "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++81BF818" : "ThumbnailService\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ThumbnailService",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ThumbnailService\/ThumbnailService.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:alexgarbarev\/ThumbnailService.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++7628AAE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:alexgarbarev\/ThumbnailService.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++81BF818"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:alexgarbarev\/ThumbnailService.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DD024A9630F67A6B03FDDD4FBB10FA078D2BD3D8+++F00951B"
+    }
+  ]
+}
