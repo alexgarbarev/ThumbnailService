@@ -3,6 +3,10 @@ ThumbnailService
 
 ThumbnailService - is a service which helps you to generate asynchronically preview images.
 
+[![Build Status](https://travis-ci.org/alexgarbarev/ThumbnailService.svg?branch=master)](https://travis-ci.org/alexgarbarev/ThumbnailService)
+[![codecov](https://codecov.io/gh/alexgarbarev/ThumbnailService/branch/master/graph/badge.svg)](https://codecov.io/gh/alexgarbarev/ThumbnailService)
+
+
 Features
 ====
 
