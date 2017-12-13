@@ -191,7 +191,7 @@
     WaitAndCallInBackground(0.8, ^{
         [thumbnailService enqueueRequest:request3 andWait:YES];
         XCTAssert(request1.operation == request3.operation, @"");
-        XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"%d",request1.operation.queuePriority);
+        XCTAssert(request1.operation.queuePriority == NSOperationQueuePriorityNormal, @"%@", @(request1.operation.queuePriority));
     });
     
     

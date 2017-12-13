@@ -12,6 +12,6 @@
 /**
  Hashes a given string with the MD5 algorithm.
  */
--(NSString *)md5;
+@property (nonatomic, readonly) NSString *md5;
 
 @end

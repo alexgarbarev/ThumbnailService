@@ -1,3 +1,11 @@
+//
+//  NSString+Hash.m
+//  Pods
+//
+//  Created by David Martínez Echavarría on 13/12/17.
+//
+
+#import "NSString+Hash.h"
 #import <CommonCrypto/CommonDigest.h>
 
 @implementation NSString(Hash)
