@@ -8,6 +8,7 @@
 
 #import "TSSourceWebView.h"
 #import <UIKit/UIKit.h>
+#import "NSString+Hash.h"
 
 @interface TSSourceWebView ()<UIWebViewDelegate>
 @property (atomic) BOOL loading;
@@ -31,7 +32,7 @@
         webViewLoadingGroup = dispatch_group_create();
         loadingError = nil;
 
-        identifier = [NSString stringWithFormat:@"%d", (unsigned int)[[resourceURL absoluteString] hash]];
+        identifier = [[[resourceURL absoluteString] stringByReplacingOccurrencesOfString:NSHomeDirectory() withString:@""] md5];
     }
     return self;
 }

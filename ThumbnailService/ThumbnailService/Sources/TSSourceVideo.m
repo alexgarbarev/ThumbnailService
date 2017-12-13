@@ -8,6 +8,7 @@
 
 #import "TSSourceVideo.h"
 #import "UIImageView+ImageFrame.h"
+#import "NSString+Hash.h"
 
 @implementation TSSourceVideo {
     NSString *identifier;
@@ -28,7 +29,7 @@
     if (self) {
         thumbnailSecond = second;
         videoURL = url;
-        identifier = [NSString stringWithFormat:@"%d-%g", (unsigned int)[[videoURL absoluteString] hash], second];
+        identifier = [NSString stringWithFormat:@"%@-%g", [[[videoURL absoluteString] stringByReplacingOccurrencesOfString:NSHomeDirectory() withString:@""] md5], second];
     }
     return self;
 }
