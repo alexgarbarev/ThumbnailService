@@ -7,6 +7,7 @@
 //
 
 #import "TSSourceImage.h"
+#import "NSString+Hash.h"
 
 @implementation TSSourceImage {
     NSURL *_imageURL;
@@ -31,7 +32,7 @@
 - (NSString *)identifier
 {
     if (![super identifier]) {
-        self.identifier = [NSString stringWithFormat:@"%d", (unsigned int)[[_imageURL absoluteString] hash]];
+        self.identifier = [[[_imageURL absoluteString] stringByReplacingOccurrencesOfString:NSHomeDirectory() withString:@""] md5];
     }
 
     return [super identifier];
